@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e2e8f0;
+  font-family: Georgia, serif;
+  overflow: hidden;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+.screen-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes damage-float {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-60px); }
+}
+
+.damage-number {
+  animation: damage-float 1s ease-out forwards;
+}
+
+.card-attack { border-color: #c0392b; }
+.card-skill  { border-color: #27ae60; }
+.card-power  { border-color: #8e44ad; }
+.card-curse  { border-color: #7f8c8d; }
+
+.card-attack .card-header { background: linear-gradient(135deg, #7b1a1a, #c0392b); }
+.card-skill .card-header  { background: linear-gradient(135deg, #1a5c2e, #27ae60); }
+.card-power .card-header  { background: linear-gradient(135deg, #4a1a7b, #8e44ad); }
+.card-curse .card-header  { background: linear-gradient(135deg, #2c3e50, #7f8c8d); }
+
+.node-available { cursor: pointer; filter: drop-shadow(0 0 8px #f1c40f); }
+.node-visited   { opacity: 0.5; }
+.node-locked    { opacity: 0.3; cursor: not-allowed; }
+
+/* ── Sprite idle breathing ── */
+@keyframes breathe {
+  0%, 100% { transform: scaleY(1)   translateY(0);    }
+  40%       { transform: scaleY(1.012) translateY(-2px); }
+  70%       { transform: scaleY(0.995) translateY(1px);  }
+}
+@keyframes sprite-hurt {
+  0%   { transform: translateX(0)   brightness(1); filter: brightness(1); }
+  20%  { transform: translateX(-12px); filter: brightness(3) sepia(1) saturate(5) hue-rotate(-30deg); }
+  50%  { transform: translateX(8px);  filter: brightness(2) sepia(1) saturate(5) hue-rotate(-30deg); }
+  100% { transform: translateX(0);   filter: brightness(1); }
+}
+@keyframes sprite-attack {
+  0%,100% { transform: translateX(0) rotate(0deg); }
+  30%     { transform: translateX(18px) rotate(3deg); }
+  60%     { transform: translateX(8px) rotate(1deg); }
+}
+@keyframes sprite-death {
+  0%   { transform: rotate(0deg) translateY(0); opacity: 1; }
+  60%  { transform: rotate(45deg) translateY(20px); opacity: 0.6; }
+  100% { transform: rotate(90deg) translateY(40px); opacity: 0; }
+}
+
+.sprite-idle   { animation: breathe 3.2s ease-in-out infinite; transform-origin: bottom center; }
+.sprite-hurt   { animation: sprite-hurt 0.5s ease-out forwards; }
+.sprite-attack { animation: sprite-attack 0.6s ease-out forwards; }
+.sprite-death  { animation: sprite-death 0.8s ease-out forwards; }
+
+/* ── Torch flame ── */
+@keyframes flicker {
+  0%,100% { transform: scaleX(1)   scaleY(1)   translateY(0);    opacity: 1;    }
+  20%      { transform: scaleX(0.9) scaleY(1.1) translateY(-2px); opacity: 0.9;  }
+  40%      { transform: scaleX(1.1) scaleY(0.9) translateY(1px);  opacity: 1;    }
+  60%      { transform: scaleX(0.95)scaleY(1.05)translateY(-1px); opacity: 0.95; }
+  80%      { transform: scaleX(1.05)scaleY(0.95)translateY(0);    opacity: 1;    }
+}
+@keyframes glow-pulse {
+  0%,100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+  50%     { opacity: 1;   transform: translateX(-50%) scale(1.15); }
+}
+
+.torch-flame {
+  animation: flicker 0.9s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+.flame-inner {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 10px; height: 18px;
+  background: radial-gradient(ellipse at 50% 80%, #fff700 0%, #ff8c00 40%, #ff4500 70%, transparent 100%);
+  border-radius: 50% 50% 20% 20%;
+  animation: flicker 0.6s ease-in-out infinite alternate;
+  filter: blur(1px);
+}
+.flame-inner::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 50%;
+  transform: translateX(-50%);
+  width: 6px; height: 12px;
+  background: radial-gradient(ellipse at 50% 80%, #ffffff 0%, #ffdd00 50%, transparent 100%);
+  border-radius: 50% 50% 20% 20%;
+  filter: blur(0.5px);
+}
+.torch-glow {
+  animation: glow-pulse 1.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #1a1a2e; }
+::-webkit-scrollbar-thumb { background: #4a4a6a; border-radius: 3px; }
