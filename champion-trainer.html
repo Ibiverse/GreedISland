@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Champion Trainer — Yu-Gi-Oh!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== CSS VARIABLES ===== */
+    :root {
+      --bg: #0a0a1a;
+      --surface: #12122a;
+      --surface2: #1a1a35;
+      --surface3: #222246;
+      --gold: #c9a84c;
+      --gold-dark: #8a6a20;
+      --gold-light: #e8c96a;
+      --holographic: linear-gradient(135deg, #667eea 0%, #764ba2 33%, #f093fb 66%, #c9a84c 100%);
+      --monster-orange: #d4730a;
+      --spell-green: #1a7a4a;
+      --trap-purple: #7a1a7a;
+      --link-blue: #0a4a9a;
+      --danger: #e03030;
+      --text: #e8e8f0;
+      --text-dim: #8888aa;
+      --border: #2a2a4a;
+      --border2: #3a3a5a;
+
+      /* Card type colors */
+      --c-normal: #d4a849;
+      --c-effect: #d47022;
+      --c-ritual: #2244aa;
+      --c-fusion: #7a22a8;
+      --c-synchro: #c8c8c8;
+      --c-xyz: #1a1a2e;
+      --c-link: #2255cc;
+      --c-spell: #1a7a4a;
+      --c-trap: #7a1a7a;
+
+      --tab-h: 68px;
+      --hdr-h: 58px;
+      --radius: 12px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    #app {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+    }
+
+    /* ===== SCREENS ===== */
+    .screen {
+      display: none; flex-direction: column;
+      flex: 1; overflow: hidden;
+      height: calc(100% - var(--tab-h));
+    }
+    .screen.active { display: flex; }
+
+    .screen-hdr {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .screen-hdr-row {
+      height: var(--hdr-h);
+      display: flex; align-items: center;
+      padding: 0 16px; gap: 12px;
+    }
+
+    .screen-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px; color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    .screen-body {
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: calc(var(--tab-h) + 8px);
+    }
+
+    /* ===== TAB BAR ===== */
+    #tab-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: var(--tab-h);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex; z-index: 100;
+    }
+
+    .tab-btn {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: none; border: none;
+      color: var(--text-dim); cursor: pointer;
+      padding: 6px 4px; gap: 4px;
+      transition: color .2s; min-height: 44px;
+      font-family: 'Rajdhani', sans-serif;
+    }
+    .tab-btn.active { color: var(--gold); }
+    .tab-btn .ti { font-size: 22px; line-height: 1; }
+    .tab-btn .tl { font-size: 9px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+
+    /* ===== HOME ===== */
+    #home-screen { position: relative; }
+
+    .home-bg {
+      position: absolute; inset: 0;
+      overflow: hidden; background: var(--bg);
+    }
+
+    .home-bg::before {
+      content: '';
+      position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: var(--holographic);
+      opacity: .04;
+      animation: hbg 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes hbg {
+      0%   { transform: rotate(0deg) scale(1); }
+      100% { transform: rotate(12deg) scale(1.15); }
+    }
+
+    .float-card {
+      position: absolute;
+      width: 70px; height: 98px;
+      border-radius: 5px;
+      background: var(--holographic);
+      opacity: 0; animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
+      8%   { opacity: .12; }
+      92%  { opacity: .12; }
+      100% { transform: translateY(-15vh) rotate(320deg); opacity: 0; }
+    }
+
+    .home-inner {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column;
+      align-items: center;
+      padding: 36px 20px 20px;
+      min-height: 100%;
+    }
+
+    .app-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(14px, 4vw, 22px);
+      color: var(--gold); text-align: center;
+      line-height: 1.6; letter-spacing: 2px;
+      text-shadow: 0 0 24px rgba(201,168,76,.7);
+      animation: titlePulse 3s ease-in-out infinite;
+      margin-bottom: 8px;
+    }
+
+    @keyframes titlePulse {
+      0%,100% { text-shadow: 0 0 24px rgba(201,168,76,.6); }
+      50%      { text-shadow: 0 0 48px rgba(201,168,76,1), 0 0 80px rgba(201,168,76,.3); }
+    }
+
+    .app-sub {
+      font-size: 13px; letter-spacing: 3px;
+      color: var(--text-dim); margin-bottom: 32px;
+      text-transform: uppercase;
+    }
+
+    .home-holo-card {
+      width: 120px; height: 168px;
+      border-radius: 8px;
+      background: var(--holographic);
+      margin-bottom: 36px;
+      position: relative; overflow: hidden;
+      box-shadow: 0 0 48px rgba(102,126,234,.5);
+      animation: cardPulse 4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes cardPulse {
+      0%   { box-shadow: 0 0 48px rgba(102,126,234,.5); }
+      33%  { box-shadow: 0 0 48px rgba(118,75,162,.6); }
+      66%  { box-shadow: 0 0 48px rgba(240,147,251,.4); }
+      100% { box-shadow: 0 0 48px rgba(201,168,76,.6); }
+    }
+
+    .home-holo-card::after {
+      content: '🐉';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      font-size: 56px; opacity: .7;
+    }
+
+    .quick-btns {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; width: 100%; max-width: 320px;
+      margin-bottom: 28px;
+    }
+
+    .qbtn {
+      padding: 14px 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text);
+      font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700;
+      letter-spacing: .5px; cursor: pointer; text-align: center;
+      transition: all .2s; min-height: 52px;
+    }
+    .qbtn:hover, .qbtn:active {
+      border-color: var(--gold); color: var(--gold);
+      background: var(--surface2); transform: translateY(-2px);
+    }
+    .qbtn.primary {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: var(--bg); border-color: var(--gold);
+      font-size: 15px; box-shadow: 0 4px 20px rgba(201,168,76,.3);
+    }
+    .qbtn.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,.4); }
+
+    .activity-wrap { width: 100%; max-width: 400px; }
+
+    .section-label {
+      font-size: 10px; font-weight: 700;
+      color: var(--text-dim); text-transform: uppercase;
+      letter-spacing: 2px; margin-bottom: 10px;
+    }
+
+    .act-item {
+      padding: 10px 14px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; margin-bottom: 8px;
+      font-size: 13px; color: var(--text-dim);
+    }
+    .act-sub { font-size: 11px; opacity: .6; margin-top: 2px; }
+
+    /* ===== DECK BUILDER ===== */
+    .search-bar-wrap { padding: 10px 12px 0; position: relative; }
+
+    .search-bar {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 10px 14px;
+      transition: border-color .2s;
+    }
+    .search-bar:focus-within { border-color: var(--gold); }
+
+    .search-bar input {
+      flex: 1; background: none; border: none;
+      color: var(--text); font-family: 'Rajdhani', sans-serif;
+      font-size: 16px; outline: none; min-width: 0;
+    }
+    .search-bar input::placeholder { color: var(--text-dim); }
+
+    .si { color: var(--text-dim); font-size: 18px; flex-shrink: 0; }
+
+    .clear-x {
+      background: none; border: none; color: var(--text-dim);
+      cursor: pointer; font-size: 16px; line-height: 1;
+      padding: 4px; min-width: 28px; min-height: 28px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex; overflow-x: auto; scrollbar-width: none;
+      padding: 0 12px; margin-top: 6px;
+    }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+
+    .ftab {
+      padding: 9px 16px; background: none; border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      white-space: nowrap; min-height: 40px; transition: all .2s;
+    }
+    .ftab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    /* Card grid */
+    .card-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 8px; padding: 12px;
+    }
+
+    @media (min-width: 480px) { .card-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 768px) { .card-grid { grid-template-columns: repeat(5, 1fr); } }
+
+    .cgi {
+      aspect-ratio: 59/86; border-radius: 5px;
+      overflow: hidden; position: relative;
+      cursor: pointer; background: var(--surface2);
+      border: 1px solid var(--border); transition: transform .15s;
+    }
+    .cgi:active { transform: scale(.95); }
+    .cgi img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .cgi-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .cgi-badge {
+      position: absolute; top: 3px; right: 3px;
+      background: var(--gold); color: var(--bg);
+      border-radius: 50%; width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+
+    /* Skeleton */
+    .skel {
+      background: linear-gradient(90deg,
+        var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+      background-size: 200% 100%;
+      animation: skel 1.4s infinite;
+    }
+    @keyframes skel {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ===== DECK PANEL TOGGLE ===== */
+    .dp-fab {
+      position: fixed; bottom: calc(var(--tab-h) + 14px); right: 16px;
+      background: var(--gold); color: var(--bg);
+      border: none; border-radius: 50px; padding: 10px 18px;
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px;
+      cursor: pointer; z-index: 50;
+      display: none; align-items: center; gap: 8px;
+      box-shadow: 0 4px 24px rgba(201,168,76,.45); min-height: 44px;
+    }
+
+    .dp-badge {
+      background: var(--bg); border-radius: 50%;
+      width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+    }
+
+    /* ===== DECK PANEL ===== */
+    .dp-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.55); z-index: 199;
+    }
+
+    .deck-panel {
+      position: fixed; bottom: var(--tab-h); left: 0; right: 0;
+      height: 72vh; background: var(--surface);
+      border-top: 2px solid var(--gold);
+      border-radius: 20px 20px 0 0;
+      z-index: 200;
+      transform: translateY(100%); transition: transform .32s cubic-bezier(.4,0,.2,1);
+      display: flex; flex-direction: column;
+    }
+    .deck-panel.open { transform: translateY(0); }
+
+    @media (min-width: 640px) {
+      .deck-panel {
+        left: 50%; right: auto; width: 480px;
+        transform: translateX(-50%) translateY(100%);
+      }
+      .deck-panel.open { transform: translateX(-50%) translateY(0); }
+    }
+
+    .dp-knob {
+      width: 40px; height: 4px; background: var(--border2);
+      border-radius: 2px; margin: 10px auto 0; flex-shrink: 0;
+    }
+
+    .dp-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 18px 10px; border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .dp-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px; color: var(--gold);
+    }
+
+    .dp-close {
+      background: none; border: none; color: var(--text-dim);
+      cursor: pointer; font-size: 20px;
+      min-width: 44px; min-height: 44px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .dp-stats {
+      display: flex; gap: 10px; padding: 8px 14px;
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+
+    .dp-stat {
+      flex: 1; background: var(--surface2); border-radius: 8px;
+      padding: 7px 10px; text-align: center;
+    }
+    .dp-stat-n { font-size: 20px; font-weight: 700; color: var(--gold); display: block; }
+    .dp-stat-l { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+    .dp-validity {
+      margin: 0 14px 6px; padding: 5px 12px; border-radius: 6px;
+      font-size: 12px; font-weight: 700; text-align: center; display: none;
+    }
+    .dp-validity.ok  { background: rgba(26,122,74,.2); border:1px solid var(--spell-green); color: #4ade80; }
+    .dp-validity.bad { background: rgba(224,48,48,.2);  border:1px solid var(--danger);      color: #f87171; }
+
+    .dp-tabs {
+      display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+
+    .dp-tab {
+      flex: 1; padding: 9px; background: none; border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
+      font-weight: 700; font-size: 13px; cursor: pointer; min-height: 44px;
+      text-align: center; transition: all .2s;
+    }
+    .dp-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    .dp-body {
+      flex: 1; overflow-y: auto; padding: 10px 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .dk-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 8px; background: var(--surface2);
+      border-radius: 8px; margin-bottom: 6px;
+    }
+
+    .dk-thumb {
+      width: 34px; height: 49px; border-radius: 3px;
+      object-fit: cover; flex-shrink: 0; background: var(--border);
+    }
+
+    .dk-info { flex: 1; min-width: 0; }
+    .dk-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dk-type { font-size: 11px; color: var(--text-dim); }
+    .dk-qty  { font-size: 15px; font-weight: 700; color: var(--gold); flex-shrink: 0; }
+
+    .dk-rm {
+      background: none; border: none; color: var(--danger);
+      cursor: pointer; font-size: 20px; padding: 4px;
+      min-width: 36px; min-height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .dp-actions {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 7px;
+      padding: 10px 12px; border-top: 1px solid var(--border); flex-shrink: 0;
+    }
+
+    .da-btn {
+      padding: 11px 8px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); font-family: 'Rajdhani', sans-serif;
+      font-weight: 700; font-size: 13px; cursor: pointer;
+      min-height: 44px; transition: all .2s;
+    }
+    .da-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .da-btn.full { grid-column: 1/-1; background: linear-gradient(135deg,var(--gold-dark),var(--gold)); color: var(--bg); border-color: var(--gold); }
+
+    /* ===== CARD MODAL ===== */
+    .cm-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.82);
+      z-index: 300; display: none;
+      align-items: flex-end; justify-content: center;
+    }
+    .cm-overlay.open { display: flex; animation: fadeIn .2s; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .card-modal {
+      width: 100%; max-width: 520px;
+      max-height: 92vh; background: var(--surface);
+      border-radius: 20px 20px 0 0;
+      border-top: 2px solid var(--border2);
+      overflow-y: auto; position: relative;
+      animation: slideUp .28s cubic-bezier(.4,0,.2,1);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(60px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .cm-close {
+      position: absolute; top: 14px; right: 14px;
+      background: var(--surface2); border: none; color: var(--text);
+      border-radius: 50%; width: 36px; height: 36px;
+      font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1;
+    }
+
+    .cm-img-row {
+      display: flex; gap: 16px; padding: 20px 18px 12px;
+    }
+
+    .cm-img {
+      width: 110px; height: 160px; border-radius: 6px;
+      object-fit: cover; flex-shrink: 0;
+      box-shadow: 0 6px 24px rgba(0,0,0,.6);
+    }
+
+    .cm-info { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+    .cm-name { font-size: 16px; font-weight: 700; line-height: 1.3; }
+
+    .cm-badge {
+      display: inline-block; padding: 3px 8px;
+      border-radius: 4px; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; color: #fff;
+      max-width: fit-content;
+    }
+
+    .cm-attr { font-size: 12px; color: var(--text-dim); font-weight: 600; }
+    .cm-level { font-size: 12px; color: var(--gold); }
+    .cm-atkdef { font-size: 15px; font-weight: 700; }
+
+    .cm-desc {
+      margin: 0 18px 14px; font-size: 13px;
+      color: var(--text-dim); line-height: 1.6;
+      padding: 12px; background: var(--surface2);
+      border-radius: 8px; max-height: 180px; overflow-y: auto;
+    }
+
+    .cm-btns {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px; padding: 0 18px 20px;
+    }
+
+    .cm-btn {
+      padding: 12px 6px; background: var(--surface2);
+      border-radius: 8px; font-family: 'Rajdhani', sans-serif;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      text-align: center; min-height: 44px; transition: all .2s;
+    }
+    .cm-btn.main  { border: 1px solid var(--spell-green); color: #4ade80; }
+    .cm-btn.extra { border: 1px solid #3b82f6;           color: #60a5fa; }
+    .cm-btn.side  { border: 1px solid #a855f7;           color: #c084fc; }
+    .cm-btn:hover { brightness: 1.2; transform: translateY(-1px); }
+    .cm-btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
+
+    /* ===== STATS ===== */
+    .stats-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; padding: 16px;
+    }
+
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px; text-align: center;
+    }
+    .stat-v { font-family: 'Press Start 2P', monospace; font-size: 20px; color: var(--gold); margin-bottom: 8px; display: block; }
+    .stat-l { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Simple chart */
+    .chart-wrap { padding: 16px; }
+    .chart-title { font-size: 12px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .bar-chart { display: flex; flex-direction: column; gap: 8px; }
+    .bar-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+    .bar-label { width: 80px; color: var(--text-dim); text-align: right; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 20px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; background: var(--gold); transition: width .5s ease; }
+    .bar-val { width: 30px; color: var(--text); font-weight: 700; }
+
+    /* ===== SETTINGS ===== */
+    .settings-section { padding: 16px; border-bottom: 1px solid var(--border); }
+    .ss-title { font-size: 10px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+
+    .sr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.04);
+      min-height: 52px; gap: 12px;
+    }
+    .sr:last-child { border-bottom: none; }
+    .sr-label { font-size: 15px; font-weight: 600; }
+
+    .ss-sel {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text);
+      font-family: 'Rajdhani', sans-serif; font-size: 14px;
+      padding: 8px 12px; cursor: pointer; min-height: 44px;
+    }
+
+    .ss-inp {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text);
+      font-family: 'Rajdhani', sans-serif; font-size: 14px;
+      padding: 8px 12px; width: 160px; min-height: 44px;
+    }
+
+    /* Toggle */
+    .toggle { position: relative; width: 52px; height: 28px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .tg-sl {
+      position: absolute; inset: 0; background: var(--border2);
+      border-radius: 14px; cursor: pointer; transition: .3s;
+    }
+    .tg-sl::before {
+      content: ''; position: absolute;
+      height: 22px; width: 22px; left: 3px; bottom: 3px;
+      background: #fff; border-radius: 50%; transition: .3s;
+    }
+    .toggle input:checked + .tg-sl { background: var(--gold); }
+    .toggle input:checked + .tg-sl::before { transform: translateX(24px); }
+
+    .danger-btn {
+      width: 100%; padding: 14px;
+      background: rgba(224,48,48,.12); border: 1px solid var(--danger);
+      border-radius: 8px; color: var(--danger);
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 15px;
+      cursor: pointer; min-height: 48px; transition: background .2s;
+    }
+    .danger-btn:hover { background: rgba(224,48,48,.22); }
+
+    /* ===== COMING SOON ===== */
+    .cs-wrap {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      height: 100%; gap: 16px; text-align: center; padding: 24px;
+    }
+    .cs-icon { font-size: 64px; opacity: .4; }
+    .cs-h { font-family: 'Press Start 2P', monospace; font-size: 11px; color: var(--gold); }
+    .cs-p { font-size: 14px; color: var(--text-dim); line-height: 1.7; max-width: 280px; }
+
+    /* ===== MODALS (name / load) ===== */
+    .modal-full-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.82); z-index: 400;
+      align-items: center; justify-content: center;
+    }
+    .modal-full-overlay.open { display: flex; }
+
+    .modal-box {
+      background: var(--surface); border: 1px solid var(--gold);
+      border-radius: 16px; padding: 24px;
+      width: 90%; max-width: 340px;
+    }
+    .modal-box h3 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px; color: var(--gold);
+      text-align: center; margin-bottom: 18px;
+    }
+    .modal-box input {
+      width: 100%; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); font-family: 'Rajdhani', sans-serif;
+      font-size: 16px; padding: 12px; margin-bottom: 16px; outline: none;
+    }
+    .modal-box input:focus { border-color: var(--gold); }
+    .modal-row { display: flex; gap: 8px; }
+    .modal-row button {
+      flex: 1; padding: 12px; border-radius: 8px;
+      font-family: 'Rajdhani', sans-serif; font-weight: 700;
+      font-size: 14px; cursor: pointer; min-height: 44px;
+    }
+    .mbtn-cancel { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+    .mbtn-ok     { background: var(--gold); border: none; color: var(--bg); }
+
+    /* Load deck sheet */
+    .load-sheet {
+      display: none; position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--surface);
+      border-radius: 20px 20px 0 0;
+      border-top: 2px solid var(--gold);
+      z-index: 400; max-height: 80vh;
+      overflow-y: auto; padding: 20px 16px;
+    }
+    .load-sheet.open { display: block; }
+
+    .load-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .load-hdr span { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--gold); }
+    .load-close {
+      background: none; border: none; color: var(--text-dim);
+      font-size: 20px; cursor: pointer;
+      min-width: 44px; min-height: 44px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .saved-dk-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 13px 14px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 8px;
+      margin-bottom: 8px; cursor: pointer; min-height: 52px;
+      transition: border-color .2s;
+    }
+    .saved-dk-item:hover { border-color: var(--gold); }
+    .sdk-name { font-weight: 700; font-size: 15px; }
+    .sdk-info { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+    .sdk-right { display: flex; gap: 8px; align-items: center; }
+    .sdk-del {
+      background: none; border: none; color: var(--danger);
+      cursor: pointer; font-size: 18px;
+      min-width: 36px; min-height: 36px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ===== EMPTY / LOADING ===== */
+    .empty {
+      display: flex; flex-direction: column;
+      align-items: center; padding: 48px 24px; gap: 12px; text-align: center;
+    }
+    .empty-i { font-size: 48px; opacity: .35; }
+    .empty p { font-size: 14px; color: var(--text-dim); line-height: 1.7; max-width: 260px; }
+
+    /* ===== TOAST ===== */
+    #toast-container {
+      position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+      z-index: 1000; display: flex; flex-direction: column; gap: 8px;
+      pointer-events: none; width: max-content; max-width: calc(100vw - 32px);
+    }
+
+    .toast {
+      padding: 11px 20px; border-radius: 10px;
+      font-size: 13px; font-weight: 700;
+      background: var(--surface); border: 1px solid var(--border);
+      box-shadow: 0 4px 24px rgba(0,0,0,.5); text-align: center;
+      animation: tin .25s ease, tout .3s ease 2.7s forwards;
+    }
+    .toast.ok  { border-color: var(--spell-green); color: #4ade80; }
+    .toast.err { border-color: var(--danger);      color: #f87171; }
+    .toast.inf { border-color: var(--gold);         color: var(--gold); }
+
+    @keyframes tin  { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes tout { from { opacity:1; } to { opacity:0; transform:translateY(-12px); } }
+
+    /* ===== CARD TYPE COLORS (helpers) ===== */
+    .ct-normal  { background: var(--c-normal); }
+    .ct-effect  { background: var(--c-effect); }
+    .ct-ritual  { background: var(--c-ritual); }
+    .ct-fusion  { background: var(--c-fusion); }
+    .ct-synchro { background: var(--c-synchro); color: #000 !important; }
+    .ct-xyz     { background: var(--c-xyz); border: 1px solid var(--gold) !important; }
+    .ct-link    { background: var(--c-link); }
+    .ct-spell   { background: var(--c-spell); }
+    .ct-trap    { background: var(--c-trap); }
+    .ct-pend    { background: linear-gradient(90deg, var(--c-spell), var(--c-effect)); }
+
+    /* Footer info */
+    .footer-note { padding: 16px; text-align: center; color: var(--text-dim); font-size: 11px; line-height: 1.8; }
+
+    /* Pull-to-refresh hint */
+    .ptr-hint { text-align: center; padding: 12px; font-size: 12px; color: var(--text-dim); display: none; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ======================== HOME ======================== -->
+  <div id="home-screen" class="screen active">
+    <div class="home-bg" id="home-bg"></div>
+    <div class="screen-body">
+      <div class="home-inner">
+        <h1 class="app-title">CHAMPION<br>TRAINER</h1>
+        <p class="app-sub">Practice like the pros</p>
+        <div class="home-holo-card"></div>
+        <div class="quick-btns">
+          <button class="qbtn primary" onclick="nav('deck')">🃏 Build Deck</button>
+          <button class="qbtn" onclick="nav('duel')">⚔️ Quick Duel</button>
+          <button class="qbtn" onclick="nav('stats')">📊 View Stats</button>
+        </div>
+        <div class="activity-wrap">
+          <div class="section-label">Recent Activity</div>
+          <div id="activity-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== DECK BUILDER ======================== -->
+  <div id="deck-screen" class="screen">
+    <div class="screen-hdr">
+      <div class="screen-hdr-row">
+        <span class="screen-title">DECK BUILDER</span>
+      </div>
+      <div class="search-bar-wrap">
+        <div class="search-bar">
+          <span class="si">🔍</span>
+          <input type="text" id="card-search"
+                 placeholder="Search cards by name…"
+                 autocomplete="off" autocorrect="off" spellcheck="false">
+          <button class="clear-x" id="clear-btn" onclick="clearSearch()" style="display:none">✕</button>
+        </div>
+      </div>
+      <div class="filter-tabs" id="filter-tabs">
+        <button class="ftab active" data-f="all"     onclick="setFilter('all',this)">All</button>
+        <button class="ftab"        data-f="monster"  onclick="setFilter('monster',this)">Monster</button>
+        <button class="ftab"        data-f="spell"    onclick="setFilter('spell',this)">Spell</button>
+        <button class="ftab"        data-f="trap"     onclick="setFilter('trap',this)">Trap</button>
+        <button class="ftab"        data-f="extra"    onclick="setFilter('extra',this)">Extra Deck</button>
+      </div>
+    </div>
+    <div class="screen-body" id="deck-body">
+      <div id="card-results">
+        <div class="empty">
+          <div class="empty-i">🔍</div>
+          <p>Search for cards to start building your deck.<br>Try "Dark Magician", "Blue-Eyes White Dragon", or "Ash Blossom".</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== DUEL ======================== -->
+  <div id="duel-screen" class="screen">
+    <div class="screen-hdr">
+      <div class="screen-hdr-row"><span class="screen-title">DUEL</span></div>
+    </div>
+    <div class="screen-body">
+      <div class="cs-wrap">
+        <div class="cs-icon">⚔️</div>
+        <p class="cs-h">Coming in Phase 2</p>
+        <p class="cs-p">The full duel simulator with Champion AI profiles is coming soon. Build your deck first!</p>
+        <button class="qbtn" style="margin-top:20px" onclick="nav('deck')">🃏 Go to Deck Builder →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== STATS ======================== -->
+  <div id="stats-screen" class="screen">
+    <div class="screen-hdr">
+      <div class="screen-hdr-row"><span class="screen-title">STATS</span></div>
+    </div>
+    <div class="screen-body">
+      <div class="stats-grid" id="stats-grid"></div>
+      <div class="chart-wrap" id="chart-wrap"></div>
+    </div>
+  </div>
+
+  <!-- ======================== SETTINGS ======================== -->
+  <div id="settings-screen" class="screen">
+    <div class="screen-hdr">
+      <div class="screen-hdr-row"><span class="screen-title">SETTINGS</span></div>
+    </div>
+    <div class="screen-body">
+
+      <div class="settings-section">
+        <div class="ss-title">Player</div>
+        <div class="sr">
+          <span class="sr-label">Player Name</span>
+          <input class="ss-inp" id="s-name" type="text" placeholder="Duelist" maxlength="20">
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="ss-title">Duel Rules</div>
+        <div class="sr">
+          <span class="sr-label">Starting LP</span>
+          <select class="ss-sel" id="s-lp" onchange="Cfg.set('lp',this.value)">
+            <option value="8000">8000</option>
+            <option value="4000">4000</option>
+          </select>
+        </div>
+        <div class="sr">
+          <span class="sr-label">Starting Hand</span>
+          <select class="ss-sel" id="s-hand" onchange="Cfg.set('hand',this.value)">
+            <option value="5">5 cards</option>
+            <option value="6">6 cards</option>
+          </select>
+        </div>
+        <div class="sr">
+          <span class="sr-label">AI Difficulty</span>
+          <select class="ss-sel" id="s-ai" onchange="Cfg.set('ai',this.value)">
+            <option value="normal">Normal</option>
+            <option value="champion">Champion</option>
+            <option value="unbeatable">Unbeatable</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="ss-title">Experience</div>
+        <div class="sr">
+          <span class="sr-label">Animation Speed</span>
+          <select class="ss-sel" id="s-anim" onchange="Cfg.set('anim',this.value)">
+            <option value="normal">Normal</option>
+            <option value="fast">Fast</option>
+            <option value="slow">Slow</option>
+            <option value="off">Off</option>
+          </select>
+        </div>
+        <div class="sr">
+          <span class="sr-label">Sound Effects</span>
+          <label class="toggle">
+            <input type="checkbox" id="s-sound" onchange="Cfg.set('sound',this.checked)">
+            <span class="tg-sl"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="ss-title">Data</div>
+        <button class="danger-btn" onclick="clearAllData()">⚠️ Clear All Saved Data</button>
+      </div>
+
+      <div class="footer-note">
+        Champion Trainer v1.0 (Phase 1)<br>
+        Card data: <span style="color:var(--gold)">YGOPRODeck API</span><br>
+        No backend required — runs entirely in your browser.
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== TAB BAR ======================== -->
+  <div id="tab-bar">
+    <button class="tab-btn active" id="tab-home"     onclick="nav('home')">
+      <span class="ti">🏠</span><span class="tl">Home</span>
+    </button>
+    <button class="tab-btn"        id="tab-deck"     onclick="nav('deck')">
+      <span class="ti">🃏</span><span class="tl">Deck</span>
+    </button>
+    <button class="tab-btn"        id="tab-duel"     onclick="nav('duel')">
+      <span class="ti">⚔️</span><span class="tl">Duel</span>
+    </button>
+    <button class="tab-btn"        id="tab-stats"    onclick="nav('stats')">
+      <span class="ti">📊</span><span class="tl">Stats</span>
+    </button>
+    <button class="tab-btn"        id="tab-settings" onclick="nav('settings')">
+      <span class="ti">⚙️</span><span class="tl">Settings</span>
+    </button>
+  </div>
+
+  <!-- ======================== DECK PANEL FAB ======================== -->
+  <button class="dp-fab" id="dp-fab" onclick="toggleDeckPanel()">
+    🃏 Deck <span class="dp-badge" id="dp-badge">0</span>
+  </button>
+
+  <!-- ======================== DECK PANEL ======================== -->
+  <div class="dp-overlay" id="dp-overlay" onclick="closeDeckPanel()"></div>
+
+  <div class="deck-panel" id="deck-panel">
+    <div class="dp-knob"></div>
+    <div class="dp-hdr">
+      <span class="dp-title">MY DECK</span>
+      <button class="dp-close" onclick="closeDeckPanel()">✕</button>
+    </div>
+    <div id="dp-validity" class="dp-validity"></div>
+    <div class="dp-stats">
+      <div class="dp-stat"><span class="dp-stat-n" id="cnt-main">0</span><span class="dp-stat-l">Main</span></div>
+      <div class="dp-stat"><span class="dp-stat-n" id="cnt-extra">0</span><span class="dp-stat-l">Extra</span></div>
+      <div class="dp-stat"><span class="dp-stat-n" id="cnt-side">0</span><span class="dp-stat-l">Side</span></div>
+    </div>
+    <div class="dp-tabs">
+      <button class="dp-tab active" onclick="showSec('main',this)">Main</button>
+      <button class="dp-tab"        onclick="showSec('extra',this)">Extra</button>
+      <button class="dp-tab"        onclick="showSec('side',this)">Side</button>
+    </div>
+    <div class="dp-body" id="dp-body"></div>
+    <div class="dp-actions">
+      <button class="da-btn" onclick="saveDeckDialog()">💾 Save</button>
+      <button class="da-btn" onclick="openLoadSheet()">📂 Load</button>
+      <button class="da-btn" onclick="validateDeck()">✓ Validate</button>
+      <button class="da-btn" onclick="exportDeck()">📤 Export</button>
+      <button class="da-btn full" onclick="newDeck()">＋ New Deck</button>
+    </div>
+  </div>
+
+  <!-- ======================== CARD MODAL ======================== -->
+  <div class="cm-overlay" id="cm-overlay" onclick="cmClickOut(event)">
+    <div class="card-modal" id="card-modal">
+      <button class="cm-close" onclick="closeModal()">✕</button>
+      <div class="cm-img-row">
+        <img class="cm-img" id="cm-img" src="" alt="">
+        <div class="cm-info">
+          <div class="cm-name"  id="cm-name"></div>
+          <span class="cm-badge" id="cm-badge"></span>
+          <div class="cm-attr"  id="cm-attr"></div>
+          <div class="cm-level" id="cm-level"></div>
+          <div class="cm-atkdef" id="cm-atkdef"></div>
+        </div>
+      </div>
+      <div class="cm-desc" id="cm-desc"></div>
+      <div class="cm-btns">
+        <button class="cm-btn main"  id="cm-main"  onclick="addTo('main')">+ Main Deck</button>
+        <button class="cm-btn extra" id="cm-extra" onclick="addTo('extra')">+ Extra Deck</button>
+        <button class="cm-btn side"  id="cm-side"  onclick="addTo('side')">+ Side Deck</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== SAVE MODAL ======================== -->
+  <div class="modal-full-overlay" id="save-overlay" onclick="saveClickOut(event)">
+    <div class="modal-box">
+      <h3>SAVE DECK</h3>
+      <input type="text" id="deck-name-inp" placeholder="Enter deck name…" maxlength="32">
+      <div class="modal-row">
+        <button class="mbtn-cancel" onclick="closeSaveModal()">Cancel</button>
+        <button class="mbtn-ok"     onclick="confirmSave()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== LOAD SHEET ======================== -->
+  <div class="dp-overlay" id="load-overlay" onclick="closeLoadSheet()" style="z-index:398"></div>
+  <div class="load-sheet" id="load-sheet">
+    <div class="load-hdr">
+      <span>SAVED DECKS</span>
+      <button class="load-close" onclick="closeLoadSheet()">✕</button>
+    </div>
+    <div id="saved-deck-list"></div>
+  </div>
+
+  <!-- ======================== TOAST ======================== -->
+  <div id="toast-container"></div>
+</div>
+
+<script>
+'use strict';
+
+/* ============================================================
+   CONFIG / SETTINGS
+============================================================ */
+const Cfg = {
+  DEFAULTS: { name:'Duelist', lp:8000, hand:5, ai:'champion', anim:'normal', sound:true },
+  get(k) {
+    const v = localStorage.getItem('cfg_'+k);
+    return v !== null ? JSON.parse(v) : this.DEFAULTS[k];
+  },
+  set(k, v) { localStorage.setItem('cfg_'+k, JSON.stringify(v)); }
+};
+
+/* ============================================================
+   CARD DATABASE  (YGOPRODeck + localStorage cache)
+============================================================ */
+const CardDB = {
+  BASE: 'https://db.ygoprodeck.com/api/v7/cardinfo.php',
+  IMG:  'https://images.ygoprodeck.com/images/cards/',
+  CARD_TTL: 86400000,  // 24 h
+  SRCH_TTL: 3600000,   // 1 h
+
+  _read(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return null;
+      const { ts, d } = JSON.parse(raw);
+      return (Date.now() - ts < (key.startsWith('yc_') ? this.CARD_TTL : this.SRCH_TTL)) ? d : null;
+    } catch { return null; }
+  },
+
+  _write(key, data) {
+    try { localStorage.setItem(key, JSON.stringify({ ts: Date.now(), d: data })); }
+    catch { this._evict(); try { localStorage.setItem(key, JSON.stringify({ ts: Date.now(), d: data })); } catch {} }
+  },
+
+  _evict() {
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('ys_'))
+      .slice(0, 20)
+      .forEach(k => localStorage.removeItem(k));
+  },
+
+  imgUrl(card) {
+    const id = card?.card_images?.[0]?.id ?? card?.id;
+    return id ? `${this.IMG}${id}.jpg` : '';
+  },
+
+  async search(query, filter = 'all') {
+    const key = `ys_${query.toLowerCase()}_${filter}`;
+    const cached = this._read(key);
+    if (cached) return cached;
+
+    const url = new URL(this.BASE);
+    url.searchParams.set('fname', query);
+    url.searchParams.set('num', '48');
+    url.searchParams.set('offset', '0');
+
+    try {
+      const r = await fetch(url.toString());
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const { data = [] } = await r.json();
+
+      // Client-side type filtering
+      const filtered = this._filterByType(data, filter);
+
+      // Cache each card individually too
+      filtered.forEach(c => this._write(`yc_${c.id}`, c));
+      this._write(key, filtered);
+      return filtered;
+    } catch (e) {
+      console.error('CardDB.search', e);
+      toast('API error — check your connection', 'err');
+      return [];
+    }
+  },
+
+  _filterByType(cards, filter) {
+    if (filter === 'all') return cards;
+    return cards.filter(c => {
+      const t = (c.type || '').toLowerCase();
+      if (filter === 'extra')   return t.includes('fusion') || t.includes('synchro') || t.includes('xyz') || t.includes('link');
+      if (filter === 'monster') return t.includes('monster') && !t.includes('fusion') && !t.includes('synchro') && !t.includes('xyz') && !t.includes('link');
+      if (filter === 'spell')   return t.includes('spell');
+      if (filter === 'trap')    return t.includes('trap');
+      return true;
+    });
+  },
+
+  async fetchById(id) {
+    const key = `yc_${id}`;
+    const cached = this._read(key);
+    if (cached) return cached;
+    try {
+      const r = await fetch(`${this.BASE}?id=${id}`);
+      if (!r.ok) throw new Error();
+      const { data } = await r.json();
+      const c = data?.[0] ?? null;
+      if (c) this._write(key, c);
+      return c;
+    } catch { return null; }
+  }
+};
+
+/* ============================================================
+   DECK MANAGER
+============================================================ */
+const DeckMgr = {
+  PFX: 'dk_',
+  save(name, deck) {
+    try { localStorage.setItem(this.PFX + name, JSON.stringify({ ...deck, savedAt: Date.now() })); return true; }
+    catch { return false; }
+  },
+  load(name) {
+    try { return JSON.parse(localStorage.getItem(this.PFX + name)); } catch { return null; }
+  },
+  list() {
+    return Object.keys(localStorage)
+      .filter(k => k.startsWith(this.PFX))
+      .map(k => k.slice(this.PFX.length))
+      .slice(0, 10);
+  },
+  del(name) { localStorage.removeItem(this.PFX + name); }
+};
+
+/* ============================================================
+   STATS
+============================================================ */
+const Stats = {
+  KEY: 'ct_stats',
+  blank() { return { duels:0, wins:0, losses:0, profiles:[], history:[] }; },
+  get() { try { return JSON.parse(localStorage.getItem(this.KEY)) || this.blank(); } catch { return this.blank(); } },
+  save(s) { localStorage.setItem(this.KEY, JSON.stringify(s)); },
+  record(r) {
+    const s = this.get();
+    s.duels++; if (r.won) s.wins++; else s.losses++;
+    s.history.push({ ...r, ts: Date.now() });
+    if (s.history.length > 100) s.history = s.history.slice(-100);
+    this.save(s);
+  }
+};
+
+/* ============================================================
+   APP STATE
+============================================================ */
+const S = {
+  screen:   'home',
+  filter:   'all',
+  query:    '',
+  results:  [],      // Array<card>
+  byId:     {},      // id -> card (quick lookup)
+  isLoading: false,
+  debounce: null,
+  modalCard: null,
+  deck: {
+    name: 'New Deck',
+    main:  [],   // [{card, count}]
+    extra: [],
+    side:  []
+  },
+  deckSec:     'main',
+  deckOpen:    false,
+  prevScroll:  {}
+};
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+function nav(scr) {
+  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(scr + '-screen').classList.add('active');
+  document.getElementById('tab-' + scr).classList.add('active');
+  S.screen = scr;
+
+  const fab = document.getElementById('dp-fab');
+  fab.style.display = scr === 'deck' ? 'flex' : 'none';
+
+  if (scr !== 'deck') closeDeckPanel();
+  if (scr === 'stats')    renderStats();
+  if (scr === 'settings') loadSettings();
+  if (scr === 'home')     renderActivity();
+}
+
+/* ============================================================
+   HOME
+============================================================ */
+function initHome() {
+  const bg = document.getElementById('home-bg');
+  for (let i = 0; i < 6; i++) {
+    const d = document.createElement('div');
+    d.className = 'float-card';
+    d.style.cssText = [
+      `left:${Math.random() * 85}%`,
+      `animation-duration:${9 + Math.random() * 14}s`,
+      `animation-delay:-${Math.random() * 18}s`
+    ].join(';');
+    bg.appendChild(d);
+  }
+  renderActivity();
+}
+
+function renderActivity() {
+  const st = Stats.get();
+  const decks = DeckMgr.list();
+  let html = '';
+
+  if (st.duels > 0) {
+    const wr = Math.round(st.wins / st.duels * 100);
+    html += `<div class="act-item">
+      📊 ${st.wins}W / ${st.losses}L — ${wr}% win rate
+      <div class="act-sub">Overall record</div>
+    </div>`;
+  }
+
+  if (decks.length > 0) {
+    html += `<div class="act-item">
+      🃏 ${decks.length} deck${decks.length !== 1 ? 's' : ''} saved
+      <div class="act-sub">Latest: ${decks[decks.length - 1]}</div>
+    </div>`;
+  }
+
+  const mc = countSec('main');
+  if (mc > 0) {
+    html += `<div class="act-item">
+      🔧 Current deck: ${mc} main / ${countSec('extra')} extra cards
+      <div class="act-sub">Unsaved draft</div>
+    </div>`;
+  }
+
+  if (!html) {
+    html = `<div class="act-item">🎴 Welcome! Build your first deck to get started.<div class="act-sub">Tap Deck Builder below</div></div>`;
+  }
+
+  document.getElementById('activity-list').innerHTML = html;
+}
+
+/* ============================================================
+   DECK BUILDER — SEARCH
+============================================================ */
+function initDeckBuilder() {
+  const inp = document.getElementById('card-search');
+
+  inp.addEventListener('input', e => {
+    const q = e.target.value.trim();
+    document.getElementById('clear-btn').style.display = q ? 'flex' : 'none';
+    clearTimeout(S.debounce);
+    if (q.length < 2) { if (!q) showEmpty(); return; }
+    S.debounce = setTimeout(() => doSearch(q), 380);
+  });
+
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { clearTimeout(S.debounce); doSearch(inp.value.trim()); }
+  });
+}
+
+async function doSearch(q) {
+  if (!q || q.length < 2) return;
+  S.query = q; S.isLoading = true;
+  showSkeletons();
+  const cards = await CardDB.search(q, S.filter);
+  S.results = cards;
+  cards.forEach(c => { S.byId[c.id] = c; });
+  renderResults(cards);
+  S.isLoading = false;
+}
+
+function clearSearch() {
+  document.getElementById('card-search').value = '';
+  document.getElementById('clear-btn').style.display = 'none';
+  S.query = ''; S.results = [];
+  showEmpty();
+}
+
+function setFilter(f, btn) {
+  S.filter = f;
+  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (S.query) doSearch(S.query);
+}
+
+function showEmpty() {
+  document.getElementById('card-results').innerHTML = `
+    <div class="empty">
+      <div class="empty-i">🔍</div>
+      <p>Search for cards to start building your deck.<br>Try "Blue-Eyes", "Ash Blossom", or any card name.</p>
+    </div>`;
+}
+
+function showSkeletons() {
+  let h = '<div class="card-grid">';
+  for (let i = 0; i < 18; i++) h += '<div class="cgi skel"></div>';
+  h += '</div>';
+  document.getElementById('card-results').innerHTML = h;
+}
+
+function renderResults(cards) {
+  if (!cards.length) {
+    document.getElementById('card-results').innerHTML = `
+      <div class="empty">
+        <div class="empty-i">😞</div>
+        <p>No cards found for "<strong>${S.query}</strong>".<br>Try a different name or check spelling.</p>
+      </div>`;
+    return;
+  }
+
+  let h = '<div class="card-grid">';
+  cards.forEach(c => {
+    const img = CardDB.imgUrl(c);
+    const cls = typeClass(c);
+    const cnt = totalInDeck(c.id);
+    h += `<div class="cgi" onclick="openModal(${c.id})" data-id="${c.id}">
+      <img src="${img}" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
+      <div class="cgi-bar ${cls}"></div>
+      ${cnt ? `<div class="cgi-badge">${cnt}</div>` : ''}
+    </div>`;
+  });
+  h += '</div>';
+  document.getElementById('card-results').innerHTML = h;
+}
+
+/* ============================================================
+   CARD MODAL
+============================================================ */
+async function openModal(cardId) {
+  let card = S.byId[cardId];
+  if (!card) card = await CardDB.fetchById(cardId);
+  if (!card) { toast('Could not load card', 'err'); return; }
+
+  S.modalCard = card;
+  S.byId[cardId] = card;
+
+  document.getElementById('cm-img').src  = CardDB.imgUrl(card);
+  document.getElementById('cm-img').alt  = card.name;
+  document.getElementById('cm-name').textContent = card.name;
+
+  const badge = document.getElementById('cm-badge');
+  badge.textContent = card.type || '';
+  badge.className = 'cm-badge ' + typeClass(card);
+
+  document.getElementById('cm-attr').textContent =
+    card.attribute ? `${card.attribute} • ${card.race}` : (card.race || '');
+
+  let lvl = '';
+  if (card.level) lvl = '★'.repeat(Math.min(card.level, 12)) + ` Lv.${card.level}`;
+  if (card.rank)  lvl = '★'.repeat(Math.min(card.rank,  12)) + ` Rank ${card.rank}`;
+  if (card.linkval) lvl = `Link-${card.linkval}`;
+  document.getElementById('cm-level').textContent = lvl;
+
+  let ad = '';
+  if (card.atk !== undefined) ad += `ATK ${card.atk ?? '?'}`;
+  if (card.def !== undefined) ad += ` / DEF ${card.def ?? '?'}`;
+  document.getElementById('cm-atkdef').textContent = ad;
+  document.getElementById('cm-desc').textContent = card.desc || '';
+
+  const isExtra = isExtraCard(card);
+  document.getElementById('cm-main').disabled  = isExtra;
+  document.getElementById('cm-extra').disabled = !isExtra;
+
+  document.getElementById('cm-overlay').classList.add('open');
+  if (navigator.vibrate) navigator.vibrate(12);
+}
+
+function closeModal() {
+  document.getElementById('cm-overlay').classList.remove('open');
+  S.modalCard = null;
+}
+
+function cmClickOut(e) {
+  if (e.target === document.getElementById('cm-overlay')) closeModal();
+}
+
+function addTo(sec) {
+  if (S.modalCard) addCard(S.modalCard, sec);
+  closeModal();
+}
+
+/* ============================================================
+   DECK OPERATIONS
+============================================================ */
+function isExtraCard(c) {
+  const t = (c.type || '').toLowerCase();
+  return t.includes('fusion') || t.includes('synchro') || t.includes('xyz') || t.includes('link');
+}
+
+function totalInDeck(id) {
+  return [...S.deck.main, ...S.deck.extra, ...S.deck.side]
+    .filter(e => e.card.id == id)
+    .reduce((s, e) => s + e.count, 0);
+}
+
+function countSec(sec) {
+  return S.deck[sec].reduce((s, e) => s + e.count, 0);
+}
+
+function addCard(card, sec) {
+  if (totalInDeck(card.id) >= 3) { toast(`${card.name} already at 3 copies`, 'err'); return; }
+  if (sec === 'main' && isExtraCard(card))  { sec = 'extra'; }
+  if (sec === 'extra' && !isExtraCard(card)) { toast('This card belongs in Main Deck', 'err'); return; }
+  const limits = { main: 60, extra: 15, side: 15 };
+  if (countSec(sec) >= limits[sec]) { toast(`${sec} deck full`, 'err'); return; }
+
+  const list = S.deck[sec];
+  const ex = list.find(e => e.card.id === card.id);
+  if (ex) ex.count++;
+  else list.push({ card, count: 1 });
+
+  refreshDeckUI();
+  refreshGridBadge(card.id);
+  toast(`Added ${card.name}`, 'ok');
+  if (navigator.vibrate) navigator.vibrate(8);
+}
+
+function removeCard(id, sec) {
+  const list = S.deck[sec];
+  const i = list.findIndex(e => e.card.id == id);
+  if (i < 0) return;
+  if (list[i].count > 1) list[i].count--;
+  else list.splice(i, 1);
+  refreshDeckUI();
+  renderDeckBody();
+  refreshGridBadge(id);
+}
+
+function refreshGridBadge(id) {
+  const el = document.querySelector(`[data-id="${id}"]`);
+  if (!el) return;
+  let badge = el.querySelector('.cgi-badge');
+  const cnt = totalInDeck(id);
+  if (cnt > 0) {
+    if (!badge) { badge = document.createElement('div'); badge.className = 'cgi-badge'; el.appendChild(badge); }
+    badge.textContent = cnt;
+  } else if (badge) badge.remove();
+}
+
+function refreshDeckUI() {
+  document.getElementById('dp-badge').textContent  = countSec('main');
+  document.getElementById('cnt-main').textContent  = countSec('main');
+  document.getElementById('cnt-extra').textContent = countSec('extra');
+  document.getElementById('cnt-side').textContent  = countSec('side');
+  // hide validity on change
+  const v = document.getElementById('dp-validity');
+  v.style.display = 'none';
+}
+
+function renderDeckBody() {
+  const list = S.deck[S.deckSec];
+  const body = document.getElementById('dp-body');
+
+  if (!list.length) {
+    body.innerHTML = `<div class="empty" style="padding:24px">
+      <div class="empty-i">🃏</div><p>No cards in ${S.deckSec} deck yet</p></div>`;
+    return;
+  }
+
+  const sorted = [...list].sort((a, b) => {
+    const to = { monster:0, spell:1, trap:2, extra:3 };
+    const ta = simpleType(a.card), tb = simpleType(b.card);
+    return (to[ta] - to[tb]) || a.card.name.localeCompare(b.card.name);
+  });
+
+  body.innerHTML = sorted.map(e => `
+    <div class="dk-row">
+      <img class="dk-thumb" src="${CardDB.imgUrl(e.card)}" alt="${e.card.name}"
+           loading="lazy" onerror="this.style.opacity='.3'">
+      <div class="dk-info">
+        <div class="dk-name">${e.card.name}</div>
+        <div class="dk-type">${e.card.type || ''}</div>
+      </div>
+      <div class="dk-qty">×${e.count}</div>
+      <button class="dk-rm" onclick="removeCard(${e.card.id},'${S.deckSec}')">−</button>
+    </div>`).join('');
+}
+
+function simpleType(c) {
+  if (isExtraCard(c)) return 'extra';
+  const t = (c.type || '').toLowerCase();
+  if (t.includes('spell')) return 'spell';
+  if (t.includes('trap'))  return 'trap';
+  return 'monster';
+}
+
+function showSec(sec, btn) {
+  S.deckSec = sec;
+  document.querySelectorAll('.dp-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDeckBody();
+}
+
+/* ============================================================
+   DECK PANEL
+============================================================ */
+function toggleDeckPanel() {
+  S.deckOpen ? closeDeckPanel() : openDeckPanel();
+}
+
+function openDeckPanel() {
+  S.deckOpen = true;
+  document.getElementById('deck-panel').classList.add('open');
+  document.getElementById('dp-overlay').style.display = 'block';
+  renderDeckBody();
+}
+
+function closeDeckPanel() {
+  S.deckOpen = false;
+  document.getElementById('deck-panel').classList.remove('open');
+  document.getElementById('dp-overlay').style.display = 'none';
+}
+
+/* ============================================================
+   SAVE / LOAD / VALIDATE / EXPORT
+============================================================ */
+function saveDeckDialog() {
+  document.getElementById('deck-name-inp').value = S.deck.name;
+  document.getElementById('save-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('deck-name-inp').focus(), 100);
+}
+
+function closeSaveModal() { document.getElementById('save-overlay').classList.remove('open'); }
+function saveClickOut(e)  { if (e.target === document.getElementById('save-overlay')) closeSaveModal(); }
+
+function confirmSave() {
+  const name = document.getElementById('deck-name-inp').value.trim();
+  if (!name) { toast('Enter a deck name', 'err'); return; }
+  S.deck.name = name;
+  DeckMgr.save(name, S.deck) ? toast(`"${name}" saved!`, 'ok') : toast('Save failed', 'err');
+  closeSaveModal();
+}
+
+function openLoadSheet() {
+  const list = DeckMgr.list();
+  const el = document.getElementById('saved-deck-list');
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-i">📭</div><p>No saved decks yet</p></div>`;
+  } else {
+    el.innerHTML = list.map(name => {
+      const dk = DeckMgr.load(name);
+      const mc = (dk?.main || []).reduce((s, e) => s + e.count, 0);
+      const ec = (dk?.extra || []).reduce((s, e) => s + e.count, 0);
+      return `<div class="saved-dk-item" onclick="loadDeck('${name.replace(/'/g,"\\'")}')">
+        <div><div class="sdk-name">${name}</div>
+        <div class="sdk-info">${mc} main · ${ec} extra</div></div>
+        <div class="sdk-right">
+          <button class="sdk-del" onclick="event.stopPropagation();deleteDeck('${name.replace(/'/g,"\\'")}')">🗑</button>
+          <span style="color:var(--gold)">→</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('load-sheet').classList.add('open');
+  document.getElementById('load-overlay').style.display = 'block';
+}
+
+function closeLoadSheet() {
+  document.getElementById('load-sheet').classList.remove('open');
+  document.getElementById('load-overlay').style.display = 'none';
+}
+
+function loadDeck(name) {
+  const dk = DeckMgr.load(name);
+  if (!dk) { toast('Could not load deck', 'err'); return; }
+  S.deck = { name, main: dk.main || [], extra: dk.extra || [], side: dk.side || [] };
+  // Re-populate byId cache from loaded cards
+  [...S.deck.main, ...S.deck.extra, ...S.deck.side].forEach(e => { S.byId[e.card.id] = e.card; });
+  closeLoadSheet(); closeDeckPanel();
+  refreshDeckUI();
+  if (S.query) renderResults(S.results); // refresh badges
+  toast(`Loaded "${name}"`, 'ok');
+}
+
+function deleteDeck(name) {
+  if (!confirm(`Delete "${name}"?`)) return;
+  DeckMgr.del(name);
+  openLoadSheet(); // refresh
+  toast(`Deleted "${name}"`, 'inf');
+}
+
+function newDeck() {
+  if (countSec('main') > 0 && !confirm('Start a new deck? Unsaved changes will be lost.')) return;
+  S.deck = { name: 'New Deck', main: [], extra: [], side: [] };
+  refreshDeckUI();
+  renderDeckBody();
+  // Clear badges on grid
+  document.querySelectorAll('.cgi-badge').forEach(b => b.remove());
+  toast('New deck started', 'inf');
+}
+
+function validateDeck() {
+  const m = countSec('main'), ex = countSec('extra'), si = countSec('side');
+  const errs = [];
+  if (m < 40)  errs.push(`Main deck needs 40+ cards (currently ${m})`);
+  if (m > 60)  errs.push(`Main deck exceeds 60 cards (currently ${m})`);
+  if (ex > 15) errs.push(`Extra deck exceeds 15 cards (currently ${ex})`);
+  if (si > 15) errs.push(`Side deck exceeds 15 cards (currently ${si})`);
+  [...S.deck.main, ...S.deck.extra, ...S.deck.side].forEach(e => {
+    if (e.count > 3) errs.push(`${e.card.name} has ${e.count} copies (max 3)`);
+  });
+
+  const v = document.getElementById('dp-validity');
+  v.style.display = 'block';
+  if (!errs.length) {
+    v.className = 'dp-validity ok';
+    v.textContent = '✓ Deck is valid and tournament-legal!';
+  } else {
+    v.className = 'dp-validity bad';
+    v.textContent = errs[0];
+  }
+}
+
+function exportDeck() {
+  let txt = `=== ${S.deck.name} ===\n\n`;
+  if (S.deck.main.length) {
+    txt += `[Main Deck — ${countSec('main')} cards]\n`;
+    [...S.deck.main].sort((a,b)=>a.card.name.localeCompare(b.card.name))
+      .forEach(e => { txt += `${e.count}x ${e.card.name}\n`; });
+  }
+  if (S.deck.extra.length) {
+    txt += `\n[Extra Deck — ${countSec('extra')} cards]\n`;
+    S.deck.extra.forEach(e => { txt += `${e.count}x ${e.card.name}\n`; });
+  }
+  if (S.deck.side.length) {
+    txt += `\n[Side Deck — ${countSec('side')} cards]\n`;
+    S.deck.side.forEach(e => { txt += `${e.count}x ${e.card.name}\n`; });
+  }
+
+  navigator.clipboard.writeText(txt)
+    .then(() => toast('Deck list copied to clipboard!', 'ok'))
+    .catch(() => { window.prompt('Copy deck list:', txt); });
+}
+
+/* ============================================================
+   STATS
+============================================================ */
+function renderStats() {
+  const s = Stats.get();
+  const wr = s.duels ? Math.round(s.wins / s.duels * 100) : 0;
+
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card"><span class="stat-v">${s.duels}</span><span class="stat-l">Duels Played</span></div>
+    <div class="stat-card"><span class="stat-v">${wr}%</span><span class="stat-l">Win Rate</span></div>
+    <div class="stat-card"><span class="stat-v">${s.wins}</span><span class="stat-l">Wins</span></div>
+    <div class="stat-card"><span class="stat-v">${s.losses}</span><span class="stat-l">Losses</span></div>
+    <div class="stat-card" style="grid-column:1/-1">
+      <span class="stat-v">${s.profiles?.length ?? 0}</span>
+      <span class="stat-l">Champion Profiles Defeated</span>
+    </div>`;
+
+  const decks = DeckMgr.list();
+  const main = countSec('main');
+  document.getElementById('chart-wrap').innerHTML = `
+    <div class="chart-title">Deck Status</div>
+    <div class="bar-chart">
+      ${bar('Main Deck', main, 60)}
+      ${bar('Extra Deck', countSec('extra'), 15)}
+      ${bar('Side Deck', countSec('side'), 15)}
+      ${bar('Saved Decks', decks.length, 10)}
+    </div>
+    ${!s.duels ? `<p style="margin-top:16px;font-size:13px;color:var(--text-dim)">Complete duels to unlock match history and win-rate charts.</p>` : ''}
+  `;
+}
+
+function bar(label, val, max) {
+  const pct = max ? Math.min(100, Math.round(val / max * 100)) : 0;
+  return `<div class="bar-row">
+    <span class="bar-label">${label}</span>
+    <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+    <span class="bar-val">${val}</span>
+  </div>`;
+}
+
+/* ============================================================
+   SETTINGS
+============================================================ */
+function loadSettings() {
+  document.getElementById('s-name').value = Cfg.get('name');
+  document.getElementById('s-lp').value   = Cfg.get('lp');
+  document.getElementById('s-hand').value = Cfg.get('hand');
+  document.getElementById('s-ai').value   = Cfg.get('ai');
+  document.getElementById('s-anim').value = Cfg.get('anim');
+  document.getElementById('s-sound').checked = Cfg.get('sound');
+}
+
+function clearAllData() {
+  if (!confirm('Delete ALL decks, stats, and settings? This cannot be undone.')) return;
+  Object.keys(localStorage)
+    .filter(k => k.startsWith('dk_') || k.startsWith('yc_') || k.startsWith('ys_') || k.startsWith('cfg_') || k === 'ct_stats')
+    .forEach(k => localStorage.removeItem(k));
+  S.deck = { name:'New Deck', main:[], extra:[], side:[] };
+  refreshDeckUI();
+  renderDeckBody();
+  document.querySelectorAll('.cgi-badge').forEach(b => b.remove());
+  loadSettings();
+  toast('All data cleared', 'inf');
+}
+
+/* ============================================================
+   HELPERS
+============================================================ */
+function typeClass(card) {
+  const t = (card.type || '').toLowerCase();
+  if (t.includes('fusion'))  return 'ct-fusion';
+  if (t.includes('synchro')) return 'ct-synchro';
+  if (t.includes('xyz'))     return 'ct-xyz';
+  if (t.includes('link'))    return 'ct-link';
+  if (t.includes('ritual') && t.includes('monster')) return 'ct-ritual';
+  if (t.includes('pendulum')) return 'ct-pend';
+  if (t.includes('normal monster')) return 'ct-normal';
+  if (t.includes('monster')) return 'ct-effect';
+  if (t.includes('spell'))   return 'ct-spell';
+  if (t.includes('trap'))    return 'ct-trap';
+  return 'ct-effect';
+}
+
+function toast(msg, type = 'inf') {
+  const c = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = msg;
+  c.appendChild(el);
+  setTimeout(() => el.remove(), 3100);
+}
+
+/* ============================================================
+   SETTINGS SAVE — name field blur
+============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  initHome();
+  initDeckBuilder();
+  loadSettings();
+
+  document.getElementById('s-name').addEventListener('blur', e => Cfg.set('name', e.target.value.trim() || 'Duelist'));
+  document.getElementById('s-name').addEventListener('change', e => Cfg.set('name', e.target.value.trim() || 'Duelist'));
+
+  // Keyboard dismiss for modals
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeModal();
+      closeSaveModal();
+      closeLoadSheet();
+      closeDeckPanel();
+    }
+  });
+
+  // Touch swipe-down to close deck panel
+  let touchStartY = 0;
+  const dp = document.getElementById('deck-panel');
+  dp.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
+  dp.addEventListener('touchend', e => {
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (dy > 80) closeDeckPanel();
+  }, { passive: true });
+});
+</script>
+</body>
+</html>
