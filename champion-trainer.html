@@ -766,6 +766,351 @@
 
     /* Pull-to-refresh hint */
     .ptr-hint { text-align: center; padding: 12px; font-size: 12px; color: var(--text-dim); display: none; }
+
+    /* ===== DUEL FIELD ===== */
+
+    /* Pre-duel profile select */
+    .pre-duel-wrap {
+      flex: 1; display: flex; align-items: center;
+      justify-content: center; background: var(--bg);
+      overflow-y: auto; padding: 24px 16px calc(var(--tab-h) + 16px);
+    }
+    .pre-duel-inner { width: 100%; max-width: 600px; }
+    .pre-duel-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 13px; color: var(--gold); text-align: center;
+      margin-bottom: 28px; letter-spacing: 2px;
+    }
+    .profile-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 480px) { .profile-list { grid-template-columns: 1fr; } }
+    .profile-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px; cursor: pointer;
+      transition: all .2s; position: relative; overflow: hidden;
+    }
+    .profile-card:hover:not(.locked) { border-color: var(--gold); transform: translateY(-2px); }
+    .profile-card.locked { opacity: .5; cursor: not-allowed; }
+    .profile-icon { font-size: 32px; margin-bottom: 8px; }
+    .profile-name { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--gold); margin-bottom: 6px; }
+    .profile-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-bottom: 8px; }
+    .profile-diff { font-size: 11px; font-weight: 700; color: #4ade80; }
+    .locked-badge { color: var(--text-dim) !important; }
+
+    /* Duel root layout */
+    #duel-screen { overflow: hidden; }
+    .duel-root {
+      height: 100%; display: flex; overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .d-sidebar {
+      width: 172px; flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    @media (max-width: 600px) { .d-sidebar { width: 0; display: none; } }
+
+    .d-preview-wrap {
+      height: 260px; flex-shrink: 0;
+      display: flex; flex-direction: column;
+      overflow: hidden; border-bottom: 1px solid var(--border);
+    }
+    .d-preview-empty {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
+    }
+    .d-preview-img {
+      width: 100%; height: 160px; object-fit: cover;
+      flex-shrink: 0; display: block;
+    }
+    .d-preview-info {
+      padding: 6px 8px 0; flex-shrink: 0;
+    }
+    .d-preview-name { font-size: 11px; font-weight: 700; line-height: 1.3; margin-bottom: 2px; }
+    .d-preview-type { font-size: 9px; color: var(--text-dim); }
+    .d-preview-stats { font-size: 11px; font-weight: 700; color: var(--gold); margin-top: 2px; }
+    .d-preview-desc {
+      flex: 1; overflow-y: auto; padding: 6px 8px;
+      font-size: 9px; color: var(--text-dim); line-height: 1.5;
+    }
+
+    .d-log-section { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .d-log-hdr {
+      font-size: 9px; font-weight: 700; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 2px;
+      padding: 6px 8px; border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .d-log {
+      flex: 1; overflow-y: auto; padding: 6px 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .d-log-entry {
+      font-size: 10px; color: var(--text-dim);
+      padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,.04);
+      line-height: 1.4;
+    }
+    .d-log-entry b { color: var(--text); }
+
+    /* MAIN FIELD */
+    .d-main {
+      flex: 1; display: flex; flex-direction: column;
+      overflow: hidden; min-width: 0;
+    }
+
+    /* LP top bar */
+    .d-topbar {
+      height: 32px; flex-shrink: 0;
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 10px;
+      background: rgba(0,0,0,.4);
+      border-bottom: 1px solid var(--border);
+    }
+    .d-lp-group { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+    .d-lp-group.you { align-items: flex-end; }
+    .d-lp-label { font-size: 10px; font-weight: 700; color: var(--text); }
+    .d-lp-track {
+      height: 6px; background: rgba(255,255,255,.12);
+      border-radius: 3px; overflow: hidden; width: 100%;
+    }
+    .d-lp-fill {
+      height: 100%; border-radius: 3px; transition: width .5s ease;
+    }
+    .d-lp-fill.opp { background: #e03030; }
+    .d-lp-fill.you { background: #22c55e; }
+    .d-turn-center {
+      text-align: center; flex-shrink: 0; min-width: 100px;
+    }
+    .d-turn-label { font-size: 9px; font-weight: 700; color: var(--gold); }
+    .d-turn-num { font-size: 8px; color: var(--text-dim); }
+
+    /* Opp hand row */
+    .d-opp-hand-row {
+      height: 50px; flex-shrink: 0;
+      display: flex; align-items: center;
+      padding: 4px 8px; gap: 4px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .d-opp-hand { display: flex; gap: 4px; align-items: center; }
+    .d-opp-card-back {
+      width: 32px; height: 44px; border-radius: 3px;
+      background: linear-gradient(135deg, #1a2a6c, #2244aa);
+      border: 1px solid #3355bb; flex-shrink: 0;
+    }
+    .d-opp-hand-label { font-size: 9px; color: var(--text-dim); margin-left: 6px; }
+
+    /* Field area */
+    .d-field-area {
+      flex: 1; display: flex; flex-direction: column;
+      gap: 3px; padding: 4px 6px; overflow: hidden;
+    }
+    .d-field-row {
+      flex: 1; display: flex; align-items: stretch; gap: 3px; min-height: 0;
+    }
+    .d-center-bar {
+      height: 34px; flex-shrink: 0;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    .d-side-col {
+      width: 46px; flex-shrink: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 4px; cursor: pointer;
+      transition: border-color .15s;
+    }
+    .d-side-col:hover { border-color: rgba(255,255,255,.2); }
+    .d-side-label { font-size: 8px; color: var(--text-dim); font-weight: 700; text-transform: uppercase; text-align: center; }
+    .d-side-count { font-size: 14px; font-weight: 700; color: var(--gold); }
+    .d-side-img { width: 100%; height: 55px; object-fit: cover; border-radius: 3px; }
+
+    /* 5-zone grid */
+    .d-zones-5 {
+      flex: 1; display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 3px; min-width: 0;
+    }
+    .d-zone {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 4px; cursor: pointer; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; transition: border-color .15s, background .15s;
+      min-height: 0;
+    }
+    .d-zone:hover { border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.06); }
+    .d-zone.targeting { border-color: var(--danger) !important; box-shadow: 0 0 8px rgba(224,48,48,.5); animation: pulse-red .6s infinite; }
+    .d-zone.can-attack { border-color: var(--gold); box-shadow: 0 0 8px rgba(201,168,76,.4); }
+
+    @keyframes pulse-red {
+      0%,100% { box-shadow: 0 0 8px rgba(224,48,48,.5); }
+      50%      { box-shadow: 0 0 16px rgba(224,48,48,.9); }
+    }
+
+    /* Diamond icons for empty zones */
+    .d-zone.monster-zone.empty::before  { content:'◆'; font-size: clamp(12px,1.8vw,26px); color: rgba(212,115,10,.45); }
+    .d-zone.st-zone.empty::before       { content:'◆'; font-size: clamp(10px,1.4vw,20px); color: rgba(40,80,200,.45); }
+
+    /* Card in zone */
+    .d-zone img { width:100%; height:100%; object-fit:cover; display:block; }
+    .d-zone.def-pos img { transform: rotate(90deg) scale(.9); }
+    .d-zone-atk {
+      position: absolute; bottom: 1px; left:0; right:0;
+      text-align: center; font-size: clamp(8px,.9vw,12px);
+      font-weight: 700; color: #fff;
+      text-shadow: 0 1px 3px #000;
+      background: rgba(0,0,0,.5);
+      padding: 1px 0;
+    }
+    .d-zone-attacked {
+      position: absolute; top: 2px; right: 2px;
+      background: rgba(0,0,0,.6); color: #4ade80;
+      font-size: 10px; border-radius: 3px; padding: 1px 3px;
+    }
+    .d-zone-set {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #1a2a6c, #2244aa);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .d-zone-face-down {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #1a2a6c, #2244aa);
+      border: 1px solid #3355bb;
+      border-radius: 3px;
+    }
+
+    /* Center bar */
+    .d-link-zone {
+      width: 46px; flex-shrink: 0;
+      background: rgba(34,85,204,.2); border: 1px solid rgba(34,85,204,.4);
+      border-radius: 4px; display: flex; align-items: center;
+      justify-content: center; font-size: 8px; font-weight: 700;
+      color: #60a5fa; letter-spacing: 1px; height: 100%;
+    }
+    .d-phase-center {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 4px; height: 100%; padding: 0 8px;
+    }
+    .d-phase-name {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(7px,.9vw,11px); color: var(--gold); letter-spacing: 1px;
+    }
+    .d-phase-desc { font-size: clamp(7px,.75vw,10px); color: var(--text-dim); text-align: center; }
+
+    /* Player hand row */
+    .d-my-hand-row {
+      height: 82px; flex-shrink: 0;
+      display: flex; align-items: center;
+      padding: 4px 8px; gap: 4px;
+      border-top: 1px solid rgba(255,255,255,.07);
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .d-my-hand-row::-webkit-scrollbar { display: none; }
+    .d-my-hand { display: flex; gap: 5px; align-items: center; height: 100%; }
+
+    .d-hand-card {
+      height: 70px;
+      aspect-ratio: 59/86;
+      border-radius: 4px; overflow: hidden;
+      border: 1px solid var(--border); cursor: pointer;
+      flex-shrink: 0; transition: transform .15s, border-color .15s;
+      position: relative;
+    }
+    .d-hand-card:hover { transform: translateY(-8px) scale(1.05); border-color: var(--gold); z-index: 10; }
+    .d-hand-card:active { transform: translateY(-4px) scale(1.02); }
+    .d-hand-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .d-hand-card.selected { border-color: var(--gold); box-shadow: 0 0 10px rgba(201,168,76,.6); }
+
+    /* Phase bar */
+    .d-phase-bar {
+      height: 42px; flex-shrink: 0;
+      display: flex; align-items: center;
+      background: rgba(0,0,0,.4);
+      border-top: 1px solid var(--border);
+      padding: 0 6px; gap: 4px;
+    }
+    .d-phases { display: flex; gap: 2px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+    .d-phases::-webkit-scrollbar { display: none; }
+
+    .d-pbtn {
+      padding: 6px 10px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 6px;
+      color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
+      font-size: 11px; font-weight: 700; cursor: pointer;
+      white-space: nowrap; min-height: 30px; transition: all .2s;
+      letter-spacing: .5px;
+    }
+    .d-pbtn:hover { border-color: var(--gold); color: var(--gold); }
+    .d-pbtn.active { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+    .d-pbtn:disabled { opacity: .4; cursor: not-allowed; }
+
+    .d-end-btn {
+      padding: 8px 14px; background: #166534;
+      border: 1px solid #22c55e; border-radius: 6px;
+      color: #4ade80; font-family: 'Rajdhani', sans-serif;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      white-space: nowrap; min-height: 30px; flex-shrink: 0;
+      transition: all .2s; letter-spacing: .5px;
+    }
+    .d-end-btn:hover { background: #15803d; }
+    .d-end-btn.battle-mode { background: #7f1d1d; border-color: var(--danger); color: #f87171; }
+
+    /* Action popup */
+    .action-popup {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--surface); border: 1px solid var(--gold);
+      border-radius: 12px; padding: 8px; z-index: 500;
+      display: flex; flex-direction: column; gap: 4px;
+      min-width: 180px; box-shadow: 0 8px 32px rgba(0,0,0,.8);
+      animation: fadeIn .15s;
+    }
+    .action-popup.hidden { display: none; }
+    .action-opt {
+      padding: 11px 16px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); font-family: 'Rajdhani', sans-serif;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      text-align: left; min-height: 44px; transition: all .15s;
+    }
+    .action-opt:hover { border-color: var(--gold); color: var(--gold); background: var(--surface3); }
+
+    /* Damage flash */
+    .dmg-flash {
+      position: fixed; inset: 0; pointer-events: none; z-index: 998;
+      background: rgba(224,48,48,.28);
+      animation: dflash .45s ease forwards;
+    }
+    @keyframes dflash {
+      0%   { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* End duel overlay */
+    .duel-end-overlay {
+      position: fixed; inset: 0; z-index: 600;
+      background: rgba(0,0,0,.75);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .duel-end-box {
+      background: var(--surface); border: 2px solid var(--gold);
+      border-radius: 20px; padding: 36px 40px; text-align: center;
+      animation: slideUp .3s ease;
+    }
+    .duel-end-icon { font-size: 64px; margin-bottom: 16px; }
+    .duel-end-title { font-family: 'Press Start 2P', monospace; font-size: 18px; color: var(--gold); margin-bottom: 24px; }
+    .duel-end-btns { display: flex; gap: 10px; justify-content: center; }
+    .deb { padding: 14px 24px; border-radius: 10px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; min-height: 48px; }
+    .deb.primary { background: var(--gold); color: var(--bg); border: none; }
+    .deb.secondary { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+
   </style>
 </head>
 <body>
@@ -827,18 +1172,179 @@
 
   <!-- ======================== DUEL ======================== -->
   <div id="duel-screen" class="screen">
-    <div class="screen-hdr">
-      <div class="screen-hdr-row"><span class="screen-title">DUEL</span></div>
-    </div>
-    <div class="screen-body">
-      <div class="cs-wrap">
-        <div class="cs-icon">⚔️</div>
-        <p class="cs-h">Coming in Phase 2</p>
-        <p class="cs-p">The full duel simulator with Champion AI profiles is coming soon. Build your deck first!</p>
-        <button class="qbtn" style="margin-top:20px" onclick="nav('deck')">🃏 Go to Deck Builder →</button>
+
+    <!-- PROFILE SELECT -->
+    <div id="pre-duel" class="pre-duel-wrap">
+      <div class="pre-duel-inner">
+        <div class="pre-duel-title">SELECT OPPONENT</div>
+        <div class="profile-list">
+          <div class="profile-card" onclick="startDuel('aggro')">
+            <div class="profile-icon">🗡️</div>
+            <div class="profile-name">Pure Aggro</div>
+            <div class="profile-desc">Classic beatdown with powerful monsters. Perfect for learning the basics of combat.</div>
+            <div class="profile-diff">⭐ Beginner</div>
+          </div>
+          <div class="profile-card locked">
+            <div class="profile-icon">🐉</div>
+            <div class="profile-name">Dragon Link</div>
+            <div class="profile-desc">YCS combo specialist. Builds unbreakable boards on turn 1.</div>
+            <div class="profile-diff locked-badge">🔒 Phase 3</div>
+          </div>
+          <div class="profile-card locked">
+            <div class="profile-icon">💧</div>
+            <div class="profile-name">Tearlaments</div>
+            <div class="profile-desc">GY fusion master. Mills aggressively and creates Mirrorjade.</div>
+            <div class="profile-diff locked-badge">🔒 Phase 3</div>
+          </div>
+          <div class="profile-card locked">
+            <div class="profile-icon">🔥</div>
+            <div class="profile-name">Snake-Eye</div>
+            <div class="profile-desc">2024 world champion deck. Link climbs into unstoppable boards.</div>
+            <div class="profile-diff locked-badge">🔒 Phase 3</div>
+          </div>
+          <div class="profile-card locked">
+            <div class="profile-icon">⚔️</div>
+            <div class="profile-name">Branded Despia</div>
+            <div class="profile-desc">Fusion spam engine. Albaz absorbs opponent monsters.</div>
+            <div class="profile-diff locked-badge">🔒 Phase 3</div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- DUEL FIELD -->
+    <div id="duel-field" class="duel-root" style="display:none">
+
+      <!-- SIDEBAR -->
+      <div class="d-sidebar">
+        <div class="d-preview-wrap" id="d-preview">
+          <div class="d-preview-empty">
+            <span style="font-size:40px;opacity:.25">🃏</span>
+            <span style="font-size:10px;color:var(--text-dim)">Tap any card</span>
+          </div>
+        </div>
+        <div class="d-log-section">
+          <div class="d-log-hdr">DUEL LOG</div>
+          <div class="d-log" id="d-log"></div>
+        </div>
+      </div>
+
+      <!-- MAIN AREA -->
+      <div class="d-main">
+
+        <!-- LP TOP BAR -->
+        <div class="d-topbar">
+          <div class="d-lp-group opp">
+            <div class="d-lp-label">OPP <span id="opp-lp-num">8000</span></div>
+            <div class="d-lp-track"><div class="d-lp-fill opp" id="opp-lp-fill" style="width:100%"></div></div>
+          </div>
+          <div class="d-turn-center">
+            <div class="d-turn-label" id="d-turn-who">YOUR TURN</div>
+            <div class="d-turn-num">TURN <span id="d-turn-num">1</span></div>
+          </div>
+          <div class="d-lp-group you">
+            <div class="d-lp-label">YOU <span id="you-lp-num">8000</span></div>
+            <div class="d-lp-track"><div class="d-lp-fill you" id="you-lp-fill" style="width:100%"></div></div>
+          </div>
+        </div>
+
+        <!-- OPP HAND -->
+        <div class="d-opp-hand-row">
+          <div id="d-opp-hand" class="d-opp-hand"></div>
+          <span class="d-opp-hand-label" id="opp-hand-lbl"></span>
+        </div>
+
+        <!-- FIELD AREA -->
+        <div class="d-field-area">
+
+          <!-- AI: monster row -->
+          <div class="d-field-row">
+            <div class="d-side-col" onclick="viewGY('ai')">
+              <div class="d-side-label">GY</div>
+              <div class="d-side-count" id="opp-gy-cnt">0</div>
+            </div>
+            <div class="d-zones-5" id="opp-m-zones"></div>
+            <div class="d-side-col">
+              <div class="d-side-label">DECK</div>
+              <div class="d-side-count" id="opp-deck-cnt">0</div>
+            </div>
+          </div>
+
+          <!-- AI: spell/trap row -->
+          <div class="d-field-row">
+            <div class="d-side-col">
+              <div class="d-side-label">FIELD</div>
+            </div>
+            <div class="d-zones-5" id="opp-st-zones"></div>
+            <div class="d-side-col">
+              <div class="d-side-label">EXTRA</div>
+            </div>
+          </div>
+
+          <!-- CENTER -->
+          <div class="d-center-bar">
+            <div class="d-link-zone">LINK</div>
+            <div class="d-phase-center">
+              <div class="d-phase-name" id="d-phase-name">MAIN 1</div>
+              <div class="d-phase-desc" id="d-phase-desc">Main Phase 1 — Summon, Set or Activate</div>
+            </div>
+            <div class="d-link-zone">LINK</div>
+          </div>
+
+          <!-- PLAYER: spell/trap row -->
+          <div class="d-field-row">
+            <div class="d-side-col">
+              <div class="d-side-label">FIELD</div>
+            </div>
+            <div class="d-zones-5" id="my-st-zones"></div>
+            <div class="d-side-col">
+              <div class="d-side-label">EXTRA</div>
+              <div class="d-side-count" id="my-extra-cnt">0</div>
+            </div>
+          </div>
+
+          <!-- PLAYER: monster row -->
+          <div class="d-field-row">
+            <div class="d-side-col" onclick="viewGY('player')">
+              <div class="d-side-label">GY</div>
+              <div class="d-side-count" id="my-gy-cnt">0</div>
+            </div>
+            <div class="d-zones-5" id="my-m-zones"></div>
+            <div class="d-side-col">
+              <div class="d-side-label">DECK</div>
+              <div class="d-side-count" id="my-deck-cnt">0</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- PLAYER HAND -->
+        <div class="d-my-hand-row">
+          <div id="d-my-hand" class="d-my-hand"></div>
+        </div>
+
+        <!-- PHASE BAR -->
+        <div class="d-phase-bar">
+          <div class="d-phases">
+            <button class="d-pbtn" id="pb-DRAW"   onclick="goToPhase('DRAW')"  >DRAW</button>
+            <button class="d-pbtn" id="pb-STBY"   onclick="goToPhase('STBY')"  >STBY</button>
+            <button class="d-pbtn active" id="pb-MAIN1"  onclick="goToPhase('MAIN1')" >MAIN 1</button>
+            <button class="d-pbtn" id="pb-BATTLE" onclick="goToPhase('BATTLE')">BATTLE</button>
+            <button class="d-pbtn" id="pb-MAIN2"  onclick="goToPhase('MAIN2')" >MAIN 2</button>
+            <button class="d-pbtn" id="pb-END"    onclick="goToPhase('END')"   >END</button>
+          </div>
+          <button class="d-end-btn" id="d-end-btn" onclick="advancePhase()">END TURN</button>
+        </div>
+
+      </div><!-- /d-main -->
+    </div><!-- /duel-field -->
+
+    <!-- ACTION POPUP -->
+    <div class="action-popup hidden" id="action-popup">
+      <div id="action-opts"></div>
+    </div>
+
+  </div><!-- /duel-screen -->
 
   <!-- ======================== STATS ======================== -->
   <div id="stats-screen" class="screen">
@@ -1757,6 +2263,798 @@ function toast(msg, type = 'inf') {
 /* ============================================================
    SETTINGS SAVE — name field blur
 ============================================================ */
+/* ============================================================
+   PHASE 2 — DUEL ENGINE
+============================================================ */
+
+/* ---- AI starter deck (hardcoded 40 cards, all lv4 or lower for easy AI) ---- */
+const AI_DECK_TEMPLATE = [
+  {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A genie of the lamp that's not to be trifled with.'},
+  {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A genie of the lamp that's not to be trifled with.'},
+  {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A genie of the lamp that's not to be trifled with.'},
+  {id:42285799,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
+  {id:42285799,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
+  {id:42285799,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
+  {id:64631466,  name:'Vorse Raider',                 type:'Normal Monster', atk:1900, def:1200, level:4, attribute:'DARK', desc:'A brutal, bloodthirsty raider who wields a large battle-ax.'},
+  {id:64631466,  name:'Vorse Raider',                 type:'Normal Monster', atk:1900, def:1200, level:4, attribute:'DARK', desc:'A brutal, bloodthirsty raider who wields a large battle-ax.'},
+  {id:64631466,  name:'Vorse Raider',                 type:'Normal Monster', atk:1900, def:1200, level:4, attribute:'DARK', desc:'A brutal, bloodthirsty raider who wields a large battle-ax.'},
+  {id:79744001,  name:'Giant Orc',                    type:'Effect Monster', atk:2200, def:0,    level:4, attribute:'DARK', desc:'After this card attacks, it is changed to Defense Position at the end of the Damage Step.'},
+  {id:79744001,  name:'Giant Orc',                    type:'Effect Monster', atk:2200, def:0,    level:4, attribute:'DARK', desc:'After this card attacks, it is changed to Defense Position at the end of the Damage Step.'},
+  {id:79744001,  name:'Giant Orc',                    type:'Effect Monster', atk:2200, def:0,    level:4, attribute:'DARK', desc:'After this card attacks, it is changed to Defense Position at the end of the Damage Step.'},
+  {id:50930991,  name:'Neo the Magic Swordsman',      type:'Normal Monster', atk:1700, def:1000, level:4, attribute:'WIND', desc:'A swordsman who travels the world with his magical sword.'},
+  {id:50930991,  name:'Neo the Magic Swordsman',      type:'Normal Monster', atk:1700, def:1000, level:4, attribute:'WIND', desc:'A swordsman who travels the world with his magical sword.'},
+  {id:13039848,  name:'Giant Soldier of Stone',       type:'Normal Monster', atk:1300, def:2000, level:3, attribute:'EARTH', desc:'A giant warrior made of stone. A cross between a golem and a soldier.'},
+  {id:13039848,  name:'Giant Soldier of Stone',       type:'Normal Monster', atk:1300, def:2000, level:3, attribute:'EARTH', desc:'A giant warrior made of stone. A cross between a golem and a soldier.'},
+  {id:13039848,  name:'Giant Soldier of Stone',       type:'Normal Monster', atk:1300, def:2000, level:3, attribute:'EARTH', desc:'A giant warrior made of stone. A cross between a golem and a soldier.'},
+  {id:54652250,  name:'Man-Eater Bug',                type:'Effect Monster', atk:450,  def:600,  level:2, attribute:'EARTH', desc:'FLIP: Destroy 1 monster on the field (regardless of position).'},
+  {id:54652250,  name:'Man-Eater Bug',                type:'Effect Monster', atk:450,  def:600,  level:2, attribute:'EARTH', desc:'FLIP: Destroy 1 monster on the field (regardless of position).'},
+  {id:11502550,  name:'Warrior Dai Grepher',          type:'Normal Monster', atk:1700, def:1600, level:4, attribute:'EARTH', desc:'A former soldier with dark ambitions.'},
+  // Spells (12)
+  {id:53129443,  name:'Dark Hole',                    type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Destroy all monsters on the field.'},
+  {id:53129443,  name:'Dark Hole',                    type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Destroy all monsters on the field.'},
+  {id:83764718,  name:'Monster Reborn',               type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Target 1 monster in either GY; Special Summon it.'},
+  {id:83764718,  name:'Monster Reborn',               type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Target 1 monster in either GY; Special Summon it.'},
+  {id:74789026,  name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Destroy all monsters your opponent controls.'},
+  {id:55144522,  name:'Pot of Greed',                 type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Draw 2 cards.'},
+  {id:72302403,  name:'Mystical Space Typhoon',       type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Target 1 Spell/Trap on the field; destroy that target.'},
+  {id:72302403,  name:'Mystical Space Typhoon',       type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Target 1 Spell/Trap on the field; destroy that target.'},
+  {id:40619825,  name:'Axe of Despair',               type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'The equipped monster gains 1000 ATK.'},
+  {id:40619825,  name:'Axe of Despair',               type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'The equipped monster gains 1000 ATK.'},
+  {id:15302108,  name:'Swords of Revealing Light',    type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Flip all opponent\'s monsters face-up. While this card is face-up, opponent cannot attack.'},
+  {id:36468556,  name:'Change of Heart',              type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Target 1 opponent\'s monster; take control of it until end of turn.'},
+  // Traps (8)
+  {id:44095762,  name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null, attribute:null, desc:'When an opponent\'s monster declares an attack: destroy all your opponent\'s ATK position monsters.'},
+  {id:44095762,  name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null, attribute:null, desc:'When an opponent\'s monster declares an attack: destroy all your opponent\'s ATK position monsters.'},
+  {id:44095762,  name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null, attribute:null, desc:'When an opponent\'s monster declares an attack: destroy all your opponent\'s ATK position monsters.'},
+  {id:4206964,   name:'Trap Hole',                    type:'Trap Card',      atk:null, def:null, level:null, attribute:null, desc:'When your opponent Normal or Flip Summons a monster with 1000+ ATK, destroy it.'},
+  {id:4206964,   name:'Trap Hole',                    type:'Trap Card',      atk:null, def:null, level:null, attribute:null, desc:'When your opponent Normal or Flip Summons a monster with 1000+ ATK, destroy it.'},
+  {id:97077563,  name:'Seven Tools of the Bandit',    type:'Trap Card',      atk:null, def:null, level:null, attribute:null, desc:'Pay 1000 LP; negate the activation of a Trap Card and destroy it.'},
+  {id:94192409,  name:'Compulsory Evacuation Device', type:'Trap Card',      atk:null, def:null, level:null, attribute:null, desc:'Return 1 monster on the field to the hand.'},
+  {id:83550880,  name:'Sakuretsu Armor',              type:'Trap Card',      atk:null, def:null, level:null, attribute:null, desc:'When an opponent\'s monster declares an attack: destroy that attacking monster.'},
+];
+
+/* ---- Game State ---- */
+let GS = null;
+const PHASE_ORDER = ['DRAW','STBY','MAIN1','BATTLE','MAIN2','END'];
+const PHASE_LABELS = { DRAW:'DRAW', STBY:'STBY', MAIN1:'MAIN 1', BATTLE:'BATTLE', MAIN2:'MAIN 2', END:'END' };
+const PHASE_DESCS  = {
+  DRAW:   'Draw Phase — Draw 1 card',
+  STBY:   'Standby Phase — Trigger effects',
+  MAIN1:  'Main Phase 1 — Summon, Set or Activate',
+  BATTLE: 'Battle Phase — Select a monster to attack with',
+  MAIN2:  'Main Phase 2 — Summon, Set or Activate',
+  END:    'End Phase — Discard to hand limit (6)'
+};
+
+let actionOpts = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function isExtraType(c) {
+  const t = (c.type||'').toLowerCase();
+  return t.includes('fusion') || t.includes('synchro') || t.includes('xyz') || t.includes('link');
+}
+
+function mkZone(card, position = 'ATK', faceDown = false) {
+  return { card: { ...card }, position, faceDown, hasAttacked: false, equipATK: 0 };
+}
+
+/* ---- Start Duel ---- */
+function startDuel(profile) {
+  // Player deck
+  let pCards = [...S.deck.main.flatMap(e => Array(e.count).fill({ ...e.card }))];
+  if (pCards.length < 5) {
+    pCards = AI_DECK_TEMPLATE.map(c => ({ ...c }));
+    toast('Using starter deck — build one in Deck Builder!', 'inf');
+  }
+  const startLP = parseInt(Cfg.get('lp')) || 8000;
+  const handSz  = parseInt(Cfg.get('hand')) || 5;
+
+  const pDeck = shuffle(pCards);
+  const aDeck = shuffle(AI_DECK_TEMPLATE.map(c => ({ ...c })));
+
+  GS = {
+    phase: 'MAIN1', turn: 1, active: 'player',
+    normalSummonUsed: false, spSummonCount: 0,
+    attackingSlot: null, aiThinking: false,
+    player: {
+      lp: startLP, maxLP: startLP,
+      hand: pDeck.splice(0, handSz),
+      deck: pDeck, gy: [], banished: [],
+      field: { monsters: Array(5).fill(null), spells: Array(5).fill(null) },
+      extraDeck: [...S.deck.extra.flatMap(e => Array(e.count).fill({ ...e.card }))]
+    },
+    ai: {
+      lp: startLP, maxLP: startLP,
+      hand: aDeck.splice(0, handSz),
+      deck: aDeck, gy: [], banished: [],
+      field: { monsters: Array(5).fill(null), spells: Array(5).fill(null) },
+      extraDeck: []
+    }
+  };
+
+  document.getElementById('pre-duel').style.display = 'none';
+  document.getElementById('duel-field').style.display = 'flex';
+  document.getElementById('d-log').innerHTML = '';
+
+  dlog('─── DUEL START ───');
+  dlog(`You drew ${handSz} cards.`);
+  dlog(PHASE_DESCS.MAIN1);
+  renderAll();
+}
+
+/* ---- Rendering ---- */
+function renderAll() {
+  if (!GS) return;
+  renderLPs();
+  renderOppHand();
+  renderPlayerHand();
+  renderZones('opp-m-zones',  GS.ai.field.monsters,  'monster', 'ai');
+  renderZones('opp-st-zones', GS.ai.field.spells,    'st',      'ai');
+  renderZones('my-m-zones',   GS.player.field.monsters, 'monster', 'player');
+  renderZones('my-st-zones',  GS.player.field.spells,   'st',      'player');
+  renderCounters();
+  updatePhaseBar();
+  document.getElementById('d-turn-num').textContent = GS.turn;
+  document.getElementById('d-turn-who').textContent = GS.active === 'player' ? 'YOUR TURN' : 'OPP TURN';
+}
+
+function renderLPs() {
+  ['player','ai'].forEach(who => {
+    const data = GS[who];
+    const pct = Math.max(0, Math.min(100, data.lp / data.maxLP * 100));
+    const numId  = who === 'player' ? 'you-lp-num'  : 'opp-lp-num';
+    const fillId = who === 'player' ? 'you-lp-fill' : 'opp-lp-fill';
+    document.getElementById(numId).textContent  = data.lp;
+    document.getElementById(fillId).style.width = pct + '%';
+  });
+}
+
+function renderCounters() {
+  document.getElementById('opp-deck-cnt').textContent = GS.ai.deck.length;
+  document.getElementById('opp-gy-cnt').textContent   = GS.ai.gy.length;
+  document.getElementById('my-deck-cnt').textContent  = GS.player.deck.length;
+  document.getElementById('my-gy-cnt').textContent    = GS.player.gy.length;
+  document.getElementById('my-extra-cnt').textContent = GS.player.extraDeck.length;
+}
+
+function renderOppHand() {
+  const el = document.getElementById('d-opp-hand');
+  el.innerHTML = GS.ai.hand.map(() =>
+    '<div class="d-opp-card-back"></div>'
+  ).join('');
+  const lbl = document.getElementById('opp-hand-lbl');
+  if (lbl) lbl.textContent = `(${GS.ai.hand.length})`;
+}
+
+function renderPlayerHand() {
+  const el = document.getElementById('d-my-hand');
+  el.innerHTML = '';
+  GS.player.hand.forEach((card, i) => {
+    const div = document.createElement('div');
+    div.className = 'd-hand-card';
+    div.innerHTML = `<img src="https://images.ygoprodeck.com/images/cards/${card.id}.jpg" alt="${card.name}" loading="lazy" onerror="this.style.opacity='.3'">`;
+    div.onclick = () => { if (GS.active === 'player' && !GS.aiThinking) showHandActions(card, i); };
+    div.title = card.name;
+    el.appendChild(div);
+  });
+}
+
+function renderZones(containerId, zones, zoneType, owner) {
+  const wrap = document.getElementById(containerId);
+  if (!wrap) return;
+  wrap.innerHTML = '';
+
+  zones.forEach((slot, i) => {
+    const div = document.createElement('div');
+    div.className = `d-zone ${zoneType}-zone${slot ? '' : ' empty'}`;
+
+    // Highlight attacker selection
+    if (GS.attackingSlot !== null && owner === 'ai' && zoneType === 'monster' && slot) {
+      div.classList.add('targeting');
+    }
+    if (GS.attackingSlot === i && owner === 'player' && zoneType === 'monster') {
+      div.classList.add('can-attack');
+    }
+
+    if (slot) {
+      if (slot.faceDown) {
+        div.innerHTML = '<div class="d-zone-face-down"></div>';
+      } else {
+        const defPos = slot.position === 'DEF';
+        const dispATK = defPos ? slot.card.def : (slot.card.atk ?? '?') + (slot.equipATK ? `+${slot.equipATK}` : '');
+        div.classList.toggle('def-pos', defPos);
+        div.innerHTML = `<img src="https://images.ygoprodeck.com/images/cards/${slot.card.id}.jpg" alt="${slot.card.name}" loading="lazy" onerror="this.style.opacity='.3'">
+          ${zoneType === 'monster' ? `<div class="d-zone-atk">${defPos ? 'DEF ' : ''}${dispATK}</div>` : ''}
+          ${slot.hasAttacked ? '<div class="d-zone-attacked">✓</div>' : ''}`;
+      }
+      div.onclick = () => {
+        previewCard(slot.card);
+        if (owner === 'player') onPlayerZone(i, zoneType, slot, div);
+        else                    onOppZone(i, zoneType, slot);
+      };
+    } else if (owner === 'player') {
+      div.onclick = () => closeActionPopup();
+    }
+
+    wrap.appendChild(div);
+  });
+}
+
+/* ---- Preview card in sidebar ---- */
+function previewCard(card) {
+  const el = document.getElementById('d-preview');
+  const isMon = card.type && card.type.toLowerCase().includes('monster');
+  el.innerHTML = `
+    <img class="d-preview-img" src="https://images.ygoprodeck.com/images/cards/${card.id}.jpg" alt="${card.name}" onerror="this.style.display='none'">
+    <div class="d-preview-info">
+      <div class="d-preview-name">${card.name}</div>
+      <div class="d-preview-type">${card.type || ''}${card.attribute ? ' · ' + card.attribute : ''}${card.level ? ' LV' + card.level : ''}</div>
+      ${isMon ? `<div class="d-preview-stats">ATK ${card.atk ?? '?'} / DEF ${card.def ?? '?'}</div>` : ''}
+    </div>
+    <div class="d-preview-desc">${(card.desc || '').slice(0, 250)}</div>`;
+}
+
+/* ---- Action popup ---- */
+function showHandActions(card, idx) {
+  const t = (card.type || '').toLowerCase();
+  const isMon   = t.includes('monster') && !isExtraType(card);
+  const isSpell  = t.includes('spell');
+  const isTrap   = t.includes('trap');
+  const inMain   = GS.phase === 'MAIN1' || GS.phase === 'MAIN2';
+  const myMons   = GS.player.field.monsters.filter(Boolean).length;
+  const lv       = card.level || 0;
+
+  previewCard(card);
+  const opts = [];
+
+  if (isMon && inMain) {
+    if (!GS.normalSummonUsed) {
+      if (lv <= 4) opts.push({ label: '⬆ Normal Summon', fn: () => doNormalSummon(card, idx) });
+      else if (lv <= 6 && myMons >= 1) opts.push({ label: '⬆ Tribute Summon (1)', fn: () => doTributeSummon(card, idx, 1) });
+      else if (lv >= 7 && myMons >= 2) opts.push({ label: '⬆ Tribute Summon (2)', fn: () => doTributeSummon(card, idx, 2) });
+    }
+    opts.push({ label: '🔽 Set Face-Down', fn: () => doSetMonster(card, idx) });
+  }
+  if (isSpell && inMain) {
+    opts.push({ label: '✨ Activate',   fn: () => doActivateSpell(card, idx) });
+    opts.push({ label: '🔽 Set Spell',  fn: () => doSetST(card, idx) });
+  }
+  if (isTrap && inMain) {
+    opts.push({ label: '🔽 Set Trap', fn: () => doSetST(card, idx) });
+  }
+
+  opts.push({ label: '✕ Cancel', fn: () => {} });
+  showPopup(opts);
+}
+
+function onPlayerZone(i, type, slot, div) {
+  if (GS.aiThinking) return;
+
+  if (GS.phase === 'BATTLE' && type === 'monster') {
+    if (GS.attackingSlot !== null) {
+      GS.attackingSlot = null; // deselect
+      renderAll();
+      return;
+    }
+    if (!slot.hasAttacked && slot.position === 'ATK') {
+      GS.attackingSlot = i;
+      renderAll();
+      dlog(`Selected <b>${slot.card.name}</b> — tap an opponent monster or direct attack zone.`);
+      toast('Tap opponent field to attack', 'inf');
+    }
+    return;
+  }
+
+  if (GS.phase === 'MAIN1' || GS.phase === 'MAIN2') {
+    previewCard(slot.card);
+    const opts = [];
+    if (slot.faceDown) {
+      opts.push({ label: '🔼 Flip Face-Up', fn: () => {
+        slot.faceDown = false;
+        dlog(`You flip <b>${slot.card.name}</b> face-up.`);
+        renderAll();
+      }});
+    } else if (type === 'monster') {
+      if (slot.position === 'ATK') {
+        opts.push({ label: '🔽 Switch to DEF', fn: () => {
+          slot.position = 'DEF';
+          dlog(`<b>${slot.card.name}</b> changed to Defense Position.`);
+          renderAll();
+        }});
+      } else {
+        opts.push({ label: '⬆ Switch to ATK', fn: () => {
+          slot.position = 'ATK';
+          dlog(`<b>${slot.card.name}</b> changed to Attack Position.`);
+          renderAll();
+        }});
+      }
+    }
+    opts.push({ label: '✕ Cancel', fn: () => {} });
+    showPopup(opts);
+  }
+}
+
+function onOppZone(i, type, slot) {
+  if (GS.aiThinking) return;
+  if (GS.phase === 'BATTLE' && GS.attackingSlot !== null && type === 'monster') {
+    doBattleAttack(GS.attackingSlot, i);
+  }
+}
+
+// Clicking empty opponent field for direct attack
+function tryDirectAttack() {
+  if (GS.phase !== 'BATTLE' || GS.attackingSlot === null) return;
+  const anyOppMon = GS.ai.field.monsters.some(Boolean);
+  if (anyOppMon) { toast('Opponent has monsters — attack a monster first!', 'err'); return; }
+  doBattleAttack(GS.attackingSlot, -1);
+}
+
+function showPopup(opts) {
+  actionOpts = opts;
+  const container = document.getElementById('action-opts');
+  container.innerHTML = opts.map((o, i) =>
+    `<button class="action-opt" onclick="runOpt(${i})">${o.label}</button>`
+  ).join('');
+  document.getElementById('action-popup').classList.remove('hidden');
+}
+
+function runOpt(i) {
+  closeActionPopup();
+  if (actionOpts[i]) actionOpts[i].fn();
+}
+
+function closeActionPopup() {
+  document.getElementById('action-popup').classList.add('hidden');
+}
+
+/* ---- Summon / Set / Activate ---- */
+function doNormalSummon(card, handIdx) {
+  const slot = GS.player.field.monsters.findIndex(z => !z);
+  if (slot === -1) { toast('Monster zones full', 'err'); return; }
+  GS.player.field.monsters[slot] = mkZone(card, 'ATK');
+  GS.player.hand.splice(handIdx, 1);
+  GS.normalSummonUsed = true;
+  dlog(`You Normal Summoned <b>${card.name}</b> (ATK ${card.atk}).`);
+  renderAll();
+  toast(`Summoned ${card.name}`, 'ok');
+  if (navigator.vibrate) navigator.vibrate(15);
+}
+
+function doTributeSummon(card, handIdx, tributes) {
+  const filled = GS.player.field.monsters.map((z,i) => z ? i : -1).filter(x => x >= 0);
+  if (filled.length < tributes) { toast(`Need ${tributes} tribute(s)`, 'err'); return; }
+  // tribute first N monsters
+  for (let t = 0; t < tributes; t++) {
+    GS.player.gy.push(GS.player.field.monsters[filled[t]].card);
+    GS.player.field.monsters[filled[t]] = null;
+  }
+  const slot = GS.player.field.monsters.findIndex(z => !z);
+  GS.player.field.monsters[slot] = mkZone(card, 'ATK');
+  GS.player.hand.splice(handIdx, 1);
+  GS.normalSummonUsed = true;
+  dlog(`You Tribute Summoned <b>${card.name}</b> (ATK ${card.atk})!`);
+  renderAll();
+}
+
+function doSetMonster(card, handIdx) {
+  const slot = GS.player.field.monsters.findIndex(z => !z);
+  if (slot === -1) { toast('Monster zones full', 'err'); return; }
+  GS.player.field.monsters[slot] = mkZone(card, 'DEF', true);
+  GS.player.hand.splice(handIdx, 1);
+  GS.normalSummonUsed = true;
+  dlog(`You Set a monster face-down.`);
+  renderAll();
+}
+
+function doSetST(card, handIdx) {
+  const slot = GS.player.field.spells.findIndex(z => !z);
+  if (slot === -1) { toast('Spell/Trap zones full', 'err'); return; }
+  GS.player.field.spells[slot] = mkZone(card, 'SET', true);
+  GS.player.hand.splice(handIdx, 1);
+  const t = (card.type||'').toLowerCase();
+  dlog(`You Set a ${t.includes('trap') ? 'Trap' : 'Spell'} card face-down.`);
+  renderAll();
+}
+
+function doActivateSpell(card, handIdx) {
+  GS.player.hand.splice(handIdx, 1);
+  GS.player.gy.push(card);
+  const n = card.name.toLowerCase();
+
+  if (n.includes('dark hole')) {
+    for (let i = 0; i < 5; i++) {
+      if (GS.player.field.monsters[i]) { GS.player.gy.push(GS.player.field.monsters[i].card); GS.player.field.monsters[i] = null; }
+      if (GS.ai.field.monsters[i])     { GS.ai.gy.push(GS.ai.field.monsters[i].card);         GS.ai.field.monsters[i] = null; }
+    }
+    dlog(`You activated <b>Dark Hole</b> — all monsters destroyed!`);
+  } else if (n.includes('raigeki')) {
+    for (let i = 0; i < 5; i++) {
+      if (GS.ai.field.monsters[i]) { GS.ai.gy.push(GS.ai.field.monsters[i].card); GS.ai.field.monsters[i] = null; }
+    }
+    dlog(`You activated <b>Raigeki</b> — all opponent monsters destroyed!`);
+  } else if (n.includes('monster reborn')) {
+    const allGY = [...GS.player.gy, ...GS.ai.gy].filter(c => c.type && c.type.toLowerCase().includes('monster'));
+    const target = allGY[0];
+    if (target && GS.player.field.monsters.some(z => !z)) {
+      const slot = GS.player.field.monsters.findIndex(z => !z);
+      // Remove from the right GY
+      const piGY = GS.player.gy.indexOf(target);
+      if (piGY >= 0) GS.player.gy.splice(piGY, 1);
+      else { const aiGYi = GS.ai.gy.indexOf(target); if (aiGYi >= 0) GS.ai.gy.splice(aiGYi, 1); }
+      GS.player.field.monsters[slot] = mkZone(target, 'ATK');
+      dlog(`You activated <b>Monster Reborn</b> — Special Summoned <b>${target.name}</b>!`);
+    } else { dlog(`<b>Monster Reborn</b> — no valid target.`); }
+  } else if (n.includes('pot of greed')) {
+    drawCards('player', 2);
+    dlog(`You activated <b>Pot of Greed</b> — drew 2 cards.`);
+  } else if (n.includes('mystical space typhoon') || n.includes('mst')) {
+    // Destroy first opponent S/T
+    const slot = GS.ai.field.spells.findIndex(Boolean);
+    if (slot >= 0) { GS.ai.gy.push(GS.ai.field.spells[slot].card); GS.ai.field.spells[slot] = null; dlog(`You activated <b>MST</b> — destroyed opponent's set card!`); }
+    else dlog(`<b>MST</b> — no target.`);
+  } else {
+    dlog(`You activated <b>${card.name}</b>.`);
+  }
+  renderAll();
+}
+
+/* ---- Battle ---- */
+function doBattleAttack(atkSlot, defSlot) {
+  const atkZone = GS.player.field.monsters[atkSlot];
+  if (!atkZone || atkZone.hasAttacked) return;
+
+  const atkVal = (atkZone.card.atk || 0) + atkZone.equipATK;
+  const name   = atkZone.card.name;
+
+  if (defSlot === -1) {
+    // Direct attack
+    GS.ai.lp = Math.max(0, GS.ai.lp - atkVal);
+    atkZone.hasAttacked = true;
+    dlog(`<b>${name}</b> attacks directly! OPP takes <b style="color:#f87171">${atkVal} damage</b>!`);
+    flashScreen('ai');
+  } else {
+    const defZone = GS.ai.field.monsters[defSlot];
+    if (!defZone) return;
+
+    // Flip face-down if in DEF face-down
+    if (defZone.faceDown) defZone.faceDown = false;
+
+    const defIsAtk = defZone.position === 'ATK';
+    const defVal   = defIsAtk ? ((defZone.card.atk || 0) + defZone.equipATK) : (defZone.card.def || 0);
+
+    if (defIsAtk) {
+      // ATK vs ATK
+      if (atkVal > defVal) {
+        const dmg = atkVal - defVal;
+        GS.ai.lp = Math.max(0, GS.ai.lp - dmg);
+        GS.ai.gy.push(defZone.card); GS.ai.field.monsters[defSlot] = null;
+        dlog(`<b>${name}</b> destroys <b>${defZone.card.name}</b>! OPP takes <b style="color:#f87171">${dmg} damage</b>!`);
+        flashScreen('ai');
+      } else if (atkVal < defVal) {
+        const dmg = defVal - atkVal;
+        GS.player.lp = Math.max(0, GS.player.lp - dmg);
+        GS.player.gy.push(atkZone.card); GS.player.field.monsters[atkSlot] = null;
+        dlog(`<b>${name}</b> is destroyed by <b>${defZone.card.name}</b>! You take <b style="color:#f87171">${dmg} damage</b>!`);
+        flashScreen('player');
+      } else {
+        GS.ai.gy.push(defZone.card); GS.ai.field.monsters[defSlot] = null;
+        GS.player.gy.push(atkZone.card); GS.player.field.monsters[atkSlot] = null;
+        dlog(`Both <b>${name}</b> and <b>${defZone.card.name}</b> are destroyed!`);
+      }
+    } else {
+      // ATK vs DEF
+      if (atkVal > defVal) {
+        GS.ai.gy.push(defZone.card); GS.ai.field.monsters[defSlot] = null;
+        dlog(`<b>${name}</b> destroys <b>${defZone.card.name}</b> in DEF!`);
+      } else if (atkVal < defVal) {
+        const dmg = defVal - atkVal;
+        GS.player.lp = Math.max(0, GS.player.lp - dmg);
+        dlog(`<b>${name}</b> attacks <b>${defZone.card.name}</b> in DEF — you take <b style="color:#f87171">${dmg} damage</b>!`);
+        flashScreen('player');
+      } else {
+        dlog(`Attack on <b>${defZone.card.name}</b> — tie, no damage!`);
+      }
+    }
+    if (GS.player.field.monsters[atkSlot]) atkZone.hasAttacked = true;
+  }
+
+  GS.attackingSlot = null;
+  renderAll();
+  if (checkWin()) return;
+}
+
+function flashScreen(who) {
+  const div = document.createElement('div');
+  div.className = 'dmg-flash';
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 500);
+  if (navigator.vibrate) navigator.vibrate([80, 30, 80]);
+}
+
+/* ---- Phase progression ---- */
+function goToPhase(phase) {
+  if (!GS || GS.active !== 'player' || GS.aiThinking) return;
+  GS.phase = phase;
+  if (phase === 'DRAW') {
+    if (GS.turn > 1) drawCards('player', 1);
+    else dlog('Turn 1: No draw in Draw Phase.');
+  }
+  if (phase === 'END') doEndPhase();
+  updatePhaseBar();
+  renderAll();
+  dlog(PHASE_DESCS[phase]);
+}
+
+function advancePhase() {
+  if (!GS || GS.active !== 'player' || GS.aiThinking) return;
+  const idx = PHASE_ORDER.indexOf(GS.phase);
+  if (idx < PHASE_ORDER.length - 1) {
+    goToPhase(PHASE_ORDER[idx + 1]);
+  } else {
+    endPlayerTurn();
+  }
+}
+
+function doEndPhase() {
+  while (GS.player.hand.length > 6) {
+    const d = GS.player.hand.pop();
+    GS.player.gy.push(d);
+    dlog(`End Phase: Discarded <b>${d.name}</b> (hand limit 6).`);
+  }
+}
+
+function endPlayerTurn() {
+  GS.player.field.monsters.forEach(z => { if (z) z.hasAttacked = false; });
+  GS.normalSummonUsed = false;
+  GS.spSummonCount    = 0;
+  GS.attackingSlot    = null;
+  dlog('─── You end your turn ───');
+  GS.active = 'ai';
+  GS.turn++;
+  GS.phase = 'DRAW';
+  renderAll();
+  setTimeout(aiTakeTurn, 700);
+}
+
+function updatePhaseBar() {
+  if (!GS) return;
+  PHASE_ORDER.forEach(p => {
+    const btn = document.getElementById('pb-' + p);
+    if (btn) {
+      btn.classList.toggle('active', GS.phase === p);
+      btn.disabled = GS.active !== 'player' || GS.aiThinking;
+    }
+  });
+  const nameEl = document.getElementById('d-phase-name');
+  const descEl = document.getElementById('d-phase-desc');
+  if (nameEl) nameEl.textContent = PHASE_LABELS[GS.phase] || GS.phase;
+  if (descEl) descEl.textContent = PHASE_DESCS[GS.phase]  || '';
+
+  const endBtn = document.getElementById('d-end-btn');
+  if (endBtn) {
+    endBtn.disabled = GS.active !== 'player' || GS.aiThinking;
+    endBtn.classList.toggle('battle-mode', GS.phase === 'BATTLE');
+    endBtn.textContent = GS.phase === 'BATTLE' ? '⚔ END BATTLE' : 'END TURN';
+  }
+}
+
+/* ---- Draw ---- */
+function drawCards(who, count) {
+  const data = GS[who];
+  for (let i = 0; i < count; i++) {
+    if (!data.deck.length) break;
+    data.hand.push(data.deck.shift());
+  }
+  renderAll();
+}
+
+/* ---- Win check ---- */
+function checkWin() {
+  if (GS.ai.lp <= 0)     { showEndScreen('player'); return true; }
+  if (GS.player.lp <= 0) { showEndScreen('ai');     return true; }
+  return false;
+}
+
+function showEndScreen(winner) {
+  GS.active = 'ended';
+  const overlay = document.createElement('div');
+  overlay.className = 'duel-end-overlay';
+  overlay.innerHTML = `
+    <div class="duel-end-box">
+      <div class="duel-end-icon">${winner === 'player' ? '🏆' : '💀'}</div>
+      <div class="duel-end-title">${winner === 'player' ? 'YOU WIN!' : 'YOU LOSE!'}</div>
+      <div class="duel-end-btns">
+        <button class="deb primary" onclick="this.closest('.duel-end-overlay').remove(); startDuel('aggro')">⚔ Rematch</button>
+        <button class="deb secondary" onclick="this.closest('.duel-end-overlay').remove(); document.getElementById('duel-field').style.display='none'; document.getElementById('pre-duel').style.display='flex'">← Menu</button>
+      </div>
+    </div>`;
+  document.getElementById('duel-field').appendChild(overlay);
+  Stats.record({ won: winner === 'player', profile: 'aggro' });
+}
+
+/* ---- AI Turn ---- */
+async function aiTakeTurn() {
+  GS.aiThinking = true;
+  updatePhaseBar();
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+
+  // DRAW
+  GS.phase = 'DRAW'; updatePhaseBar(); dlog('OPP: Draw Phase');
+  renderAll(); await wait(500);
+  if (!GS.ai.deck.length) { dlog('<b>OPP has no cards to draw — you win by deck-out!</b>'); showEndScreen('player'); return; }
+  drawCards('ai', 1); dlog('OPP drew 1 card.'); renderOppHand(); await wait(500);
+
+  // STANDBY
+  GS.phase = 'STBY'; updatePhaseBar(); dlog('OPP: Standby Phase');
+  renderAll(); await wait(450);
+
+  // MAIN 1
+  GS.phase = 'MAIN1'; updatePhaseBar(); dlog('OPP: Main Phase 1');
+  renderAll(); await wait(600);
+
+  // Try Normal Summon (highest ATK level 4 or lower)
+  const mons4 = GS.ai.hand
+    .filter(c => c.type && c.type.toLowerCase().includes('monster') && !isExtraType(c) && (c.level||0) <= 4)
+    .sort((a,b) => (b.atk||0) - (a.atk||0));
+
+  if (mons4.length) {
+    const freeSlot = GS.ai.field.monsters.findIndex(z => !z);
+    if (freeSlot >= 0) {
+      const pick = mons4[0];
+      GS.ai.hand.splice(GS.ai.hand.indexOf(pick), 1);
+      GS.ai.field.monsters[freeSlot] = mkZone(pick, 'ATK');
+      dlog(`OPP Normal Summoned <b>${pick.name}</b> (ATK ${pick.atk}).`);
+      renderAll(); await wait(700);
+    }
+  }
+
+  // Set a S/T
+  const sts = GS.ai.hand.filter(c => { const t=(c.type||'').toLowerCase(); return t.includes('spell')||t.includes('trap'); });
+  if (sts.length) {
+    const freeSlot = GS.ai.field.spells.findIndex(z => !z);
+    if (freeSlot >= 0) {
+      const pick = sts[0];
+      GS.ai.hand.splice(GS.ai.hand.indexOf(pick), 1);
+      GS.ai.field.spells[freeSlot] = mkZone(pick, 'SET', true);
+      dlog(`OPP Set a card face-down.`);
+      renderAll(); await wait(600);
+    }
+  }
+
+  // Activate nuke spells if player has monsters
+  const playerMons = GS.player.field.monsters.filter(Boolean);
+  const nukes = GS.ai.hand.filter(c => c.name && (c.name.includes('Dark Hole') || c.name.includes('Raigeki')));
+  if (nukes.length && playerMons.length) {
+    const nuke = nukes[0];
+    GS.ai.hand.splice(GS.ai.hand.indexOf(nuke), 1);
+    GS.ai.gy.push(nuke);
+    if (nuke.name.includes('Dark Hole')) {
+      for (let i = 0; i < 5; i++) {
+        if (GS.player.field.monsters[i]) { GS.player.gy.push(GS.player.field.monsters[i].card); GS.player.field.monsters[i] = null; }
+        if (GS.ai.field.monsters[i])     { GS.ai.gy.push(GS.ai.field.monsters[i].card);         GS.ai.field.monsters[i] = null; }
+      }
+      dlog(`OPP activated <b>Dark Hole</b> — all monsters destroyed!`);
+    } else {
+      for (let i = 0; i < 5; i++) {
+        if (GS.player.field.monsters[i]) { GS.player.gy.push(GS.player.field.monsters[i].card); GS.player.field.monsters[i] = null; }
+      }
+      dlog(`OPP activated <b>Raigeki</b> — your monsters destroyed!`);
+    }
+    renderAll(); await wait(900);
+  }
+
+  // BATTLE PHASE
+  GS.phase = 'BATTLE'; updatePhaseBar(); dlog('OPP: Battle Phase');
+  renderAll(); await wait(600);
+
+  for (let i = 0; i < 5; i++) {
+    const atkZ = GS.ai.field.monsters[i];
+    if (!atkZ || atkZ.hasAttacked || atkZ.position !== 'ATK') continue;
+    const atkVal = (atkZ.card.atk||0) + atkZ.equipATK;
+    const pMons = GS.player.field.monsters.map((z,idx)=>z?{z,idx}:null).filter(Boolean);
+
+    await wait(700);
+    if (!pMons.length) {
+      GS.player.lp = Math.max(0, GS.player.lp - atkVal);
+      dlog(`OPP: <b>${atkZ.card.name}</b> attacks directly! You take <b style="color:#f87171">${atkVal} damage</b>!`);
+      flashScreen('player');
+    } else {
+      // Target weakest ATK-position first, then DEF
+      const atkTargets = pMons.filter(p => p.z.position === 'ATK').sort((a,b)=>(a.z.card.atk||0)-(b.z.card.atk||0));
+      const defTargets = pMons.filter(p => p.z.position === 'DEF').sort((a,b)=>(a.z.card.def||0)-(b.z.card.def||0));
+      const target = atkTargets[0] || defTargets[0];
+      const { z: defZ, idx: defSlot } = target;
+
+      if (defZ.faceDown) defZ.faceDown = false;
+      const defIsAtk = defZ.position === 'ATK';
+      const defVal   = defIsAtk ? (defZ.card.atk||0) : (defZ.card.def||0);
+
+      if (defIsAtk) {
+        if (atkVal > defVal) {
+          const dmg = atkVal - defVal;
+          GS.player.lp = Math.max(0, GS.player.lp - dmg);
+          GS.player.gy.push(defZ.card); GS.player.field.monsters[defSlot] = null;
+          dlog(`OPP: <b>${atkZ.card.name}</b> destroys <b>${defZ.card.name}</b>! You take <b style="color:#f87171">${dmg}</b>!`);
+          flashScreen('player');
+        } else if (atkVal < defVal) {
+          const dmg = defVal - atkVal;
+          GS.ai.lp = Math.max(0, GS.ai.lp - dmg);
+          GS.ai.gy.push(atkZ.card); GS.ai.field.monsters[i] = null;
+          dlog(`OPP: <b>${atkZ.card.name}</b> is destroyed! OPP takes <b style="color:#60a5fa">${dmg}</b>.`);
+          flashScreen('ai');
+        } else {
+          GS.player.gy.push(defZ.card); GS.player.field.monsters[defSlot] = null;
+          GS.ai.gy.push(atkZ.card);    GS.ai.field.monsters[i]            = null;
+          dlog(`OPP: Both monsters destroyed!`);
+        }
+      } else {
+        if (atkVal > defVal) {
+          GS.player.gy.push(defZ.card); GS.player.field.monsters[defSlot] = null;
+          dlog(`OPP: <b>${atkZ.card.name}</b> destroys <b>${defZ.card.name}</b> in DEF!`);
+        } else if (atkVal < defVal) {
+          const dmg = defVal - atkVal;
+          GS.ai.lp = Math.max(0, GS.ai.lp - dmg);
+          dlog(`OPP attacks in DEF — OPP takes <b style="color:#60a5fa">${dmg}</b> reflection!`);
+          flashScreen('ai');
+        } else {
+          dlog(`Tie: <b>${atkZ.card.name}</b> vs DEF — no damage.`);
+        }
+      }
+    }
+
+    atkZ.hasAttacked = true;
+    renderAll();
+    if (checkWin()) return;
+    await wait(800);
+  }
+
+  // END PHASE
+  GS.phase = 'END'; updatePhaseBar(); dlog('OPP: End Phase');
+  while (GS.ai.hand.length > 6) {
+    const d = GS.ai.hand.pop(); GS.ai.gy.push(d);
+    dlog(`OPP discards <b>${d.name}</b>.`);
+  }
+  GS.ai.field.monsters.forEach(z => { if (z) z.hasAttacked = false; });
+  renderAll(); await wait(500);
+
+  // Switch to player
+  GS.aiThinking = false;
+  GS.active = 'player';
+  GS.phase  = 'MAIN1';
+  GS.normalSummonUsed = false;
+  GS.turn++;
+  document.getElementById('d-turn-who').textContent = 'YOUR TURN';
+  document.getElementById('d-turn-num').textContent = GS.turn;
+
+  // Player draw
+  if (!GS.player.deck.length) { dlog('<b>You have no cards to draw — OPP wins by deck-out!</b>'); showEndScreen('ai'); return; }
+  drawCards('player', 1);
+  dlog(`─── Your Turn ${GS.turn} ─── Drew 1 card.`);
+  dlog(PHASE_DESCS.MAIN1);
+  renderAll();
+}
+
+/* ---- GY viewer (simple toast) ---- */
+function viewGY(who) {
+  const gy = GS ? GS[who].gy : [];
+  if (!gy.length) { toast('Graveyard is empty', 'inf'); return; }
+  const names = gy.slice(-5).map(c => c.name).join(', ');
+  toast(`GY (${gy.length}): ${names}`, 'inf');
+}
+
+/* Close action popup on Escape */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeActionPopup();
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   initHome();
   initDeckBuilder();
