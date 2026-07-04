@@ -1379,7 +1379,8 @@
     .d-opp-hand { display: flex; gap: 4px; align-items: center; }
     .d-opp-card-back {
       width: 32px; height: 44px; border-radius: 3px;
-      background: linear-gradient(135deg, #1a2a6c, #2244aa);
+      background: url('https://images.ygoprodeck.com/images/cards/back.jpg') center/cover no-repeat,
+                  linear-gradient(135deg, #1a2a6c, #2244aa);
       border: 1px solid #3355bb; flex-shrink: 0;
     }
     .d-opp-hand-label { font-size: 9px; color: var(--text-dim); margin-left: 6px; }
@@ -1525,7 +1526,7 @@
     .d-pbtn {
       padding: 6px 10px; background: var(--surface2);
       border: 1px solid var(--border); border-radius: 6px;
-      color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
+      color: var(--text-dim); font-family: 'Rajdhani', sans-serif; cursor: pointer;
       font-size: 11px; font-weight: 700; cursor: pointer;
       white-space: nowrap; min-height: 30px; transition: all .2s;
       letter-spacing: .5px;
@@ -1745,6 +1746,48 @@
     .cs-h                 { font-size: 14px !important; letter-spacing: 1px; }
     .load-hdr span        { font-size: 13px !important; letter-spacing: 1px; }
 
+    /* ===== DECK PICKER MODAL ===== */
+    .deck-pick-overlay {
+      position: fixed; inset: 0; z-index: 900;
+      background: rgba(0,0,0,0.82); backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; animation: fadeIn .15s ease;
+    }
+    .deck-pick-modal {
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 16px; width: 100%; max-width: 380px;
+      overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.8);
+    }
+    .deck-pick-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+    .deck-pick-hdr span { font-family: 'Exo 2', sans-serif; font-size: 14px; font-weight: 700; color: var(--gold); }
+    .deck-pick-hdr button { background: none; border: none; color: var(--text-dim); font-size: 18px; cursor: pointer; line-height: 1; }
+    .deck-pick-hdr button:hover { color: var(--text); }
+    .deck-pick-list { padding: 10px; display: flex; flex-direction: column; gap: 6px; max-height: 60vh; overflow-y: auto; }
+    .dp-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 10px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      cursor: pointer; transition: all .2s;
+    }
+    .dp-item:hover { border-color: var(--gold); background: rgba(212,170,80,0.08); }
+    .dp-item-icon { font-size: 22px; flex-shrink: 0; }
+    .dp-item-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .dp-item-cnt { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+    .dp-item.starter { border-color: rgba(74,222,128,0.3); }
+    .dp-item.starter:hover { border-color: #4ade80; background: rgba(74,222,128,0.08); }
+
+    /* Profile card image */
+    .profile-card-img {
+      width: 100%; height: 130px; border-radius: 8px;
+      object-fit: cover; object-position: top;
+      margin-bottom: 10px; display: block;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
     /* ===== GY / BANISH MODAL ===== */
     .gy-overlay {
       position: fixed; inset: 0; z-index: 850;
@@ -1871,27 +1914,27 @@
       <!-- Quick Duel — card art thumbnails -->
       <div class="home-section-hdr"><span class="home-section-title">Quick Duel</span></div>
       <div class="home-opp-row">
-        <div class="home-opp-card" onclick="nav('duel')">
+        <div class="home-opp-card" onclick="nav('duel');startDuel('aggro')">
           <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/70095154.jpg" alt="Cyber Dragon" onerror="this.style.opacity='.15'">
           <div class="home-opp-card-label">Pure Aggro</div>
           <div class="home-opp-card-diff">⭐ Beginner</div>
         </div>
-        <div class="home-opp-card" onclick="nav('duel')">
+        <div class="home-opp-card" onclick="nav('duel');startDuel('dragonlink')">
           <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/58921041.jpg" alt="Borreload Savage" onerror="this.style.opacity='.15'">
           <div class="home-opp-card-label">Dragon Link</div>
           <div class="home-opp-card-diff">⭐⭐⭐ Advanced</div>
         </div>
-        <div class="home-opp-card" onclick="nav('duel')">
+        <div class="home-opp-card" onclick="nav('duel');startDuel('tearalaments')">
           <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/71572567.jpg" alt="Kitkallos" onerror="this.style.opacity='.15'">
           <div class="home-opp-card-label">Tearlaments</div>
           <div class="home-opp-card-diff">⭐⭐⭐⭐ Expert</div>
         </div>
-        <div class="home-opp-card" onclick="nav('duel')">
+        <div class="home-opp-card" onclick="nav('duel');startDuel('snakeeye')">
           <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/73979678.jpg" alt="Snake-Eye Ash" onerror="this.style.opacity='.15'">
           <div class="home-opp-card-label">Snake-Eye</div>
           <div class="home-opp-card-diff">⭐⭐⭐⭐⭐ Champion</div>
         </div>
-        <div class="home-opp-card" onclick="nav('duel')">
+        <div class="home-opp-card" onclick="nav('duel');startDuel('branded')">
           <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/75375465.jpg" alt="Mirrorjade" onerror="this.style.opacity='.15'">
           <div class="home-opp-card-label">Branded</div>
           <div class="home-opp-card-diff">⭐⭐⭐⭐⭐ Champion</div>
@@ -2056,35 +2099,35 @@
         <div class="profile-list">
 
           <div class="profile-card" onclick="startDuel('aggro')">
-            <div class="profile-icon">🗡️</div>
+            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/70095154.jpg" alt="Pure Aggro" onerror="this.style.display='none'">
             <div class="profile-name">Pure Aggro</div>
             <div class="profile-desc">Classic beatdown. Perfect for learning the basics of combat and damage calculation.</div>
             <div class="profile-diff" style="color:#4ade80">⭐ Beginner</div>
           </div>
 
           <div class="profile-card" onclick="startDuel('dragonlink')">
-            <div class="profile-icon">🐉</div>
+            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/58921041.jpg" alt="Dragon Link" onerror="this.style.display='none'">
             <div class="profile-name">Dragon Link</div>
             <div class="profile-desc">2020 WCS combo deck. Striker Dragon into Boot Sector Launch into Borreload Savage + Apollousa on turn 1.</div>
             <div class="profile-diff" style="color:#facc15">⭐⭐⭐ Advanced — use Ash on BSL search</div>
           </div>
 
           <div class="profile-card" onclick="startDuel('tearalaments')">
-            <div class="profile-icon">💧</div>
+            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/71572567.jpg" alt="Tearlaments" onerror="this.style.display='none'">
             <div class="profile-name">Tearlaments</div>
             <div class="profile-desc">2022-2023 dominant GY fusion engine. Mills aggressively, chains Scheiren/Havnis effects to build Kitkallos + Mirrorjade.</div>
             <div class="profile-diff" style="color:#fb923c">⭐⭐⭐⭐ Expert — Ash the GY fusions</div>
           </div>
 
           <div class="profile-card" onclick="startDuel('snakeeye')">
-            <div class="profile-icon">🔥</div>
+            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/73979678.jpg" alt="Snake-Eye" onerror="this.style.display='none'">
             <div class="profile-name">Snake-Eye</div>
             <div class="profile-desc">2024 YCS champion deck. Snake-Eye Ash searches Oak, Diabellstar extends into Flamberge + I:P Masquerena board.</div>
             <div class="profile-diff" style="color:#f87171">⭐⭐⭐⭐⭐ Champion — interrupt Ash before Oak</div>
           </div>
 
           <div class="profile-card" onclick="startDuel('branded')">
-            <div class="profile-icon">⚔️</div>
+            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/75375465.jpg" alt="Branded Despia" onerror="this.style.display='none'">
             <div class="profile-name">Branded Despia</div>
             <div class="profile-desc">2022 YCS Albaz fusion engine. Aluber searches Branded Fusion, fuses with opponent monsters into Mirrorjade + Dramaturge.</div>
             <div class="profile-diff" style="color:#f87171">⭐⭐⭐⭐⭐ Champion — Ghost Ogre Aluber on search</div>
@@ -2611,6 +2654,12 @@ function nav(scr) {
   if (scr === 'stats')    renderStats();
   if (scr === 'settings') loadSettings();
   if (scr === 'home')     refreshHome();
+  if (scr === 'duel' && !GS) {
+    const pd = document.getElementById('pre-duel');
+    const df = document.getElementById('duel-field');
+    if (pd) pd.style.display = '';
+    if (df) df.style.display = 'none';
+  }
 }
 
 /* ============================================================
@@ -3786,20 +3835,85 @@ function mkZone(card, position = 'ATK', faceDown = false) {
   return { card: { ...card }, position, faceDown, hasAttacked: false, equipATK: 0 };
 }
 
-/* ---- Start Duel ---- */
+/* ---- Deck Picker ---- */
 function startDuel(profile) {
-  const prof = PROFILES[profile] || PROFILES.aggro;
+  const savedDecks = DeckMgr.list();
+  const currentMainCnt = S.deck.main.reduce((s, e) => s + e.count, 0);
+  const hasCurrentDeck = currentMainCnt >= 5;
 
-  // Player deck
-  let pCards = [...S.deck.main.flatMap(e => Array(e.count).fill({ ...e.card }))];
-  if (pCards.length < 5) {
-    pCards = AI_DECK_TEMPLATE.map(c => ({ ...c }));
+  if (savedDecks.length === 0 && !hasCurrentDeck) {
+    doStartDuel(profile, AI_DECK_TEMPLATE.map(c => ({ ...c })), []);
     toast('Using starter deck — build one in Deck Builder!', 'inf');
+    return;
   }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'deck-pick-overlay';
+
+  let options = '';
+  if (hasCurrentDeck) {
+    const nm = S.deck.name || 'Current Deck';
+    options += `<div class="dp-item" onclick="_pickDeckAndStart('${profile}','__current__',this.closest('.deck-pick-overlay'))">
+      <div class="dp-item-icon">📋</div>
+      <div class="dp-item-info">
+        <div class="dp-item-name">${nm}</div>
+        <div class="dp-item-cnt">${currentMainCnt} cards &middot; in builder</div>
+      </div></div>`;
+  }
+  savedDecks.forEach(dn => {
+    const dk = DeckMgr.load(dn);
+    const mc = (dk?.main || []).reduce((s, e) => s + e.count, 0);
+    const escaped = dn.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    options += `<div class="dp-item" onclick="_pickDeckAndStart('${profile}','${escaped}',this.closest('.deck-pick-overlay'))">
+      <div class="dp-item-icon">🃏</div>
+      <div class="dp-item-info">
+        <div class="dp-item-name">${dn}</div>
+        <div class="dp-item-cnt">${mc} cards</div>
+      </div></div>`;
+  });
+  options += `<div class="dp-item starter" onclick="_pickDeckAndStart('${profile}','__starter__',this.closest('.deck-pick-overlay'))">
+    <div class="dp-item-icon">⭐</div>
+    <div class="dp-item-info">
+      <div class="dp-item-name">Starter Deck</div>
+      <div class="dp-item-cnt">Built-in practice deck</div>
+    </div></div>`;
+
+  overlay.innerHTML = `<div class="deck-pick-modal">
+    <div class="deck-pick-hdr"><span>Choose Your Deck</span>
+    <button onclick="this.closest('.deck-pick-overlay').remove()">✕</button></div>
+    <div class="deck-pick-list">${options}</div></div>`;
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+
+function _pickDeckAndStart(profile, deckKey, overlay) {
+  overlay.remove();
+  let pCards, extraCards = [];
+  if (deckKey === '__current__') {
+    pCards = S.deck.main.flatMap(e => Array(e.count).fill({ ...e.card }));
+    extraCards = S.deck.extra.flatMap(e => Array(e.count).fill({ ...e.card }));
+  } else if (deckKey === '__starter__') {
+    pCards = AI_DECK_TEMPLATE.map(c => ({ ...c }));
+  } else {
+    const dk = DeckMgr.load(deckKey);
+    if (dk && (dk.main||[]).length) {
+      pCards = dk.main.flatMap(e => Array(e.count).fill({ ...e.card }));
+      extraCards = (dk.extra||[]).flatMap(e => Array(e.count).fill({ ...e.card }));
+    } else {
+      pCards = AI_DECK_TEMPLATE.map(c => ({ ...c }));
+      toast('Deck not found, using starter', 'inf');
+    }
+  }
+  doStartDuel(profile, pCards, extraCards);
+}
+
+/* ---- Start Duel ---- */
+function doStartDuel(profile, pCards, extraCards) {
+  const prof = PROFILES[profile] || PROFILES.aggro;
   const startLP = parseInt(Cfg.get('lp')) || 8000;
   const handSz  = parseInt(Cfg.get('hand')) || 5;
 
-  const pDeck = shuffle(pCards);
+  const pDeck = shuffle([...pCards]);
   const aiTemplate = prof.deckFn();
   const aDeck = shuffle(aiTemplate.map(c => ({ ...c })));
 
@@ -3815,7 +3929,7 @@ function startDuel(profile) {
       hand: pDeck.splice(0, handSz),
       deck: pDeck, gy: [], banished: [],
       field: { monsters: Array(5).fill(null), spells: Array(5).fill(null) },
-      extraDeck: [...S.deck.extra.flatMap(e => Array(e.count).fill({ ...e.card }))]
+      extraDeck: extraCards || []
     },
     ai: {
       lp: startLP, maxLP: startLP,
@@ -3831,7 +3945,6 @@ function startDuel(profile) {
   document.getElementById('d-log').innerHTML = '';
   document.getElementById('combo-analysis-btn').style.display = 'none';
 
-  const profEl = document.getElementById('d-turn-who');
   dlog(`─── DUEL START vs <b>${prof.name}</b> ───`);
   dlog(`You drew ${handSz} cards.`);
   if (profile !== 'aggro') {
