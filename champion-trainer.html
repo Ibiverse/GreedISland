@@ -1253,6 +1253,9 @@
     .profile-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     @media (max-width: 480px) { .profile-list { grid-template-columns: 1fr; } }
     .profile-card {
+      /* reset <button> defaults */
+      -webkit-appearance: none; appearance: none;
+      font-family: inherit; text-align: left; width: 100%;
       background: rgba(18,18,42,0.7);
       border: 1px solid rgba(56,139,253,0.2);
       backdrop-filter: blur(12px);
@@ -1786,6 +1789,7 @@
       object-fit: cover; object-position: top;
       margin-bottom: 10px; display: block;
       border: 1px solid rgba(255,255,255,0.08);
+      pointer-events: none; /* let clicks pass to parent button */
     }
 
     /* ===== GY / BANISH MODAL ===== */
@@ -1915,7 +1919,7 @@
       <div class="home-section-hdr"><span class="home-section-title">Quick Duel</span></div>
       <div class="home-opp-row">
         <div class="home-opp-card" onclick="nav('duel');startDuel('aggro')">
-          <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/70095154.jpg" alt="Cyber Dragon" onerror="this.style.opacity='.15'">
+          <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/89631139.jpg" alt="Blue-Eyes White Dragon" onerror="this.style.opacity='.15'">
           <div class="home-opp-card-label">Pure Aggro</div>
           <div class="home-opp-card-diff">⭐ Beginner</div>
         </div>
@@ -2098,40 +2102,40 @@
         <div class="pre-duel-title">SELECT OPPONENT</div>
         <div class="profile-list">
 
-          <div class="profile-card" onclick="startDuel('aggro')">
-            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/70095154.jpg" alt="Pure Aggro" onerror="this.style.display='none'">
+          <button class="profile-card" onclick="startDuel('aggro')">
+            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/89631139.jpg" alt="Blue-Eyes White Dragon" onerror="this.style.display='none'">
             <div class="profile-name">Pure Aggro</div>
-            <div class="profile-desc">Classic beatdown. Perfect for learning the basics of combat and damage calculation.</div>
+            <div class="profile-desc">Classic beatdown. High-ATK monsters swarm and overwhelm. Perfect for learning combat and damage calculation.</div>
             <div class="profile-diff" style="color:#4ade80">⭐ Beginner</div>
-          </div>
+          </button>
 
-          <div class="profile-card" onclick="startDuel('dragonlink')">
-            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/58921041.jpg" alt="Dragon Link" onerror="this.style.display='none'">
+          <button class="profile-card" onclick="startDuel('dragonlink')">
+            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/58921041.jpg" alt="Borreload Savage Dragon" onerror="this.style.display='none'">
             <div class="profile-name">Dragon Link</div>
-            <div class="profile-desc">2020 WCS combo deck. Striker Dragon into Boot Sector Launch into Borreload Savage + Apollousa on turn 1.</div>
+            <div class="profile-desc">2020 WCS combo deck. Striker Dragon into Boot Sector Launch builds a Borreload Savage + Apollousa board on turn 1.</div>
             <div class="profile-diff" style="color:#facc15">⭐⭐⭐ Advanced — use Ash on BSL search</div>
-          </div>
+          </button>
 
-          <div class="profile-card" onclick="startDuel('tearalaments')">
-            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/71572567.jpg" alt="Tearlaments" onerror="this.style.display='none'">
+          <button class="profile-card" onclick="startDuel('tearalaments')">
+            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/71572567.jpg" alt="Tearlaments Kitkallos" onerror="this.style.display='none'">
             <div class="profile-name">Tearlaments</div>
-            <div class="profile-desc">2022-2023 dominant GY fusion engine. Mills aggressively, chains Scheiren/Havnis effects to build Kitkallos + Mirrorjade.</div>
+            <div class="profile-desc">2022-2023 dominant GY fusion engine. Mills aggressively, chains Scheiren/Havnis to build Kitkallos + Mirrorjade.</div>
             <div class="profile-diff" style="color:#fb923c">⭐⭐⭐⭐ Expert — Ash the GY fusions</div>
-          </div>
+          </button>
 
-          <div class="profile-card" onclick="startDuel('snakeeye')">
-            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/73979678.jpg" alt="Snake-Eye" onerror="this.style.display='none'">
+          <button class="profile-card" onclick="startDuel('snakeeye')">
+            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/73979678.jpg" alt="Snake-Eye Ash" onerror="this.style.display='none'">
             <div class="profile-name">Snake-Eye</div>
             <div class="profile-desc">2024 YCS champion deck. Snake-Eye Ash searches Oak, Diabellstar extends into Flamberge + I:P Masquerena board.</div>
             <div class="profile-diff" style="color:#f87171">⭐⭐⭐⭐⭐ Champion — interrupt Ash before Oak</div>
-          </div>
+          </button>
 
-          <div class="profile-card" onclick="startDuel('branded')">
-            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/75375465.jpg" alt="Branded Despia" onerror="this.style.display='none'">
+          <button class="profile-card" onclick="startDuel('branded')">
+            <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/65741786.jpg" alt="Aluber the Jester of Despia" onerror="this.style.display='none'">
             <div class="profile-name">Branded Despia</div>
-            <div class="profile-desc">2022 YCS Albaz fusion engine. Aluber searches Branded Fusion, fuses with opponent monsters into Mirrorjade + Dramaturge.</div>
+            <div class="profile-desc">2022 YCS Albaz fusion engine. Aluber searches Branded Fusion, fuses into Mirrorjade + Dramaturge on your opponent's turn.</div>
             <div class="profile-diff" style="color:#f87171">⭐⭐⭐⭐⭐ Champion — Ghost Ogre Aluber on search</div>
-          </div>
+          </button>
 
         </div>
         <div id="combo-analysis-btn" style="display:none; margin-top:20px; text-align:center;">
@@ -2654,11 +2658,14 @@ function nav(scr) {
   if (scr === 'stats')    renderStats();
   if (scr === 'settings') loadSettings();
   if (scr === 'home')     refreshHome();
-  if (scr === 'duel' && !GS) {
-    const pd = document.getElementById('pre-duel');
-    const df = document.getElementById('duel-field');
-    if (pd) pd.style.display = '';
-    if (df) df.style.display = 'none';
+  if (scr === 'duel') {
+    // If no active game is in progress, always show the profile picker
+    if (!GS || GS.active === 'ended') {
+      const pd = document.getElementById('pre-duel');
+      const df = document.getElementById('duel-field');
+      if (pd) pd.style.display = '';  // revert to CSS flex
+      if (df) df.style.display = 'none';
+    }
   }
 }
 
@@ -4467,7 +4474,7 @@ function showEndScreen(winner) {
       <div class="duel-end-btns">
         <button class="deb primary" onclick="this.closest('.duel-end-overlay').remove(); startDuel('${prof}')">⚔ Rematch</button>
         <button class="deb secondary" onclick="this.closest('.duel-end-overlay').remove(); showComboAnalysis()">📊 Analysis</button>
-        <button class="deb secondary" onclick="this.closest('.duel-end-overlay').remove(); document.getElementById('duel-field').style.display='none'; document.getElementById('pre-duel').style.display='flex'; document.getElementById('combo-analysis-btn').style.display='block'">← Menu</button>
+        <button class="deb secondary" onclick="this.closest('.duel-end-overlay').remove(); GS=null; document.getElementById('duel-field').style.display='none'; document.getElementById('pre-duel').style.display='flex'; document.getElementById('combo-analysis-btn').style.display='block'">← Menu</button>
       </div>
     </div>`;
   document.getElementById('duel-field').appendChild(overlay);
