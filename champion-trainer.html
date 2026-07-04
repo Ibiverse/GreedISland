@@ -1253,9 +1253,6 @@
     .profile-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     @media (max-width: 480px) { .profile-list { grid-template-columns: 1fr; } }
     .profile-card {
-      /* reset <button> defaults */
-      -webkit-appearance: none; appearance: none;
-      font-family: inherit; text-align: left; width: 100%;
       background: rgba(18,18,42,0.7);
       border: 1px solid rgba(56,139,253,0.2);
       backdrop-filter: blur(12px);
@@ -2102,40 +2099,40 @@
         <div class="pre-duel-title">SELECT OPPONENT</div>
         <div class="profile-list">
 
-          <button class="profile-card" onclick="startDuel('aggro')">
+          <div class="profile-card" onclick="startDuel('aggro')">
             <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/89631139.jpg" alt="Blue-Eyes White Dragon" onerror="this.style.display='none'">
             <div class="profile-name">Pure Aggro</div>
             <div class="profile-desc">Classic beatdown. High-ATK monsters swarm and overwhelm. Perfect for learning combat and damage calculation.</div>
             <div class="profile-diff" style="color:#4ade80">⭐ Beginner</div>
-          </button>
+          </div>
 
-          <button class="profile-card" onclick="startDuel('dragonlink')">
+          <div class="profile-card" onclick="startDuel('dragonlink')">
             <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/58921041.jpg" alt="Borreload Savage Dragon" onerror="this.style.display='none'">
             <div class="profile-name">Dragon Link</div>
             <div class="profile-desc">2020 WCS combo deck. Striker Dragon into Boot Sector Launch builds a Borreload Savage + Apollousa board on turn 1.</div>
             <div class="profile-diff" style="color:#facc15">⭐⭐⭐ Advanced — use Ash on BSL search</div>
-          </button>
+          </div>
 
-          <button class="profile-card" onclick="startDuel('tearalaments')">
+          <div class="profile-card" onclick="startDuel('tearalaments')">
             <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/71572567.jpg" alt="Tearlaments Kitkallos" onerror="this.style.display='none'">
             <div class="profile-name">Tearlaments</div>
             <div class="profile-desc">2022-2023 dominant GY fusion engine. Mills aggressively, chains Scheiren/Havnis to build Kitkallos + Mirrorjade.</div>
             <div class="profile-diff" style="color:#fb923c">⭐⭐⭐⭐ Expert — Ash the GY fusions</div>
-          </button>
+          </div>
 
-          <button class="profile-card" onclick="startDuel('snakeeye')">
+          <div class="profile-card" onclick="startDuel('snakeeye')">
             <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/73979678.jpg" alt="Snake-Eye Ash" onerror="this.style.display='none'">
             <div class="profile-name">Snake-Eye</div>
             <div class="profile-desc">2024 YCS champion deck. Snake-Eye Ash searches Oak, Diabellstar extends into Flamberge + I:P Masquerena board.</div>
             <div class="profile-diff" style="color:#f87171">⭐⭐⭐⭐⭐ Champion — interrupt Ash before Oak</div>
-          </button>
+          </div>
 
-          <button class="profile-card" onclick="startDuel('branded')">
+          <div class="profile-card" onclick="startDuel('branded')">
             <img class="profile-card-img" src="https://images.ygoprodeck.com/images/cards_cropped/65741786.jpg" alt="Aluber the Jester of Despia" onerror="this.style.display='none'">
             <div class="profile-name">Branded Despia</div>
-            <div class="profile-desc">2022 YCS Albaz fusion engine. Aluber searches Branded Fusion, fuses into Mirrorjade + Dramaturge on your opponent's turn.</div>
+            <div class="profile-desc">2022 YCS Albaz fusion engine. Aluber searches Branded Fusion, fuses into Mirrorjade + Dramaturge on opponent's turn.</div>
             <div class="profile-diff" style="color:#f87171">⭐⭐⭐⭐⭐ Champion — Ghost Ogre Aluber on search</div>
-          </button>
+          </div>
 
         </div>
         <div id="combo-analysis-btn" style="display:none; margin-top:20px; text-align:center;">
@@ -2679,7 +2676,7 @@ const DAILY_TIPS = [
   { title: 'Normal Summon Value', text: 'You only get 1 Normal Summon per turn — make it count. Prioritize monsters that search, draw, or extend your combo on summon.' },
   { title: 'Infinite Impermanence', text: 'Impermanence negates monster effects on the field. If activated from hand, it also negates your own Spell/Trap cards in the same column.' },
   { title: 'Tearlaments Interrupt', text: 'The key moment vs Tearlaments is when Reinoheart activates to mill Scheiren. Ashing the mill stops the entire GY fusion chain.' },
-  { title: 'Snake-Eye Pressure', text: 'Ash Blossom Snake-Eye Ash (the monster) when it searches Oak. Without Oak, Diabellstar can't extend into the full Flamberge + Masquerena board.' },
+  { title: 'Snake-Eye Pressure', text: 'Ash Blossom Snake-Eye Ash (the monster) when it searches Oak. Without Oak, Diabellstar cannot extend into the full Flamberge + Masquerena board.' },
   { title: 'Battle Phase Tactics', text: 'Attack DEF-position monsters even if you deal no damage — removing blockers opens a direct attack lane for your other monsters.' },
   { title: 'Extra Deck Planning', text: 'A balanced Extra Deck has options for every situation: Link monsters for zone routing, Synchros for negation, Fusions for raw power.' },
 ];
