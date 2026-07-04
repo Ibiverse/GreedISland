@@ -1490,14 +1490,27 @@
 
     /* Player hand row */
     .d-my-hand-row {
-      height: 82px; flex-shrink: 0;
-      display: flex; align-items: center;
-      padding: 4px 8px; gap: 4px;
+      flex-shrink: 0;
+      display: flex; flex-direction: column;
       border-top: 1px solid rgba(255,255,255,.07);
+      background: rgba(0,0,0,.18);
+    }
+    .d-hand-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--gold); padding: 3px 10px 0; opacity: .75;
+    }
+    .d-my-hand {
+      display: flex; gap: 5px; align-items: center;
+      height: 74px; padding: 4px 8px;
       overflow-x: auto; scrollbar-width: none;
     }
-    .d-my-hand-row::-webkit-scrollbar { display: none; }
-    .d-my-hand { display: flex; gap: 5px; align-items: center; height: 100%; }
+    .d-my-hand::-webkit-scrollbar { display: none; }
+
+    @keyframes hand-glow {
+      0%,100% { box-shadow: 0 0 6px rgba(212,170,80,.3); }
+      50%      { box-shadow: 0 0 14px rgba(212,170,80,.7), 0 0 0 1px rgba(212,170,80,.4); }
+    }
+    .d-hand-card.new-card { animation: hand-glow 1.6s ease-in-out 3; }
 
     .d-hand-card {
       height: 70px;
@@ -2249,6 +2262,7 @@
 
         <!-- PLAYER HAND -->
         <div class="d-my-hand-row">
+          <div class="d-hand-label">YOUR HAND — tap a card to play it</div>
           <div id="d-my-hand" class="d-my-hand"></div>
         </div>
 
@@ -3879,13 +3893,34 @@ function startDuel(profile) {
     <div class="dp-item-icon">⭐</div>
     <div class="dp-item-info">
       <div class="dp-item-name">Starter Deck</div>
-      <div class="dp-item-cnt">Built-in practice deck</div>
+      <div class="dp-item-cnt">Built-in beginner deck</div>
     </div></div>`;
+
+  // Archetype decks — same cards the AI uses
+  const ARCH_OPTIONS = [
+    { key: '__arch__aggro',        label: 'Pure Aggro Deck',     sub: 'High-ATK level 4 beatdown',       color: '#4ade80' },
+    { key: '__arch__dragonlink',   label: 'Dragon Link Deck',    sub: 'Combo engine: Striker → BSL → Savage', color: '#818cf8' },
+    { key: '__arch__tearalaments', label: 'Tearlaments Deck',    sub: 'GY fusion engine',                color: '#38bdf8' },
+    { key: '__arch__snakeeye',     label: 'Snake-Eye Deck',      sub: '2024 FIRE combo deck',            color: '#f87171' },
+    { key: '__arch__branded',      label: 'Branded Despia Deck', sub: 'Albaz fusion engine',             color: '#fbbf24' },
+  ];
+  const archHtml = ARCH_OPTIONS.map(a =>
+    `<div class="dp-item" onclick="_pickDeckAndStart('${profile}','${a.key}',this.closest('.deck-pick-overlay'))" style="border-color:${a.color}22">
+      <div class="dp-item-icon" style="font-size:16px; color:${a.color}">▶</div>
+      <div class="dp-item-info">
+        <div class="dp-item-name" style="color:${a.color}">${a.label}</div>
+        <div class="dp-item-cnt">${a.sub}</div>
+      </div></div>`
+  ).join('');
 
   overlay.innerHTML = `<div class="deck-pick-modal">
     <div class="deck-pick-hdr"><span>Choose Your Deck</span>
     <button onclick="this.closest('.deck-pick-overlay').remove()">✕</button></div>
-    <div class="deck-pick-list">${options}</div></div>`;
+    <div class="deck-pick-list">
+      ${options}
+      <div style="margin:8px 0 4px; font-size:10px; font-weight:700; letter-spacing:1px; color:var(--text-dim); text-transform:uppercase; padding:0 4px">Play with an Archetype Deck</div>
+      ${archHtml}
+    </div></div>`;
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   document.body.appendChild(overlay);
 }
@@ -3898,6 +3933,10 @@ function _pickDeckAndStart(profile, deckKey, overlay) {
     extraCards = S.deck.extra.flatMap(e => Array(e.count).fill({ ...e.card }));
   } else if (deckKey === '__starter__') {
     pCards = AI_DECK_TEMPLATE.map(c => ({ ...c }));
+  } else if (deckKey.startsWith('__arch__')) {
+    const profKey = deckKey.slice(8); // strip '__arch__'
+    const prof = PROFILES[profKey];
+    pCards = prof ? prof.deckFn().map(c => ({ ...c })) : AI_DECK_TEMPLATE.map(c => ({ ...c }));
   } else {
     const dk = DeckMgr.load(deckKey);
     if (dk && (dk.main||[]).length) {
@@ -3950,13 +3989,15 @@ function doStartDuel(profile, pCards, extraCards) {
   document.getElementById('combo-analysis-btn').style.display = 'none';
 
   dlog(`─── DUEL START vs <b>${prof.name}</b> ───`);
-  dlog(`You drew ${handSz} cards.`);
+  dlog(`You drew ${handSz} cards. <span style="color:var(--gold)">Tap any card in YOUR HAND below to summon or activate it.</span>`);
   if (profile !== 'aggro') {
     const tips = prof.tips || [];
     if (tips.length) dlog(`<span style="color:#facc15">💡 TIP: ${tips[0].text}</span>`);
   }
   dlog(PHASE_DESCS.MAIN1);
   renderAll();
+  // Brief toast guide
+  setTimeout(() => toast('Tap a card in YOUR HAND to summon it to the field!', 'inf'), 600);
 }
 
 /* ---- Rendering ---- */
@@ -4019,8 +4060,8 @@ function renderPlayerHand() {
   el.innerHTML = '';
   GS.player.hand.forEach((card, i) => {
     const div = document.createElement('div');
-    div.className = 'd-hand-card';
-    div.innerHTML = `<img src="https://images.ygoprodeck.com/images/cards/${card.id}.jpg" alt="${card.name}" loading="lazy" onerror="this.style.opacity='.3'">`;
+    div.className = 'd-hand-card' + (GS.turn === 1 ? ' new-card' : '');
+    div.innerHTML = `<img src="https://images.ygoprodeck.com/images/cards/${card.id}.jpg" alt="${card.name}" loading="lazy" onerror="this.src='https://images.ygoprodeck.com/images/cards/back.jpg'">`;
     div.onclick = () => { if (GS.active === 'player' && !GS.aiThinking) showHandActions(card, i); };
     div.title = card.name;
     el.appendChild(div);
