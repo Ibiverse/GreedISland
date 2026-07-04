@@ -10,23 +10,23 @@
   <style>
     /* ===== CSS VARIABLES ===== */
     :root {
-      --bg: #0a0a1a;
-      --surface: #12122a;
-      --surface2: #1a1a35;
-      --surface3: #222246;
-      --gold: #c9a84c;
-      --gold-dark: #8a6a20;
-      --gold-light: #e8c96a;
-      --holographic: linear-gradient(135deg, #667eea 0%, #764ba2 33%, #f093fb 66%, #c9a84c 100%);
-      --monster-orange: #d4730a;
-      --spell-green: #1a7a4a;
-      --trap-purple: #7a1a7a;
-      --link-blue: #0a4a9a;
-      --danger: #e03030;
-      --text: #e8e8f0;
-      --text-dim: #8888aa;
-      --border: #2a2a4a;
-      --border2: #3a3a5a;
+      --bg: #111132;
+      --surface: #1c1c4e;
+      --surface2: #26266a;
+      --surface3: #30307e;
+      --gold: #d4aa50;
+      --gold-dark: #9a7228;
+      --gold-light: #f0d070;
+      --holographic: linear-gradient(135deg, #5577dd 0%, #7744bb 33%, #cc66ee 66%, #d4aa50 100%);
+      --monster-orange: #e07a18;
+      --spell-green: #1e8a52;
+      --trap-purple: #8822aa;
+      --link-blue: #1255cc;
+      --danger: #e83838;
+      --text: #eeeeff;
+      --text-dim: #9090bb;
+      --border: #33337a;
+      --border2: #44448a;
 
       /* Card type colors */
       --c-normal: #d4a849;
@@ -54,43 +54,33 @@
     html, body {
       width: 100%; height: 100%;
       overflow: hidden;
-      background: #05050f;
+      background: #0e0e32;
       color: var(--text);
       font-family: 'Rajdhani', sans-serif;
     }
 
-    /* ===== MASTER DUEL-STYLE BACKGROUND ===== */
+    /* ===== RICH INDIGO BACKGROUND ===== */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 0;
+      position: fixed; inset: 0; z-index: 0;
       background:
-        /* top-center blue glow — main accent */
-        radial-gradient(ellipse 80% 45% at 50% -10%, rgba(56,139,253,0.18) 0%, transparent 70%),
-        /* bottom-left purple glow */
-        radial-gradient(ellipse 60% 50% at -10% 110%, rgba(120,60,220,0.16) 0%, transparent 65%),
-        /* bottom-right gold/amber glow */
-        radial-gradient(ellipse 55% 45% at 110% 100%, rgba(201,168,76,0.13) 0%, transparent 65%),
-        /* center subtle vignette core */
-        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(18,18,42,0.0) 0%, rgba(5,5,15,0.7) 100%),
-        /* base deep navy */
-        #05050f;
+        radial-gradient(ellipse 85% 50% at 50% -5%,  rgba(80,120,255,0.32) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 55% at -5% 105%, rgba(130,60,240,0.28) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 48% at 108% 100%,rgba(210,140,60,0.22) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 65% at 50% 50%,  rgba(20,20,60,0.4)   0%, transparent 100%),
+        #0e0e32;
       pointer-events: none;
     }
 
-    /* Subtle hex/grid overlay */
     body::after {
       content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 0;
+      position: fixed; inset: 0; z-index: 0;
       background-image:
-        linear-gradient(rgba(56,139,253,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(56,139,253,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(100,120,255,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100,120,255,0.07) 1px, transparent 1px);
       background-size: 48px 48px;
-      mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
-      -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
+      mask-image: radial-gradient(ellipse 85% 75% at 50% 50%, black 20%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 50%, black 20%, transparent 100%);
       pointer-events: none;
     }
 
@@ -116,34 +106,34 @@
       filter: blur(60px);
     }
     .bg-orb-1 {
-      width: 420px; height: 280px;
-      top: -80px; left: 50%;
+      width: 500px; height: 320px;
+      top: -100px; left: 50%;
       transform: translateX(-50%);
-      background: radial-gradient(ellipse, rgba(56,139,253,0.22) 0%, transparent 70%);
+      background: radial-gradient(ellipse, rgba(80,130,255,0.38) 0%, transparent 70%);
       animation: floatOrb1 9s ease-in-out infinite;
     }
     .bg-orb-2 {
-      width: 320px; height: 320px;
-      bottom: -60px; left: -60px;
-      background: radial-gradient(ellipse, rgba(100,50,200,0.18) 0%, transparent 70%);
+      width: 380px; height: 380px;
+      bottom: -80px; left: -80px;
+      background: radial-gradient(ellipse, rgba(120,55,220,0.34) 0%, transparent 70%);
       animation: floatOrb2 12s ease-in-out infinite;
     }
     .bg-orb-3 {
-      width: 280px; height: 200px;
-      bottom: -30px; right: -40px;
-      background: radial-gradient(ellipse, rgba(201,168,76,0.15) 0%, transparent 70%);
+      width: 300px; height: 220px;
+      bottom: -40px; right: -50px;
+      background: radial-gradient(ellipse, rgba(210,145,60,0.3) 0%, transparent 70%);
       animation: floatOrb1 10s ease-in-out infinite 3s;
     }
     .bg-orb-4 {
-      width: 180px; height: 180px;
-      top: 40%; left: 12%;
-      background: radial-gradient(ellipse, rgba(56,200,180,0.09) 0%, transparent 70%);
+      width: 220px; height: 220px;
+      top: 38%; left: 10%;
+      background: radial-gradient(ellipse, rgba(60,210,190,0.18) 0%, transparent 70%);
       animation: floatOrb2 14s ease-in-out infinite 1.5s;
     }
     .bg-orb-5 {
-      width: 150px; height: 150px;
-      top: 35%; right: 10%;
-      background: radial-gradient(ellipse, rgba(180,80,220,0.09) 0%, transparent 70%);
+      width: 180px; height: 180px;
+      top: 32%; right: 8%;
+      background: radial-gradient(ellipse, rgba(190,90,240,0.2) 0%, transparent 70%);
       animation: floatOrb1 11s ease-in-out infinite 5s;
     }
 
@@ -193,12 +183,13 @@
     #tab-bar {
       position: fixed; bottom: 0; left: 0; right: 0;
       height: var(--tab-h);
-      background: rgba(12,12,28,0.92);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(56,139,253,0.2);
-      box-shadow: 0 -4px 32px rgba(0,0,0,0.6), 0 -1px 0 rgba(56,139,253,0.08);
+      background: linear-gradient(180deg, rgba(20,20,58,0.96) 0%, rgba(14,14,46,0.98) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(100,120,255,0.25);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.55), 0 -1px 0 rgba(80,100,255,0.1);
       display: flex; z-index: 100;
+      padding: 0 4px;
     }
 
     .tab-btn {
@@ -206,25 +197,26 @@
       align-items: center; justify-content: center;
       background: none; border: none;
       color: var(--text-dim); cursor: pointer;
-      padding: 6px 4px; gap: 4px;
-      transition: color .2s; min-height: 44px;
+      padding: 8px 4px 6px; gap: 3px;
+      transition: color .2s, transform .15s; min-height: 44px;
       font-family: 'Rajdhani', sans-serif;
-      position: relative;
+      position: relative; border-radius: 10px;
+      margin: 6px 2px 4px;
     }
-    .tab-btn::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 50%;
-      transform: translateX(-50%) scaleX(0);
-      width: 36px; height: 2px;
-      background: var(--gold);
-      border-radius: 2px 2px 0 0;
-      transition: transform .2s ease;
+    .tab-btn:active { transform: scale(.92); }
+    .tab-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, rgba(80,130,255,0.35) 0%, rgba(120,60,220,0.25) 100%);
+      border: 1px solid rgba(100,140,255,0.35);
+      box-shadow: 0 2px 12px rgba(80,130,255,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
     }
-    .tab-btn.active { color: var(--gold); }
-    .tab-btn.active::after { transform: translateX(-50%) scaleX(1); }
-    .tab-btn .ti { font-size: 22px; line-height: 1; }
-    .tab-btn .tl { font-size: 9px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+    .tab-btn.active .ti { filter: drop-shadow(0 0 8px rgba(180,200,255,0.7)); }
+    .tab-btn .ti { font-size: 20px; line-height: 1; transition: filter .2s; }
+    .tab-btn .tl {
+      font-size: 9px; font-weight: 800; letter-spacing: .8px;
+      text-transform: uppercase; transition: color .2s;
+    }
+    .tab-btn.active .tl { color: rgba(200,220,255,0.9); }
 
     /* ===== HOME ===== */
     #home-screen { position: relative; }
@@ -254,6 +246,7 @@
       border-radius: 5px;
       background: var(--holographic);
       opacity: 0; animation: floatUp linear infinite;
+      pointer-events: none;
     }
 
     @keyframes floatUp {
@@ -616,36 +609,32 @@
       box-shadow: 0 4px 14px rgba(0,0,0,.6), 0 0 8px rgba(56,139,253,.2);
       border-color: rgba(56,139,253,.5);
     }
-    /* Hover overlay — shows add/remove hint */
-    .cgi::before {
-      content: '+';
-      position: absolute; inset: 0; z-index: 2;
-      background: rgba(56,139,253,0.62);
-      color: #fff; font-size: 26px; font-weight: 900;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; transition: opacity .15s;
-      border-radius: 3px;
-    }
-    .cgi:hover::before { opacity: 1; }
-    .cgi::after {
-      content: 'Right-click: remove';
-      position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
-      background: rgba(0,0,0,.78); color: rgba(255,255,255,.85);
-      font-family: 'Rajdhani', sans-serif; font-size: 8px; font-weight: 700;
-      text-align: center; padding: 3px 2px;
-      opacity: 0; transition: opacity .15s;
-    }
-    .cgi:hover::after { opacity: 1; }
-    .cgi.sel { border-color: var(--gold) !important; box-shadow: 0 0 0 1px var(--gold); }
+    .cgi.sel { border-color: var(--gold) !important; box-shadow: 0 0 0 1px var(--gold), 0 0 14px rgba(212,170,80,0.4); }
     .cgi:active { transform: scale(.93); }
     .cgi img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .cgi-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
+    .cgi-bar { position: absolute; bottom: 22px; left: 0; right: 0; height: 3px; }
     .cgi-badge {
       position: absolute; top: 2px; right: 2px; z-index: 4;
-      background: #388bfd; color: #fff; border-radius: 50%;
+      background: #5588ff; color: #fff; border-radius: 50%;
       width: 18px; height: 18px; display: flex; align-items: center;
       justify-content: center; font-size: 10px; font-weight: 700;
     }
+    /* Add/Remove buttons inside each card */
+    .cgi-actions {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 5;
+      display: flex; opacity: 0; transition: opacity .15s;
+    }
+    .cgi:hover .cgi-actions,
+    .cgi.sel  .cgi-actions { opacity: 1; }
+    .cgi-act-add, .cgi-act-rem {
+      flex: 1; border: none; cursor: pointer;
+      font-size: 16px; font-weight: 900; padding: 4px 0; line-height: 1;
+      transition: background .1s; min-height: 22px;
+    }
+    .cgi-act-add { background: rgba(60,120,255,0.9); color: #fff; }
+    .cgi-act-add:hover { background: rgba(60,120,255,1); }
+    .cgi-act-rem { background: rgba(220,50,50,0.85); color: #fff; }
+    .cgi-act-rem:hover { background: rgba(230,40,40,1); }
     .skel {
       background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
       background-size: 200% 100%; animation: skel 1.4s infinite;
@@ -1628,7 +1617,6 @@
       <div class="home-inner">
         <h1 class="app-title">CHAMPION<br>TRAINER</h1>
         <p class="app-sub">Practice like the pros</p>
-        <div class="home-holo-card"></div>
         <div class="quick-btns">
           <button class="qbtn primary" onclick="nav('deck')">🃏 Build Deck</button>
           <button class="qbtn" onclick="nav('duel')">⚔️ Quick Duel</button>
@@ -2543,10 +2531,14 @@ function renderBrowseGrid(cards, hasMore) {
     const img = CardDB.imgUrl(c);
     const cls = typeClass(c);
     const cnt = totalInDeck(c.id);
-    h += `<div class="cgi" onclick="quickAdd(${c.id})" oncontextmenu="quickRemove(${c.id},event)" data-id="${c.id}">
+    h += `<div class="cgi" onclick="pickCard(${c.id})" oncontextmenu="quickRemove(${c.id},event)" data-id="${c.id}">
       <img src="${img}" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
       <div class="cgi-bar ${cls}"></div>
       ${cnt ? `<div class="cgi-badge">${cnt}</div>` : ''}
+      <div class="cgi-actions" onclick="event.stopPropagation()">
+        <button class="cgi-act-add" onclick="quickAddById(${c.id})">+</button>
+        <button class="cgi-act-rem" onclick="quickRemById(${c.id})">−</button>
+      </div>
     </div>`;
   });
   h += '</div>';
@@ -2625,10 +2617,14 @@ function renderResults(cards) {
     const img = CardDB.imgUrl(c);
     const cls = typeClass(c);
     const cnt = totalInDeck(c.id);
-    h += `<div class="cgi" onclick="quickAdd(${c.id})" oncontextmenu="quickRemove(${c.id},event)" data-id="${c.id}">
+    h += `<div class="cgi" onclick="pickCard(${c.id})" oncontextmenu="quickRemove(${c.id},event)" data-id="${c.id}">
       <img src="${img}" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
       <div class="cgi-bar ${cls}"></div>
       ${cnt ? `<div class="cgi-badge">${cnt}</div>` : ''}
+      <div class="cgi-actions" onclick="event.stopPropagation()">
+        <button class="cgi-act-add" onclick="quickAddById(${c.id})">+</button>
+        <button class="cgi-act-rem" onclick="quickRemById(${c.id})">−</button>
+      </div>
     </div>`;
   });
   h += '</div>';
@@ -4212,13 +4208,19 @@ async function pickCard(id) {
   showCardDetail(card);
 }
 
-async function quickAdd(id) {
+async function quickAddById(id) {
   let card = S.byId[id];
   if (!card) card = await CardDB.fetchById(id);
   if (!card) return;
   showCardDetail(card);
   const sec = isExtraCard(card) ? 'extra' : 'main';
   addCard(card, sec);
+}
+
+function quickRemById(id) {
+  const card = S.byId[id];
+  if (card) showCardDetail(card);
+  mdRemById(id);
 }
 
 function quickRemove(id, ev) {
