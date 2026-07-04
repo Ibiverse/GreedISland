@@ -492,7 +492,17 @@
       transition: transform .15s; border-radius: 4px;
     }
     .md-thumb:hover { transform: translateY(-4px); z-index: 2; }
+    .md-thumb::after {
+      content: '−';
+      position: absolute; inset: 0; z-index: 2;
+      background: rgba(224,48,48,0.65);
+      color: #fff; font-size: 24px; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .15s; border-radius: 4px;
+    }
+    .md-thumb:hover::after { opacity: 1; }
     .md-thumb.sel { outline: 2px solid var(--gold); outline-offset: 1px; z-index: 3; }
+    .md-thumb.sel::after { background: rgba(201,168,76,0.55); }
     .md-thumb img {
       width: 52px; height: 76px; object-fit: cover; border-radius: 4px; display: block;
       background: var(--surface2); box-shadow: 0 2px 8px rgba(0,0,0,.7);
@@ -525,6 +535,12 @@
       font-weight: 700; font-size: 12px; cursor: pointer; transition: all .15s; text-align: center;
     }
     .md-coll-tab.active { background: #388bfd; border-color: #388bfd; color: #fff; }
+    .md-hint-bar {
+      background: rgba(56,139,253,0.1); border: 1px solid rgba(56,139,253,0.2);
+      border-radius: 6px; padding: 5px 8px; margin-bottom: 8px;
+      font-size: 10px; font-weight: 700; color: rgba(255,255,255,.55);
+      text-align: center; letter-spacing: .3px;
+    }
     #md-coll-grid { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
     #deck-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
 
@@ -598,14 +614,34 @@
     .cgi:hover {
       transform: translateY(-2px) scale(1.04);
       box-shadow: 0 4px 14px rgba(0,0,0,.6), 0 0 8px rgba(56,139,253,.2);
-      border-color: rgba(56,139,253,.4);
+      border-color: rgba(56,139,253,.5);
     }
+    /* Hover overlay — shows add/remove hint */
+    .cgi::before {
+      content: '+';
+      position: absolute; inset: 0; z-index: 2;
+      background: rgba(56,139,253,0.62);
+      color: #fff; font-size: 26px; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .15s;
+      border-radius: 3px;
+    }
+    .cgi:hover::before { opacity: 1; }
+    .cgi::after {
+      content: 'Right-click: remove';
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+      background: rgba(0,0,0,.78); color: rgba(255,255,255,.85);
+      font-family: 'Rajdhani', sans-serif; font-size: 8px; font-weight: 700;
+      text-align: center; padding: 3px 2px;
+      opacity: 0; transition: opacity .15s;
+    }
+    .cgi:hover::after { opacity: 1; }
     .cgi.sel { border-color: var(--gold) !important; box-shadow: 0 0 0 1px var(--gold); }
     .cgi:active { transform: scale(.93); }
     .cgi img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .cgi-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
     .cgi-badge {
-      position: absolute; top: 2px; right: 2px;
+      position: absolute; top: 2px; right: 2px; z-index: 4;
       background: #388bfd; color: #fff; border-radius: 50%;
       width: 18px; height: 18px; display: flex; align-items: center;
       justify-content: center; font-size: 10px; font-weight: 700;
@@ -1686,6 +1722,7 @@
           <button class="md-coll-tab active" onclick="setCollTab('all',this)">Card List</button>
           <button class="md-coll-tab" onclick="setCollTab('fav',this)">★ Favorites</button>
         </div>
+        <div class="md-hint-bar">🖱 Left-click: Add to deck &nbsp;•&nbsp; Right-click: Remove</div>
         <div class="mdb-search-row">
           <div class="mdb-search-box">
             <span class="si">🔍</span>
@@ -2506,7 +2543,7 @@ function renderBrowseGrid(cards, hasMore) {
     const img = CardDB.imgUrl(c);
     const cls = typeClass(c);
     const cnt = totalInDeck(c.id);
-    h += `<div class="cgi" onclick="pickCard(${c.id})" data-id="${c.id}">
+    h += `<div class="cgi" onclick="quickAdd(${c.id})" oncontextmenu="quickRemove(${c.id},event)" data-id="${c.id}">
       <img src="${img}" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
       <div class="cgi-bar ${cls}"></div>
       ${cnt ? `<div class="cgi-badge">${cnt}</div>` : ''}
@@ -2588,7 +2625,7 @@ function renderResults(cards) {
     const img = CardDB.imgUrl(c);
     const cls = typeClass(c);
     const cnt = totalInDeck(c.id);
-    h += `<div class="cgi" onclick="pickCard(${c.id})" data-id="${c.id}">
+    h += `<div class="cgi" onclick="quickAdd(${c.id})" oncontextmenu="quickRemove(${c.id},event)" data-id="${c.id}">
       <img src="${img}" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
       <div class="cgi-bar ${cls}"></div>
       ${cnt ? `<div class="cgi-badge">${cnt}</div>` : ''}
@@ -2760,7 +2797,7 @@ function renderDeckGrid(sec) {
   el.innerHTML = sorted.map(e => {
     const sel = e.card.id == selId ? ' sel' : '';
     const badge = e.count > 1 ? `<div class="md-thumb-cnt">×${e.count}</div>` : '';
-    return `<div class="md-thumb${sel}" onclick="pickCard(${e.card.id})" data-deck-id="${e.card.id}">
+    return `<div class="md-thumb${sel}" onclick="pickCard(${e.card.id})" oncontextmenu="event.preventDefault();mdRemById(${e.card.id})" data-id="${e.card.id}" title="${e.card.name} (Right-click to remove)">
       <img src="${CardDB.imgUrl(e.card)}" alt="${e.card.name}" loading="lazy" onerror="this.style.opacity='.35'">
       ${badge}
     </div>`;
@@ -4175,6 +4212,28 @@ async function pickCard(id) {
   showCardDetail(card);
 }
 
+async function quickAdd(id) {
+  let card = S.byId[id];
+  if (!card) card = await CardDB.fetchById(id);
+  if (!card) return;
+  showCardDetail(card);
+  const sec = isExtraCard(card) ? 'extra' : 'main';
+  addCard(card, sec);
+}
+
+function quickRemove(id, ev) {
+  ev.preventDefault();
+  const card = S.byId[id];
+  if (!card) return;
+  showCardDetail(card);
+  let sec = null;
+  if (S.deck.main.find(e => e.card.id == id))  sec = 'main';
+  else if (S.deck.extra.find(e => e.card.id == id)) sec = 'extra';
+  else if (S.deck.side.find(e => e.card.id == id))  sec = 'side';
+  if (!sec) { toast('Card not in deck', 'err'); return; }
+  removeCard(id, sec);
+}
+
 function mdAdd() {
   if (!S.selectedCard) { toast('Select a card first', 'err'); return; }
   const sec = isExtraCard(S.selectedCard) ? 'extra' : 'main';
@@ -4183,10 +4242,15 @@ function mdAdd() {
 
 function mdRem() {
   if (!S.selectedCard) return;
-  const id = S.selectedCard.id;
-  let sec = 'main';
-  if (S.deck.extra.find(e => e.card.id == id)) sec = 'extra';
-  else if (S.deck.side.find(e => e.card.id == id)) sec = 'side';
+  mdRemById(S.selectedCard.id);
+}
+
+function mdRemById(id) {
+  let sec = null;
+  if (S.deck.main.find(e => e.card.id == id))  sec = 'main';
+  else if (S.deck.extra.find(e => e.card.id == id)) sec = 'extra';
+  else if (S.deck.side.find(e => e.card.id == id))  sec = 'side';
+  if (!sec) { toast('Card not in deck', 'err'); return; }
   removeCard(id, sec);
 }
 
