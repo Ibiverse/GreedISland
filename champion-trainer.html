@@ -1599,6 +1599,71 @@
       font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 15px; margin-top: 8px;
     }
 
+    /* ===== GY / BANISH MODAL ===== */
+    .gy-overlay {
+      position: fixed; inset: 0; z-index: 850;
+      background: rgba(0,0,0,0.78); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; animation: fadeIn .15s ease;
+    }
+    .gy-modal {
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 14px; width: 100%; max-width: 480px;
+      max-height: 82vh; display: flex; flex-direction: column;
+      overflow: hidden; box-shadow: 0 28px 80px rgba(0,0,0,0.75);
+    }
+    .gy-modal-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .gy-modal-hdr span { font-size: 13px; font-weight: 700; color: var(--text); }
+    .gy-modal-close {
+      background: none; border: none; color: var(--text-dim);
+      font-size: 20px; cursor: pointer; padding: 0 4px; line-height: 1;
+    }
+    .gy-modal-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+      gap: 8px; padding: 12px; overflow-y: auto;
+    }
+    .gy-card { cursor: pointer; border-radius: 5px; transition: transform .15s; }
+    .gy-card:hover { transform: translateY(-3px); }
+    .gy-card img { width: 100%; border-radius: 4px; display: block; border: 1px solid transparent; transition: border-color .15s; }
+    .gy-card:hover img { border-color: var(--gold); }
+    .gy-card-name { font-size: 8px; color: var(--text-dim); text-align: center; margin-top: 3px; line-height: 1.3; padding: 0 2px; }
+    .gy-empty { color: var(--text-dim); font-size: 13px; text-align: center; padding: 32px; grid-column: 1/-1; }
+
+    /* ===== EXTRA DECK SUMMON BUTTON ===== */
+    .d-extra-btn {
+      padding: 0 12px; height: 30px; border-radius: 6px;
+      border: 1px solid rgba(160,80,255,0.45);
+      background: rgba(100,30,180,0.22); color: #c084fc;
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 11px;
+      cursor: pointer; letter-spacing: .4px; flex-shrink: 0;
+      transition: all .2s; white-space: nowrap;
+    }
+    .d-extra-btn:hover:not(:disabled) {
+      background: rgba(140,50,230,0.38); border-color: rgba(200,120,255,0.65);
+      box-shadow: 0 0 12px rgba(180,100,255,0.3);
+    }
+    .d-extra-btn:disabled { opacity: .3; cursor: not-allowed; }
+
+    /* ===== ATTACK GLOW ENHANCEMENTS ===== */
+    .d-zone.can-attack {
+      border-color: var(--gold) !important;
+      box-shadow: 0 0 14px rgba(212,170,80,0.65), inset 0 0 8px rgba(212,170,80,0.15) !important;
+      animation: pulse-gold .7s infinite;
+    }
+    @keyframes pulse-gold {
+      0%,100% { box-shadow: 0 0 12px rgba(212,170,80,0.5); }
+      50%      { box-shadow: 0 0 24px rgba(212,170,80,0.95), inset 0 0 10px rgba(212,170,80,0.2); }
+    }
+
+    /* LP number pop on damage */
+    .lp-dmg { animation: lp-pop-red .5s ease; }
+    .lp-heal { animation: lp-pop-green .5s ease; }
+    @keyframes lp-pop-red   { 0%,100%{color:inherit;transform:none} 35%{color:#f87171;transform:scale(1.3)} }
+    @keyframes lp-pop-green { 0%,100%{color:inherit;transform:none} 35%{color:#4ade80;transform:scale(1.3)} }
+
   </style>
 </head>
 <body>
@@ -1935,6 +2000,7 @@
             <button class="d-pbtn" id="pb-MAIN2"  onclick="goToPhase('MAIN2')" >MAIN 2</button>
             <button class="d-pbtn" id="pb-END"    onclick="goToPhase('END')"   >END</button>
           </div>
+          <button class="d-extra-btn" id="d-extra-btn" onclick="openExtraDeck()" disabled title="Special Summon from Extra Deck">⬡ EXTRA</button>
           <button class="d-end-btn" id="d-end-btn" onclick="advancePhase()">END TURN</button>
         </div>
 
@@ -3422,8 +3488,19 @@ function renderLPs() {
     const pct = Math.max(0, Math.min(100, data.lp / data.maxLP * 100));
     const numId  = who === 'player' ? 'you-lp-num'  : 'opp-lp-num';
     const fillId = who === 'player' ? 'you-lp-fill' : 'opp-lp-fill';
-    document.getElementById(numId).textContent  = data.lp;
+    const numEl = document.getElementById(numId);
+    const prev = parseInt(numEl.textContent) || data.maxLP;
+    numEl.textContent = data.lp;
     document.getElementById(fillId).style.width = pct + '%';
+    if (data.lp < prev) {
+      numEl.classList.remove('lp-dmg','lp-heal');
+      void numEl.offsetWidth;
+      numEl.classList.add('lp-dmg');
+    } else if (data.lp > prev) {
+      numEl.classList.remove('lp-dmg','lp-heal');
+      void numEl.offsetWidth;
+      numEl.classList.add('lp-heal');
+    }
   });
 }
 
@@ -3854,6 +3931,11 @@ function updatePhaseBar() {
     endBtn.classList.toggle('battle-mode', GS.phase === 'BATTLE');
     endBtn.textContent = GS.phase === 'BATTLE' ? '⚔ END BATTLE' : 'END TURN';
   }
+  const extraBtn = document.getElementById('d-extra-btn');
+  if (extraBtn) {
+    const inMain = GS.phase === 'MAIN1' || GS.phase === 'MAIN2';
+    extraBtn.disabled = GS.active !== 'player' || GS.aiThinking || !inMain || !GS.player.extraDeck.length;
+  }
 }
 
 /* ---- Draw ---- */
@@ -4073,12 +4155,118 @@ async function aiTakeTurn() {
   renderAll();
 }
 
-/* ---- GY viewer (simple toast) ---- */
+/* ---- GY viewer modal ---- */
+let _gyCards = [];
 function viewGY(who) {
-  const gy = GS ? GS[who].gy : [];
-  if (!gy.length) { toast('Graveyard is empty', 'inf'); return; }
-  const names = gy.slice(-5).map(c => c.name).join(', ');
-  toast(`GY (${gy.length}): ${names}`, 'inf');
+  if (!GS) return;
+  const gy = GS[who].gy;
+  const label = who === 'player' ? 'Your' : "Opponent's";
+  _gyCards = gy.slice().reverse();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'gy-overlay';
+  overlay.innerHTML = `
+    <div class="gy-modal">
+      <div class="gy-modal-hdr">
+        <span>${label} Graveyard (${gy.length})</span>
+        <button class="gy-modal-close" onclick="this.closest('.gy-overlay').remove()">✕</button>
+      </div>
+      <div class="gy-modal-grid">
+        ${_gyCards.length
+          ? _gyCards.map((c, i) => `
+            <div class="gy-card" onclick="previewCard(_gyCards[${i}])">
+              <img src="https://images.ygoprodeck.com/images/cards/${c.id}.jpg" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
+              <div class="gy-card-name">${c.name}</div>
+            </div>`).join('')
+          : '<div class="gy-empty">Graveyard is empty</div>'
+        }
+      </div>
+    </div>`;
+  overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+  document.body.appendChild(overlay);
+}
+
+/* ---- Extra Deck summon ---- */
+function openExtraDeck() {
+  if (!GS || GS.active !== 'player' || GS.aiThinking) return;
+  if (GS.phase !== 'MAIN1' && GS.phase !== 'MAIN2') { toast('Extra Deck: Main Phase only', 'err'); return; }
+  const ed = GS.player.extraDeck;
+  if (!ed.length) { toast('No Extra Deck cards available', 'inf'); return; }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'gy-overlay';
+  overlay.innerHTML = `
+    <div class="gy-modal">
+      <div class="gy-modal-hdr">
+        <span>Extra Deck — Special Summon (${ed.length})</span>
+        <button class="gy-modal-close" onclick="this.closest('.gy-overlay').remove()">✕</button>
+      </div>
+      <div class="gy-modal-grid">
+        ${ed.map((c, i) => {
+          const tl = (c.type||'').toLowerCase();
+          const badge = tl.includes('fusion') ? '⧫' : tl.includes('synchro') ? '◉' : tl.includes('xyz') ? '■' : tl.includes('link') ? '⬡' : '★';
+          return `<div class="gy-card" onclick="selectExtraCard(${i}, this.closest('.gy-overlay'))">
+            <img src="https://images.ygoprodeck.com/images/cards/${c.id}.jpg" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
+            <div class="gy-card-name">${badge} ${c.name}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+  document.body.appendChild(overlay);
+}
+
+function selectExtraCard(idx, overlay) {
+  const card = GS.player.extraDeck[idx];
+  if (!card) return;
+  previewCard(card);
+
+  const typeLow = (card.type || '').toLowerCase();
+  const isLink    = typeLow.includes('link');
+  const isSynchro = typeLow.includes('synchro');
+  const isXYZ     = typeLow.includes('xyz');
+  const isFusion  = typeLow.includes('fusion');
+  const matCount  = isLink ? (card.linkval || 2) : 2;
+
+  const fieldMons = GS.player.field.monsters.filter(Boolean);
+  const handMons  = GS.player.hand.filter(c => (c.type||'').toLowerCase().includes('monster') && !isExtraType(c));
+  const avail = fieldMons.length + handMons.length;
+
+  if (avail < matCount) {
+    toast(`Need ${matCount} monster${matCount > 1 ? 's' : ''} as material (you have ${avail})`, 'err');
+    return;
+  }
+  const freeSlot = GS.player.field.monsters.findIndex(z => !z);
+  if (freeSlot < 0) { toast('No free Monster Zone', 'err'); return; }
+
+  overlay.remove();
+
+  // Consume materials: field-first, then hand
+  const materials = [];
+  for (let i = 0; i < 5 && materials.length < matCount; i++) {
+    if (GS.player.field.monsters[i]) {
+      materials.push(GS.player.field.monsters[i].card);
+      GS.player.gy.push(GS.player.field.monsters[i].card);
+      GS.player.field.monsters[i] = null;
+    }
+  }
+  for (let i = GS.player.hand.length - 1; i >= 0 && materials.length < matCount; i--) {
+    const hc = GS.player.hand[i];
+    if ((hc.type||'').toLowerCase().includes('monster') && !isExtraType(hc)) {
+      materials.push(hc);
+      GS.player.gy.push(hc);
+      GS.player.hand.splice(i, 1);
+    }
+  }
+
+  GS.player.extraDeck.splice(idx, 1);
+  GS.player.field.monsters[freeSlot] = mkZone(card, 'ATK');
+  GS.spSummonCount++;
+
+  const sumType = isFusion ? 'Fusion' : isSynchro ? 'Synchro' : isXYZ ? 'XYZ' : isLink ? 'Link' : 'Special';
+  const matNames = materials.map(m => m.name).join(' + ');
+  dlog(`You ${sumType} Summoned <b>${card.name}</b> (ATK ${card.atk ?? '?'}) using ${matNames}!`);
+  renderAll();
 }
 
 /* ============================================================
