@@ -1341,6 +1341,7 @@
     .d-main {
       flex: 1; display: flex; flex-direction: column;
       overflow: hidden; min-width: 0;
+      background: radial-gradient(ellipse at 50% 50%, #1a2d4a 0%, #0e1628 60%, #070d18 100%);
     }
 
     /* LP top bar */
@@ -1348,8 +1349,8 @@
       height: 32px; flex-shrink: 0;
       display: flex; align-items: center; gap: 8px;
       padding: 0 10px;
-      background: rgba(0,0,0,.4);
-      border-bottom: 1px solid var(--border);
+      background: linear-gradient(90deg, rgba(10,20,50,.85) 0%, rgba(20,30,70,.85) 100%);
+      border-bottom: 1px solid rgba(100,140,255,.2);
     }
     .d-lp-group { flex: 1; display: flex; flex-direction: column; gap: 2px; }
     .d-lp-group.you { align-items: flex-end; }
@@ -1374,7 +1375,8 @@
       height: 50px; flex-shrink: 0;
       display: flex; align-items: center;
       padding: 4px 8px; gap: 4px;
-      border-bottom: 1px solid rgba(255,255,255,.05);
+      border-bottom: 1px solid rgba(80,130,255,.15);
+      background: rgba(10,20,60,.35);
     }
     .d-opp-hand { display: flex; gap: 4px; align-items: center; }
     .d-opp-card-back {
@@ -1389,6 +1391,15 @@
     .d-field-area {
       flex: 1; display: flex; flex-direction: column;
       gap: 3px; padding: 4px 6px; overflow: hidden;
+      background:
+        linear-gradient(180deg,
+          rgba(30,60,120,.18) 0%,
+          rgba(15,35,80,.12) 48%,
+          rgba(30,60,120,.18) 100%),
+        repeating-linear-gradient(
+          0deg, transparent, transparent 30px,
+          rgba(255,255,255,.015) 30px, rgba(255,255,255,.015) 31px
+        );
     }
     .d-field-row {
       flex: 1; display: flex; align-items: stretch; gap: 3px; min-height: 0;
@@ -1402,12 +1413,12 @@
       width: 46px; flex-shrink: 0;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center; gap: 2px;
-      background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.06);
+      background: rgba(20,40,90,.35);
+      border: 1px solid rgba(80,130,255,.18);
       border-radius: 4px; cursor: pointer;
-      transition: border-color .15s;
+      transition: border-color .15s, background .15s;
     }
-    .d-side-col:hover { border-color: rgba(255,255,255,.2); }
+    .d-side-col:hover { border-color: rgba(80,160,255,.45); background: rgba(30,60,140,.45); }
     .d-side-label { font-size: 8px; color: var(--text-dim); font-weight: 700; text-transform: uppercase; text-align: center; }
     .d-side-count { font-size: 14px; font-weight: 700; color: var(--gold); }
     .d-side-img { width: 100%; height: 55px; object-fit: cover; border-radius: 3px; }
@@ -1418,16 +1429,28 @@
       gap: 3px; min-width: 0;
     }
     .d-zone {
-      background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.12);
       border-radius: 4px; cursor: pointer; position: relative;
       display: flex; align-items: center; justify-content: center;
-      overflow: hidden; transition: border-color .15s, background .15s;
+      overflow: hidden; transition: border-color .15s, background .15s, box-shadow .15s;
       min-height: 0;
     }
-    .d-zone:hover { border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.06); }
+    .d-zone.monster-zone {
+      background: rgba(180,100,20,.08);
+      border-color: rgba(212,140,40,.22);
+      box-shadow: inset 0 0 10px rgba(212,140,40,.06);
+    }
+    .d-zone.st-zone {
+      background: rgba(30,70,200,.08);
+      border-color: rgba(80,130,255,.22);
+      box-shadow: inset 0 0 10px rgba(80,130,255,.06);
+    }
+    .d-zone:hover { border-color: rgba(255,255,255,.35); background: rgba(255,255,255,.09); box-shadow: 0 0 12px rgba(255,255,255,.08); }
+    .d-zone.monster-zone:hover { border-color: rgba(212,170,80,.55); background: rgba(180,100,20,.14); }
+    .d-zone.st-zone:hover      { border-color: rgba(80,160,255,.55); background: rgba(30,70,200,.14); }
     .d-zone.targeting { border-color: var(--danger) !important; box-shadow: 0 0 8px rgba(224,48,48,.5); animation: pulse-red .6s infinite; }
-    .d-zone.can-attack { border-color: var(--gold); box-shadow: 0 0 8px rgba(201,168,76,.4); }
+    .d-zone.can-attack { border-color: var(--gold); box-shadow: 0 0 10px rgba(212,170,80,.55); }
 
     @keyframes pulse-red {
       0%,100% { box-shadow: 0 0 8px rgba(224,48,48,.5); }
@@ -1435,8 +1458,8 @@
     }
 
     /* Diamond icons for empty zones */
-    .d-zone.monster-zone.empty::before  { content:'◆'; font-size: clamp(12px,1.8vw,26px); color: rgba(212,115,10,.45); }
-    .d-zone.st-zone.empty::before       { content:'◆'; font-size: clamp(10px,1.4vw,20px); color: rgba(40,80,200,.45); }
+    .d-zone.monster-zone.empty::before  { content:'◆'; font-size: clamp(12px,1.8vw,26px); color: rgba(212,140,40,.5); }
+    .d-zone.st-zone.empty::before       { content:'◆'; font-size: clamp(10px,1.4vw,20px); color: rgba(80,130,255,.5); }
 
     /* Card in zone */
     .d-zone img { width:100%; height:100%; object-fit:cover; display:block; }
@@ -1456,13 +1479,15 @@
     }
     .d-zone-set {
       width: 100%; height: 100%;
-      background: linear-gradient(135deg, #1a2a6c, #2244aa);
+      background: url('https://images.ygoprodeck.com/images/cards/back.jpg') center/cover no-repeat,
+                  linear-gradient(135deg, #1a2a6c, #2244aa);
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
+      font-size: 18px; border-radius: 3px;
     }
     .d-zone-face-down {
       width: 100%; height: 100%;
-      background: linear-gradient(135deg, #1a2a6c, #2244aa);
+      background: url('https://images.ygoprodeck.com/images/cards/back.jpg') center/cover no-repeat,
+                  linear-gradient(135deg, #1a2a6c, #2244aa);
       border: 1px solid #3355bb;
       border-radius: 3px;
     }
@@ -1478,9 +1503,10 @@
     .d-phase-center {
       flex: 1; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(135deg, rgba(30,50,120,.5), rgba(10,20,60,.6));
+      border: 1px solid rgba(100,160,255,.2);
       border-radius: 4px; height: 100%; padding: 0 8px;
+      box-shadow: 0 0 16px rgba(80,120,255,.1);
     }
     .d-phase-name {
       font-family: 'Exo 2', sans-serif;
@@ -1492,8 +1518,8 @@
     .d-my-hand-row {
       flex-shrink: 0;
       display: flex; flex-direction: column;
-      border-top: 1px solid rgba(255,255,255,.07);
-      background: rgba(0,0,0,.18);
+      border-top: 1px solid rgba(212,170,80,.2);
+      background: linear-gradient(180deg, rgba(20,35,80,.4) 0%, rgba(10,18,50,.55) 100%);
     }
     .d-hand-label {
       font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
@@ -1529,8 +1555,8 @@
     .d-phase-bar {
       height: 42px; flex-shrink: 0;
       display: flex; align-items: center;
-      background: rgba(0,0,0,.4);
-      border-top: 1px solid var(--border);
+      background: linear-gradient(90deg, rgba(10,18,50,.9) 0%, rgba(20,30,80,.9) 100%);
+      border-top: 1px solid rgba(100,140,255,.2);
       padding: 0 6px; gap: 4px;
     }
     .d-phases { display: flex; gap: 2px; flex: 1; overflow-x: auto; scrollbar-width: none; }
@@ -3858,12 +3884,6 @@ function startDuel(profile) {
   const savedDecks = DeckMgr.list();
   const currentMainCnt = S.deck.main.reduce((s, e) => s + e.count, 0);
   const hasCurrentDeck = currentMainCnt >= 5;
-
-  if (savedDecks.length === 0 && !hasCurrentDeck) {
-    doStartDuel(profile, AI_DECK_TEMPLATE.map(c => ({ ...c })), []);
-    toast('Using starter deck — build one in Deck Builder!', 'inf');
-    return;
-  }
 
   const overlay = document.createElement('div');
   overlay.className = 'deck-pick-overlay';
