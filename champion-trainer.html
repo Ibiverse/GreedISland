@@ -1111,6 +1111,122 @@
     .deb.primary { background: var(--gold); color: var(--bg); border: none; }
     .deb.secondary { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
 
+    /* ===== HAND TRAP WINDOW ===== */
+    .ht-overlay {
+      position: fixed; inset: 0; z-index: 900;
+      background: rgba(0,0,0,.65);
+      display: flex; align-items: flex-end; justify-content: center;
+      padding: 0 0 calc(var(--tab-h) + 4px);
+      animation: fadeIn .15s ease;
+    }
+    .ht-modal {
+      background: var(--surface); border: 2px solid var(--gold);
+      border-radius: 16px 16px 0 0; padding: 16px 16px 20px;
+      width: 100%; max-width: 540px;
+    }
+    .ht-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .ht-title { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--gold); }
+    .ht-skip {
+      font-size: 12px; color: var(--text-dim); background: none;
+      border: 1px solid var(--border2); cursor: pointer;
+      padding: 6px 12px; border-radius: 6px; font-family: 'Rajdhani', sans-serif; font-weight: 600;
+    }
+    .ht-trigger {
+      font-size: 13px; color: var(--text); margin-bottom: 12px;
+      padding: 8px 12px; background: var(--surface2); border-radius: 8px;
+      border-left: 3px solid var(--gold); line-height: 1.5;
+    }
+    .ht-cards { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .ht-card-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: 10px; cursor: pointer; transition: all .15s;
+      font-family: 'Rajdhani', sans-serif; min-width: 110px;
+    }
+    .ht-card-btn:hover { border-color: var(--gold); background: var(--surface3); transform: translateY(-2px); }
+    .ht-card-name { font-size: 11px; font-weight: 700; color: var(--text); text-align: center; }
+    .ht-card-eff { font-size: 10px; color: var(--text-dim); text-align: center; }
+    .ht-timer-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 14px; overflow: hidden; }
+    .ht-timer-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width .1s linear; }
+    .ht-no-traps { font-size: 13px; color: var(--text-dim); text-align: center; padding: 8px 0; }
+
+    /* ===== CHAIN MODAL ===== */
+    .chain-modal {
+      position: fixed; inset: 0; z-index: 910;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.55); animation: fadeIn .15s ease;
+    }
+    .chain-box {
+      background: var(--surface); border: 2px solid #4a90e2;
+      border-radius: 16px; padding: 20px 24px;
+      max-width: 340px; width: 90%;
+    }
+    .chain-title {
+      font-family: 'Press Start 2P', monospace; font-size: 8px;
+      color: #4a90e2; margin-bottom: 14px; text-align: center;
+    }
+    .chain-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .chain-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; background: var(--surface2); border-radius: 8px; font-size: 13px;
+    }
+    .chain-num {
+      background: #4a90e2; color: #fff; border-radius: 50%;
+      width: 22px; height: 22px; display: flex; align-items: center;
+      justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0;
+    }
+    .chain-resolve-btn {
+      width: 100%; padding: 10px; background: #4a90e2; color: #fff;
+      border: none; border-radius: 8px; cursor: pointer;
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px;
+    }
+
+    /* ===== ANALYSIS OVERLAY ===== */
+    .analysis-overlay {
+      position: fixed; inset: 0; z-index: 920;
+      background: rgba(0,0,0,.88);
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 20px 12px calc(var(--tab-h) + 24px);
+      overflow-y: auto; animation: fadeIn .2s ease;
+    }
+    .analysis-box {
+      background: var(--surface); border: 2px solid var(--gold);
+      border-radius: 20px; padding: 24px 20px;
+      width: 100%; max-width: 500px;
+    }
+    .analysis-title {
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: var(--gold); text-align: center; margin-bottom: 20px;
+    }
+    .analysis-score-ring { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+    .score-number { font-family: 'Press Start 2P', monospace; font-size: 44px; color: var(--gold); line-height: 1; }
+    .score-label { font-size: 12px; color: var(--text-dim); margin-top: 6px; font-weight: 600; }
+    .analysis-section { margin-bottom: 16px; }
+    .analysis-section-title {
+      font-size: 9px; color: var(--text-dim); text-transform: uppercase;
+      letter-spacing: 1px; font-weight: 700; margin-bottom: 8px;
+      font-family: 'Press Start 2P', monospace;
+    }
+    .analysis-tip {
+      background: var(--surface2); border-radius: 10px; padding: 12px 14px;
+      margin-bottom: 8px; font-size: 13px; color: var(--text); line-height: 1.6;
+    }
+    .missed-play {
+      background: rgba(224,48,48,.1); border: 1px solid rgba(224,48,48,.3);
+      border-radius: 10px; padding: 10px 14px; margin-bottom: 8px;
+      font-size: 13px; color: #f87171; line-height: 1.5;
+    }
+    .optimal-line {
+      background: rgba(74,222,128,.08); border: 1px solid rgba(74,222,128,.3);
+      border-radius: 10px; padding: 10px 14px; margin-bottom: 8px;
+      font-size: 13px; color: #4ade80; line-height: 1.5;
+    }
+    .analysis-close-btn {
+      width: 100%; padding: 14px; background: var(--gold); color: var(--bg);
+      border: none; border-radius: 10px; cursor: pointer;
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 15px; margin-top: 8px;
+    }
+
   </style>
 </head>
 <body>
@@ -1178,36 +1294,45 @@
       <div class="pre-duel-inner">
         <div class="pre-duel-title">SELECT OPPONENT</div>
         <div class="profile-list">
+
           <div class="profile-card" onclick="startDuel('aggro')">
             <div class="profile-icon">🗡️</div>
             <div class="profile-name">Pure Aggro</div>
-            <div class="profile-desc">Classic beatdown with powerful monsters. Perfect for learning the basics of combat.</div>
-            <div class="profile-diff">⭐ Beginner</div>
+            <div class="profile-desc">Classic beatdown. Perfect for learning the basics of combat and damage calculation.</div>
+            <div class="profile-diff" style="color:#4ade80">⭐ Beginner</div>
           </div>
-          <div class="profile-card locked">
+
+          <div class="profile-card" onclick="startDuel('dragonlink')">
             <div class="profile-icon">🐉</div>
             <div class="profile-name">Dragon Link</div>
-            <div class="profile-desc">YCS combo specialist. Builds unbreakable boards on turn 1.</div>
-            <div class="profile-diff locked-badge">🔒 Phase 3</div>
+            <div class="profile-desc">2020 WCS combo deck. Striker Dragon into Boot Sector Launch into Borreload Savage + Apollousa on turn 1.</div>
+            <div class="profile-diff" style="color:#facc15">⭐⭐⭐ Advanced — use Ash on BSL search</div>
           </div>
-          <div class="profile-card locked">
+
+          <div class="profile-card" onclick="startDuel('tearalaments')">
             <div class="profile-icon">💧</div>
             <div class="profile-name">Tearlaments</div>
-            <div class="profile-desc">GY fusion master. Mills aggressively and creates Mirrorjade.</div>
-            <div class="profile-diff locked-badge">🔒 Phase 3</div>
+            <div class="profile-desc">2022-2023 dominant GY fusion engine. Mills aggressively, chains Scheiren/Havnis effects to build Kitkallos + Mirrorjade.</div>
+            <div class="profile-diff" style="color:#fb923c">⭐⭐⭐⭐ Expert — Ash the GY fusions</div>
           </div>
-          <div class="profile-card locked">
+
+          <div class="profile-card" onclick="startDuel('snakeeye')">
             <div class="profile-icon">🔥</div>
             <div class="profile-name">Snake-Eye</div>
-            <div class="profile-desc">2024 world champion deck. Link climbs into unstoppable boards.</div>
-            <div class="profile-diff locked-badge">🔒 Phase 3</div>
+            <div class="profile-desc">2024 YCS champion deck. Snake-Eye Ash searches Oak, Diabellstar extends into Flamberge + I:P Masquerena board.</div>
+            <div class="profile-diff" style="color:#f87171">⭐⭐⭐⭐⭐ Champion — interrupt Ash before Oak</div>
           </div>
-          <div class="profile-card locked">
+
+          <div class="profile-card" onclick="startDuel('branded')">
             <div class="profile-icon">⚔️</div>
             <div class="profile-name">Branded Despia</div>
-            <div class="profile-desc">Fusion spam engine. Albaz absorbs opponent monsters.</div>
-            <div class="profile-diff locked-badge">🔒 Phase 3</div>
+            <div class="profile-desc">2022 YCS Albaz fusion engine. Aluber searches Branded Fusion, fuses with opponent monsters into Mirrorjade + Dramaturge.</div>
+            <div class="profile-diff" style="color:#f87171">⭐⭐⭐⭐⭐ Champion — Ghost Ogre Aluber on search</div>
           </div>
+
+        </div>
+        <div id="combo-analysis-btn" style="display:none; margin-top:20px; text-align:center;">
+          <button class="qbtn" style="max-width:320px; margin:0 auto;" onclick="showComboAnalysis()">📊 View Last Match Analysis</button>
         </div>
       </div>
     </div>
@@ -2269,9 +2394,9 @@ function toast(msg, type = 'inf') {
 
 /* ---- AI starter deck (hardcoded 40 cards, all lv4 or lower for easy AI) ---- */
 const AI_DECK_TEMPLATE = [
-  {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A genie of the lamp that's not to be trifled with.'},
-  {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A genie of the lamp that's not to be trifled with.'},
-  {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A genie of the lamp that's not to be trifled with.'},
+  {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A mystical genie of the lamp — not to be trifled with.'},
+  {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A mystical genie of the lamp — not to be trifled with.'},
+  {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A mystical genie of the lamp — not to be trifled with.'},
   {id:42285799,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
   {id:42285799,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
   {id:42285799,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
@@ -2313,6 +2438,214 @@ const AI_DECK_TEMPLATE = [
   {id:83550880,  name:'Sakuretsu Armor',              type:'Trap Card',      atk:null, def:null, level:null, attribute:null, desc:'When an opponent\'s monster declares an attack: destroy that attacking monster.'},
 ];
 
+/* ============================================================
+   PHASE 3 — CHAMPION DECKS + PROFILES
+============================================================ */
+
+/* helper to pad a deck to 40 with filler cards */
+function padDeck(cards, filler) {
+  const out = [...cards];
+  while (out.length < 40) out.push({...filler});
+  return out.slice(0, 40);
+}
+const FILLER_MON = {id:42285799, name:'Gemini Elf', type:'Normal Monster', atk:1900, def:900, level:4, attribute:'EARTH', desc:'Twin elves.'};
+const FILLER_SPL = {id:53129443, name:'Dark Hole',   type:'Spell Card', atk:null, def:null, level:null, attribute:null, desc:'Destroy all monsters.'};
+
+const DECK_DRAGONLINK = padDeck([
+  // --- Monsters (21) ---
+  {id:73539069, name:'Striker Dragon',              type:'Effect Monster', atk:1000, def:0,    level:1, attribute:'DARK',  desc:'Link 1. When Link Summoned: Add 1 "Boot Sector Launch" from Deck to hand.'},
+  {id:73539069, name:'Striker Dragon',              type:'Effect Monster', atk:1000, def:0,    level:1, attribute:'DARK',  desc:'Link 1. When Link Summoned: Add 1 "Boot Sector Launch" from Deck to hand.'},
+  {id:73539069, name:'Striker Dragon',              type:'Effect Monster', atk:1000, def:0,    level:1, attribute:'DARK',  desc:'Link 1. When Link Summoned: Add 1 "Boot Sector Launch" from Deck to hand.'},
+  {id:68120550, name:'Rokket Tracer',               type:'Effect Monster', atk:1500, def:1000, level:4, attribute:'DARK',  desc:'If a card is placed in your Spell/Trap Zone: SS this card from hand, then destroy 1 card you control.'},
+  {id:68120550, name:'Rokket Tracer',               type:'Effect Monster', atk:1500, def:1000, level:4, attribute:'DARK',  desc:'If a card is placed in your Spell/Trap Zone: SS this card from hand, then destroy 1 card you control.'},
+  {id:68120550, name:'Rokket Tracer',               type:'Effect Monster', atk:1500, def:1000, level:4, attribute:'DARK',  desc:'If a card is placed in your Spell/Trap Zone: SS this card from hand, then destroy 1 card you control.'},
+  {id:61702177, name:'Absorouter Dragon',            type:'Effect Monster', atk:1200, def:2800, level:7, attribute:'DARK',  desc:'When a Dragon Link Monster you control has its effect negated: Add 1 Rokket from Deck to hand.'},
+  {id:61702177, name:'Absorouter Dragon',            type:'Effect Monster', atk:1200, def:2800, level:7, attribute:'DARK',  desc:'When a Dragon Link Monster you control has its effect negated: Add 1 Rokket from Deck to hand.'},
+  {id:33965672, name:'Magnarokket Dragon',           type:'Effect Monster', atk:1800, def:1200, level:4, attribute:'DARK',  desc:'When a Link Monster you control is destroyed by battle: Add this from GY to hand.'},
+  {id:33965672, name:'Magnarokket Dragon',           type:'Effect Monster', atk:1800, def:1200, level:4, attribute:'DARK',  desc:'When a Link Monster you control is destroyed by battle: Add this from GY to hand.'},
+  {id:33965672, name:'Magnarokket Dragon',           type:'Effect Monster', atk:1800, def:1200, level:4, attribute:'DARK',  desc:'When a Link Monster you control is destroyed by battle: Add this from GY to hand.'},
+  {id:13326348, name:'Rokket Synchron',              type:'Effect Monster', atk:100,  def:2100, level:1, attribute:'DARK',  desc:'When used as Synchro Material: That monster gains "destroy itself to negate a monster effect."'},
+  {id:13326348, name:'Rokket Synchron',              type:'Effect Monster', atk:100,  def:2100, level:1, attribute:'DARK',  desc:'When used as Synchro Material: That monster gains "destroy itself to negate a monster effect."'},
+  {id:14558127, name:'Ash Blossom & Joyous Spring', type:'Effect Monster', atk:0,    def:1800, level:3, attribute:'FIRE',  desc:'Discard: Negate a search, SS from Deck, or send Deck to GY.'},
+  {id:14558127, name:'Ash Blossom & Joyous Spring', type:'Effect Monster', atk:0,    def:1800, level:3, attribute:'FIRE',  desc:'Discard: Negate a search, SS from Deck, or send Deck to GY.'},
+  {id:14558127, name:'Ash Blossom & Joyous Spring', type:'Effect Monster', atk:0,    def:1800, level:3, attribute:'FIRE',  desc:'Discard: Negate a search, SS from Deck, or send Deck to GY.'},
+  {id:27204311, name:'Nibiru, the Primal Being',     type:'Effect Monster', atk:3000, def:600,  level:11,attribute:'LIGHT', desc:'After the opponent has SS\'d 5+ times this turn: SS this, Tribute all others, deal 2000 damage.'},
+  {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate effects of 1 face-up monster; if activated from hand, negate all S/T in that column.'},
+  {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate effects of 1 face-up monster; if activated from hand, negate all S/T in that column.'},
+  {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate effects of 1 face-up monster; if activated from hand, negate all S/T in that column.'},
+  // --- Spells (12) ---
+  {id:81747831, name:'Boot Sector Launch',           type:'Field Spell',    atk:null, def:null, level:null,attribute:null, desc:'Rokkets gain 300 ATK/DEF. Once per turn: SS up to 2 Rokket monsters from hand/GY in DEF.'},
+  {id:81747831, name:'Boot Sector Launch',           type:'Field Spell',    atk:null, def:null, level:null,attribute:null, desc:'Rokkets gain 300 ATK/DEF. Once per turn: SS up to 2 Rokket monsters from hand/GY in DEF.'},
+  {id:81747831, name:'Boot Sector Launch',           type:'Field Spell',    atk:null, def:null, level:null,attribute:null, desc:'Rokkets gain 300 ATK/DEF. Once per turn: SS up to 2 Rokket monsters from hand/GY in DEF.'},
+  {id:95745687, name:'Quick Launch',                 type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'SS 1 Rokket monster from Deck. During End Phase it is destroyed.'},
+  {id:95745687, name:'Quick Launch',                 type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'SS 1 Rokket monster from Deck. During End Phase it is destroyed.'},
+  {id:95745687, name:'Quick Launch',                 type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'SS 1 Rokket monster from Deck. During End Phase it is destroyed.'},
+  {id:53129443, name:'Dark Hole',                    type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all monsters on the field.'},
+  {id:74789026, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all monsters your opponent controls.'},
+  {id:83764718, name:'Monster Reborn',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Special Summon 1 monster from either GY.'},
+  {id:72302403, name:'Mystical Space Typhoon',       type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Target 1 Spell/Trap; destroy it.'},
+  {id:72302403, name:'Mystical Space Typhoon',       type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Target 1 Spell/Trap; destroy it.'},
+  // --- Traps (7) ---
+  {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy all ATK-position monsters they control.'},
+  {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy all ATK-position monsters they control.'},
+  {id:4206964,  name:'Trap Hole',                    type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent Normal/Flip Summons 1000+ ATK monster: Destroy it.'},
+  {id:4206964,  name:'Trap Hole',                    type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent Normal/Flip Summons 1000+ ATK monster: Destroy it.'},
+], FILLER_MON);
+
+const DECK_TEARALAMENTS = padDeck([
+  // --- Monsters (22) ---
+  {id:51638027, name:'Tearlaments Scheiren',         type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'SS this from hand, then send 3 cards from Deck to GY. If this or another Tearlaments is sent to GY: Fusion Summon using GY monsters.'},
+  {id:51638027, name:'Tearlaments Scheiren',         type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'SS this from hand, then send 3 cards from Deck to GY. If this or another Tearlaments is sent to GY: Fusion Summon using GY monsters.'},
+  {id:51638027, name:'Tearlaments Scheiren',         type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'SS this from hand, then send 3 cards from Deck to GY. If this or another Tearlaments is sent to GY: Fusion Summon using GY monsters.'},
+  {id:71506410, name:'Tearlaments Havnis',           type:'Effect Monster', atk:1500, def:2100, level:4, attribute:'DARK',  desc:'If a card in GY is banished or sent to GY: SS this from hand. If sent to GY: Fusion Summon using GY monsters.'},
+  {id:71506410, name:'Tearlaments Havnis',           type:'Effect Monster', atk:1500, def:2100, level:4, attribute:'DARK',  desc:'If a card in GY is banished or sent to GY: SS this from hand. If sent to GY: Fusion Summon using GY monsters.'},
+  {id:71506410, name:'Tearlaments Havnis',           type:'Effect Monster', atk:1500, def:2100, level:4, attribute:'DARK',  desc:'If a card in GY is banished or sent to GY: SS this from hand. If sent to GY: Fusion Summon using GY monsters.'},
+  {id:55818101, name:'Tearlaments Merrli',           type:'Effect Monster', atk:800,  def:2200, level:3, attribute:'DARK',  desc:'If sent to GY: Send 3 from Deck to GY; if a Tearlaments was sent: Fusion Summon using GY monsters.'},
+  {id:55818101, name:'Tearlaments Merrli',           type:'Effect Monster', atk:800,  def:2200, level:3, attribute:'DARK',  desc:'If sent to GY: Send 3 from Deck to GY; if a Tearlaments was sent: Fusion Summon using GY monsters.'},
+  {id:55818101, name:'Tearlaments Merrli',           type:'Effect Monster', atk:800,  def:2200, level:3, attribute:'DARK',  desc:'If sent to GY: Send 3 from Deck to GY; if a Tearlaments was sent: Fusion Summon using GY monsters.'},
+  {id:61318483, name:'Tearlaments Reinoheart',       type:'Effect Monster', atk:1500, def:2000, level:4, attribute:'WATER', desc:'If Normal or SS\'d: Send 1 Tearlaments monster from Deck to GY. If sent to GY: SS 1 Tearlaments from hand.'},
+  {id:61318483, name:'Tearlaments Reinoheart',       type:'Effect Monster', atk:1500, def:2000, level:4, attribute:'WATER', desc:'If Normal or SS\'d: Send 1 Tearlaments monster from Deck to GY. If sent to GY: SS 1 Tearlaments from hand.'},
+  {id:52038441, name:'Diviner of the Herald',        type:'Effect Monster', atk:800,  def:900,  level:2, attribute:'LIGHT', desc:'If Normal or SS\'d: Send 1 Fairy from Extra Deck to GY, add 1 Fairy from Deck to hand. Gains Levels of sent monster.'},
+  {id:52038441, name:'Diviner of the Herald',        type:'Effect Monster', atk:800,  def:900,  level:2, attribute:'LIGHT', desc:'If Normal or SS\'d: Send 1 Fairy from Extra Deck to GY, add 1 Fairy from Deck to hand. Gains Levels of sent monster.'},
+  {id:52038441, name:'Diviner of the Herald',        type:'Effect Monster', atk:800,  def:900,  level:2, attribute:'LIGHT', desc:'If Normal or SS\'d: Send 1 Fairy from Extra Deck to GY, add 1 Fairy from Deck to hand. Gains Levels of sent monster.'},
+  {id:14558127, name:'Ash Blossom & Joyous Spring',  type:'Effect Monster', atk:0,    def:1800, level:3, attribute:'FIRE',  desc:'Discard: Negate a search, SS from Deck, or send Deck to GY.'},
+  {id:14558127, name:'Ash Blossom & Joyous Spring',  type:'Effect Monster', atk:0,    def:1800, level:3, attribute:'FIRE',  desc:'Discard: Negate a search, SS from Deck, or send Deck to GY.'},
+  {id:27204311, name:'Nibiru, the Primal Being',     type:'Effect Monster', atk:3000, def:600,  level:11,attribute:'LIGHT', desc:'After opponent SS\'d 5+ times this turn: SS this, Tribute all others, deal 2000 damage.'},
+  // --- Spells/Traps (18) ---
+  {id:93087019, name:'Tearlaments Scream',           type:'Continuous Trap',atk:null, def:null, level:null,attribute:null, desc:'All DARK monsters gain 500 ATK/DEF. Once per turn: Send top 3 Deck to GY, if Tearlaments sent trigger its GY effect.'},
+  {id:93087019, name:'Tearlaments Scream',           type:'Continuous Trap',atk:null, def:null, level:null,attribute:null, desc:'All DARK monsters gain 500 ATK/DEF. Once per turn: Send top 3 Deck to GY, if Tearlaments sent trigger its GY effect.'},
+  {id:53129443, name:'Dark Hole',                    type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all monsters.'},
+  {id:74789026, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all opponent monsters.'},
+  {id:83764718, name:'Monster Reborn',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'SS 1 monster from either GY.'},
+  {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
+  {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
+  {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy all their ATK-position monsters.'},
+], FILLER_MON);
+
+const DECK_SNAKEEYE = padDeck([
+  // --- Monsters (21) ---
+  {id:37961968, name:'Snake-Eye Ash',                type:'Effect Monster', atk:1200, def:600,  level:1, attribute:'FIRE',  desc:'If Normal or SS\'d: Add 1 "Snake-Eye Oak" or "Original Sinful Spoils" from Deck to hand.'},
+  {id:37961968, name:'Snake-Eye Ash',                type:'Effect Monster', atk:1200, def:600,  level:1, attribute:'FIRE',  desc:'If Normal or SS\'d: Add 1 "Snake-Eye Oak" or "Original Sinful Spoils" from Deck to hand.'},
+  {id:37961968, name:'Snake-Eye Ash',                type:'Effect Monster', atk:1200, def:600,  level:1, attribute:'FIRE',  desc:'If Normal or SS\'d: Add 1 "Snake-Eye Oak" or "Original Sinful Spoils" from Deck to hand.'},
+  {id:38840952, name:'Snake-Eye Oak',                type:'Effect Monster', atk:2400, def:800,  level:4, attribute:'FIRE',  desc:'Once per turn: SS 1 FIRE Level 1 from hand. If this card is in GY: SS 1 "Snake-Eye" monster from Deck.'},
+  {id:38840952, name:'Snake-Eye Oak',                type:'Effect Monster', atk:2400, def:800,  level:4, attribute:'FIRE',  desc:'Once per turn: SS 1 FIRE Level 1 from hand. If this card is in GY: SS 1 "Snake-Eye" monster from Deck.'},
+  {id:38840952, name:'Snake-Eye Oak',                type:'Effect Monster', atk:2400, def:800,  level:4, attribute:'FIRE',  desc:'Once per turn: SS 1 FIRE Level 1 from hand. If this card is in GY: SS 1 "Snake-Eye" monster from Deck.'},
+  {id:20012788, name:'Diabellstar the Black Witch',  type:'Effect Monster', atk:2500, def:2000, level:7, attribute:'DARK',  desc:'If you control no monsters or only FIRE monsters: SS this from hand. Then: Add 1 "Sinful Spoils" from Deck to hand.'},
+  {id:20012788, name:'Diabellstar the Black Witch',  type:'Effect Monster', atk:2500, def:2000, level:7, attribute:'DARK',  desc:'If you control no monsters or only FIRE monsters: SS this from hand. Then: Add 1 "Sinful Spoils" from Deck to hand.'},
+  {id:20012788, name:'Diabellstar the Black Witch',  type:'Effect Monster', atk:2500, def:2000, level:7, attribute:'DARK',  desc:'If you control no monsters or only FIRE monsters: SS this from hand. Then: Add 1 "Sinful Spoils" from Deck to hand.'},
+  {id:14558127, name:'Ash Blossom & Joyous Spring',  type:'Effect Monster', atk:0,    def:1800, level:3, attribute:'FIRE',  desc:'Discard: Negate a search, SS from Deck, or send Deck to GY.'},
+  {id:14558127, name:'Ash Blossom & Joyous Spring',  type:'Effect Monster', atk:0,    def:1800, level:3, attribute:'FIRE',  desc:'Discard: Negate a search, SS from Deck, or send Deck to GY.'},
+  {id:14558127, name:'Ash Blossom & Joyous Spring',  type:'Effect Monster', atk:0,    def:1800, level:3, attribute:'FIRE',  desc:'Discard: Negate a search, SS from Deck, or send Deck to GY.'},
+  {id:27204311, name:'Nibiru, the Primal Being',     type:'Effect Monster', atk:3000, def:600,  level:11,attribute:'LIGHT', desc:'After opponent SS\'d 5+ times: SS this, Tribute all others, deal 2000 damage.'},
+  {id:27204311, name:'Nibiru, the Primal Being',     type:'Effect Monster', atk:3000, def:600,  level:11,attribute:'LIGHT', desc:'After opponent SS\'d 5+ times: SS this, Tribute all others, deal 2000 damage.'},
+  // --- Spells/Traps (21) ---
+  {id:89943545, name:'Original Sinful Spoils - Snake-Eye', type:'Spell Card', atk:null, def:null, level:null, attribute:null, desc:'Add 1 "Snake-Eye" monster from Deck to hand; or if opponent controls a monster and you don\'t, SS 1 "Snake-Eye" from Deck.'},
+  {id:89943545, name:'Original Sinful Spoils - Snake-Eye', type:'Spell Card', atk:null, def:null, level:null, attribute:null, desc:'Add 1 "Snake-Eye" monster from Deck to hand; or if opponent controls a monster and you don\'t, SS 1 "Snake-Eye" from Deck.'},
+  {id:89943545, name:'Original Sinful Spoils - Snake-Eye', type:'Spell Card', atk:null, def:null, level:null, attribute:null, desc:'Add 1 "Snake-Eye" monster from Deck to hand; or if opponent controls a monster and you don\'t, SS 1 "Snake-Eye" from Deck.'},
+  {id:46986811, name:'Bonfire',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'If opponent has more cards: Add 1 FIRE Effect Monster from Deck to hand. Can only use once per turn.'},
+  {id:46986811, name:'Bonfire',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'If opponent has more cards: Add 1 FIRE Effect Monster from Deck to hand. Can only use once per turn.'},
+  {id:46986811, name:'Bonfire',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'If opponent has more cards: Add 1 FIRE Effect Monster from Deck to hand. Can only use once per turn.'},
+  {id:53129443, name:'Dark Hole',                    type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all monsters.'},
+  {id:74789026, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all opponent monsters.'},
+  {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
+  {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
+  {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy their ATK-position monsters.'},
+  {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy their ATK-position monsters.'},
+], FILLER_MON);
+
+const DECK_BRANDED = padDeck([
+  // --- Monsters (18) ---
+  {id:65247403, name:'Aluber the Jester of Despia',  type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'If Normal or SS\'d: Add 1 "Branded" Spell/Trap from Deck to hand. If this card is in GY and you Fusion Summon: SS this.'},
+  {id:65247403, name:'Aluber the Jester of Despia',  type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'If Normal or SS\'d: Add 1 "Branded" Spell/Trap from Deck to hand. If this card is in GY and you Fusion Summon: SS this.'},
+  {id:65247403, name:'Aluber the Jester of Despia',  type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'If Normal or SS\'d: Add 1 "Branded" Spell/Trap from Deck to hand. If this card is in GY and you Fusion Summon: SS this.'},
+  {id:68468459, name:'Fallen of Albaz',              type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'SS this from hand by sending 1 Spell from hand to GY. When this attacks: Fusion Summon using this + opponent\'s monster as materials.'},
+  {id:68468459, name:'Fallen of Albaz',              type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'SS this from hand by sending 1 Spell from hand to GY. When this attacks: Fusion Summon using this + opponent\'s monster as materials.'},
+  {id:68468459, name:'Fallen of Albaz',              type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'SS this from hand by sending 1 Spell from hand to GY. When this attacks: Fusion Summon using this + opponent\'s monster as materials.'},
+  {id:38814750, name:'Dramaturge of Despia',         type:'Effect Monster', atk:2500, def:2500, level:8, attribute:'LIGHT', desc:'Cannot be Normal Summoned. If Fusion Summoned using 2+ Despia monsters: Draw 2 cards. Gains 200 ATK for each monster in GY.'},
+  {id:38814750, name:'Dramaturge of Despia',         type:'Effect Monster', atk:2500, def:2500, level:8, attribute:'LIGHT', desc:'Cannot be Normal Summoned. If Fusion Summoned using 2+ Despia monsters: Draw 2 cards. Gains 200 ATK for each monster in GY.'},
+  {id:14558127, name:'Ash Blossom & Joyous Spring',  type:'Effect Monster', atk:0,    def:1800, level:3, attribute:'FIRE',  desc:'Discard: Negate a search, SS from Deck, or send Deck to GY.'},
+  {id:14558127, name:'Ash Blossom & Joyous Spring',  type:'Effect Monster', atk:0,    def:1800, level:3, attribute:'FIRE',  desc:'Discard: Negate a search, SS from Deck, or send Deck to GY.'},
+  {id:14558127, name:'Ash Blossom & Joyous Spring',  type:'Effect Monster', atk:0,    def:1800, level:3, attribute:'FIRE',  desc:'Discard: Negate a search, SS from Deck, or send Deck to GY.'},
+  {id:27204311, name:'Nibiru, the Primal Being',     type:'Effect Monster', atk:3000, def:600,  level:11,attribute:'LIGHT', desc:'After opponent SS\'d 5+ times: SS this, Tribute all, deal 2000 damage.'},
+  // --- Spells/Traps (22) ---
+  {id:30505329, name:'Branded Fusion',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Fusion Summon 1 Fusion Monster that lists "Fallen of Albaz" as material, using monsters from hand, Deck, or Extra Deck as material.'},
+  {id:30505329, name:'Branded Fusion',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Fusion Summon 1 Fusion Monster that lists "Fallen of Albaz" as material, using monsters from hand, Deck, or Extra Deck as material.'},
+  {id:30505329, name:'Branded Fusion',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Fusion Summon 1 Fusion Monster that lists "Fallen of Albaz" as material, using monsters from hand, Deck, or Extra Deck as material.'},
+  {id:43898403, name:'Branded in Red',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Target 1 Fusion Monster in your GY or face-up field; destroy it, then add 1 "Fallen of Albaz" or "Despia" monster from Deck/GY to hand.'},
+  {id:43898403, name:'Branded in Red',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Target 1 Fusion Monster in your GY or face-up field; destroy it, then add 1 "Fallen of Albaz" or "Despia" monster from Deck/GY to hand.'},
+  {id:53129443, name:'Dark Hole',                    type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all monsters.'},
+  {id:74789026, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all opponent monsters.'},
+  {id:83764718, name:'Monster Reborn',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'SS 1 monster from either GY.'},
+  {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
+  {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
+  {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy their ATK-position monsters.'},
+  {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy their ATK-position monsters.'},
+], FILLER_MON);
+
+/* ---- Boss monster card data (placed by scripted combos) ---- */
+const BOSS_BORRELSWORD       = {id:29301450, name:'Borrelsword Dragon',          type:'Link Monster', atk:3000, def:null, level:4, attribute:'DARK',  desc:'Cannot be destroyed by card effects. Once per turn: Target 1 ATK-position monster; attack it, halve its ATK. Negates its own destruction.'};
+const BOSS_BORRELOAD_SAVAGE  = {id:58921041, name:'Borreload Savage Dragon',     type:'Synchro Monster', atk:3000, def:2500, level:8, attribute:'DARK', desc:'Equips a Link Monster from GY, gains Counters equal to its Link Rating. Once per turn: Remove 1 Counter to negate a card/effect.'};
+const BOSS_APOLLOUSA         = {id:95660274, name:'Apollousa, Bow of the Goddess',type:'Link Monster', atk:2400, def:null, level:4, attribute:'WIND', desc:'Once per turn: Negate a monster effect; this card loses 800 ATK. Cannot be destroyed by card effects while ATK > 0.'};
+const BOSS_KITKALLOS         = {id:71572567, name:'Tearlaments Kitkallos',       type:'Fusion Monster', atk:2300, def:1200, level:5, attribute:'DARK',  desc:'When Fusion Summoned: Send 1 Tearlaments from Deck to GY, add 1 Tearlaments from GY to hand. If sent to GY: Draw 1 card.'};
+const BOSS_MIRRORJADE        = {id:75375465, name:'Mirrorjade the Iceblade Dragon',type:'Fusion Monster', atk:3000, def:2500, level:9, attribute:'DARK',  desc:'Cannot be destroyed by effects while you control another Fusion Monster. Once per turn: Banish 1 Fusion Monster from your Deck/Extra Deck.'};
+const BOSS_FLAMBERGE         = {id:30499766, name:'Flamberge the Smoldering Swordsman',type:'Link Monster', atk:2400, def:null, level:3, attribute:'FIRE', desc:'If FIRE monster is sent to GY: All "Snake-Eye" monsters gain 500 ATK. Immune to monster effects while linked.'};
+const BOSS_IP_MASQ           = {id:54807656, name:'I:P Masquerena',              type:'Link Monster', atk:800,  def:null, level:2, attribute:'DARK',  desc:'Cannot be destroyed by opponent\'s card effects. During opponent\'s turn: Use this as material for a Link Summon. That monster cannot be destroyed.'};
+const BOSS_LUBELLION         = {id:86221456, name:'Lubellion the Searing Dragon', type:'Fusion Monster', atk:2800, def:2500, level:8, attribute:'DARK',  desc:'When Fusion Summoned: Send 1 Branded Spell/Trap from Deck to GY. You can Fusion Summon "Mirrorjade" using this card on field as material.'};
+const BOSS_DRAMATURGE        = {id:38814750, name:'Dramaturge of Despia',        type:'Fusion Monster', atk:2500, def:2500, level:8, attribute:'LIGHT', desc:'Gain 200 ATK for each monster in both GY\'s. Cannot be targeted by effects while you control another Fusion Monster.'};
+
+/* ---- Champion Profile Registry ---- */
+const PROFILES = {
+  aggro: {
+    name: 'Pure Aggro', icon: '🗡️', difficulty: 1,
+    deckFn: () => AI_DECK_TEMPLATE,
+    optimalLine: 'Apply board pressure with high-ATK level 4s. Use Dark Hole/Raigeki to clear your opponent\'s board before attacking.',
+    tips: [
+      {trigger: 'summon', text: 'Ghost Ogre can destroy monsters that activate on Normal Summon.'},
+      {trigger: 'search', text: 'Ash Blossom stops the AI from searching key combo pieces.'},
+    ]
+  },
+  dragonlink: {
+    name: 'Dragon Link', icon: '🐉', difficulty: 3,
+    deckFn: () => DECK_DRAGONLINK,
+    optimalLine: 'Key interrupt: Ash Blossom when Striker Dragon searches Boot Sector Launch (BSL). Without BSL the combo fizzles — no SS engine for Halqifibrax → Savage Dragon chain.',
+    tips: [
+      {trigger: 'search', text: '⭐ BEST PLAY: Ash Blossom on Boot Sector Launch search. BSL is the engine — deny it and the whole combo falls apart.'},
+      {trigger: 'field',  text: 'Ghost Ogre can destroy Boot Sector Launch when it activates, stopping the Rokket SS engine.'},
+      {trigger: 'summon', text: 'Nibiru triggers on the 5th Special Summon. Watch the SS count — Dragon Link hits 5 fast.'},
+    ]
+  },
+  tearalaments: {
+    name: 'Tearlaments', icon: '💧', difficulty: 4,
+    deckFn: () => DECK_TEARALAMENTS,
+    optimalLine: 'Key interrupt: Ash Blossom on Scheiren\'s mill (sends Deck to GY). Without mills, GY Fusion effects never trigger — Kitkallos and Mirrorjade never hit the field.',
+    tips: [
+      {trigger: 'mill', text: '⭐ BEST PLAY: Ash Blossom on any "send Deck to GY" effect. Tearlaments live in the GY — stop the mills, stop the deck.'},
+      {trigger: 'search', text: 'Droll & Lock Bird locks searches if the opponent searches and mills in the same turn.'},
+      {trigger: 'fusion', text: 'Ash Blossom can also negate the GY Fusion activation if it requires sending Deck cards.'},
+    ]
+  },
+  snakeeye: {
+    name: 'Snake-Eye', icon: '🔥', difficulty: 5,
+    deckFn: () => DECK_SNAKEEYE,
+    optimalLine: 'Key interrupt: Ash Blossom on Snake-Eye Ash searching Oak (Normal Summon + search). Without Oak, Diabellstar cannot extend into Flamberge. Without Flamberge the board is naked.',
+    tips: [
+      {trigger: 'search', text: '⭐ BEST PLAY: Ash Blossom when Snake-Eye Ash searches Snake-Eye Oak. This is the single most impactful interrupt — it cuts the extension.'},
+      {trigger: 'summon', text: 'Imperm on Diabellstar stops it from searching Sinful Spoils, preventing the Flamberge setup.'},
+      {trigger: 'summon', text: 'Nibiru on the 5th SS disrupts the I:P Masquerena + SP Little Knight end board.'},
+    ]
+  },
+  branded: {
+    name: 'Branded Despia', icon: '⚔️', difficulty: 5,
+    deckFn: () => DECK_BRANDED,
+    optimalLine: 'Key interrupt: Ghost Ogre on Aluber when it searches Branded Fusion. Without Branded Fusion, no turn-1 Mirrorjade. Secondary: Ash Blossom on Branded Fusion itself.',
+    tips: [
+      {trigger: 'search', text: '⭐ BEST PLAY: Ghost Ogre & Snow Rabbit when Aluber searches. Destroys Aluber on resolution — no search, no Branded Fusion, no Mirrorjade.'},
+      {trigger: 'spell',  text: 'Ash Blossom negates Branded Fusion activation (it sends from Deck). Stops Lubellion + Mirrorjade chain.'},
+      {trigger: 'fusion', text: 'Infinite Impermanence on Dramaturge of Despia negates its draw effect and ATK bonus.'},
+    ]
+  }
+};
+
 /* ---- Game State ---- */
 let GS = null;
 const PHASE_ORDER = ['DRAW','STBY','MAIN1','BATTLE','MAIN2','END'];
@@ -2348,6 +2681,8 @@ function mkZone(card, position = 'ATK', faceDown = false) {
 
 /* ---- Start Duel ---- */
 function startDuel(profile) {
+  const prof = PROFILES[profile] || PROFILES.aggro;
+
   // Player deck
   let pCards = [...S.deck.main.flatMap(e => Array(e.count).fill({ ...e.card }))];
   if (pCards.length < 5) {
@@ -2358,12 +2693,16 @@ function startDuel(profile) {
   const handSz  = parseInt(Cfg.get('hand')) || 5;
 
   const pDeck = shuffle(pCards);
-  const aDeck = shuffle(AI_DECK_TEMPLATE.map(c => ({ ...c })));
+  const aiTemplate = prof.deckFn();
+  const aDeck = shuffle(aiTemplate.map(c => ({ ...c })));
 
   GS = {
     phase: 'MAIN1', turn: 1, active: 'player',
+    profile,
     normalSummonUsed: false, spSummonCount: 0,
     attackingSlot: null, aiThinking: false,
+    comboLog: [], missedPlays: [],
+    htWindows: 0, htCorrect: 0,
     player: {
       lp: startLP, maxLP: startLP,
       hand: pDeck.splice(0, handSz),
@@ -2383,9 +2722,15 @@ function startDuel(profile) {
   document.getElementById('pre-duel').style.display = 'none';
   document.getElementById('duel-field').style.display = 'flex';
   document.getElementById('d-log').innerHTML = '';
+  document.getElementById('combo-analysis-btn').style.display = 'none';
 
-  dlog('─── DUEL START ───');
+  const profEl = document.getElementById('d-turn-who');
+  dlog(`─── DUEL START vs <b>${prof.name}</b> ───`);
   dlog(`You drew ${handSz} cards.`);
+  if (profile !== 'aggro') {
+    const tips = prof.tips || [];
+    if (tips.length) dlog(`<span style="color:#facc15">💡 TIP: ${tips[0].text}</span>`);
+  }
   dlog(PHASE_DESCS.MAIN1);
   renderAll();
 }
@@ -2865,19 +3210,28 @@ function checkWin() {
 
 function showEndScreen(winner) {
   GS.active = 'ended';
+  GS.winner = winner;
+  const prof    = GS.profile || 'aggro';
+  const profDat = PROFILES[prof] || PROFILES.aggro;
+  Stats.record({ won: winner === 'player', profile: prof });
+
+  const score = computeEfficiencyScore();
   const overlay = document.createElement('div');
   overlay.className = 'duel-end-overlay';
   overlay.innerHTML = `
     <div class="duel-end-box">
       <div class="duel-end-icon">${winner === 'player' ? '🏆' : '💀'}</div>
       <div class="duel-end-title">${winner === 'player' ? 'YOU WIN!' : 'YOU LOSE!'}</div>
+      <div style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">
+        Efficiency Score: <b style="color:var(--gold)">${score}/100</b>
+      </div>
       <div class="duel-end-btns">
-        <button class="deb primary" onclick="this.closest('.duel-end-overlay').remove(); startDuel('aggro')">⚔ Rematch</button>
-        <button class="deb secondary" onclick="this.closest('.duel-end-overlay').remove(); document.getElementById('duel-field').style.display='none'; document.getElementById('pre-duel').style.display='flex'">← Menu</button>
+        <button class="deb primary" onclick="this.closest('.duel-end-overlay').remove(); startDuel('${prof}')">⚔ Rematch</button>
+        <button class="deb secondary" onclick="this.closest('.duel-end-overlay').remove(); showComboAnalysis()">📊 Analysis</button>
+        <button class="deb secondary" onclick="this.closest('.duel-end-overlay').remove(); document.getElementById('duel-field').style.display='none'; document.getElementById('pre-duel').style.display='flex'; document.getElementById('combo-analysis-btn').style.display='block'">← Menu</button>
       </div>
     </div>`;
   document.getElementById('duel-field').appendChild(overlay);
-  Stats.record({ won: winner === 'player', profile: 'aggro' });
 }
 
 /* ---- AI Turn ---- */
@@ -2885,6 +3239,18 @@ async function aiTakeTurn() {
   GS.aiThinking = true;
   updatePhaseBar();
   const wait = ms => new Promise(r => setTimeout(r, ms));
+
+  // Dispatch to champion-specific scripted combo on turn 1; fallback to generic after
+  if (GS.turn <= 2 && GS.profile && GS.profile !== 'aggro') {
+    const dispatchMap = {
+      dragonlink:   aiTakeTurn_dragonlink,
+      tearalaments: aiTakeTurn_tearalaments,
+      snakeeye:     aiTakeTurn_snakeeye,
+      branded:      aiTakeTurn_branded,
+    };
+    const fn = dispatchMap[GS.profile];
+    if (fn) { await fn(wait); return; }
+  }
 
   // DRAW
   GS.phase = 'DRAW'; updatePhaseBar(); dlog('OPP: Draw Phase');
@@ -3048,6 +3414,663 @@ function viewGY(who) {
   if (!gy.length) { toast('Graveyard is empty', 'inf'); return; }
   const names = gy.slice(-5).map(c => c.name).join(', ');
   toast(`GY (${gy.length}): ${names}`, 'inf');
+}
+
+/* ============================================================
+   PHASE 3 — HAND TRAP WINDOW SYSTEM
+============================================================ */
+
+const HAND_TRAP_DEFS = [
+  { names: ['ash blossom'], effect: 'Negate search/SS/mill from Deck', triggers: ['search','mill','summon'] },
+  { names: ['ghost ogre', 'snow rabbit'], effect: 'Destroy a monster or Spell/Trap that activated', triggers: ['summon','field','spell'] },
+  { names: ['nibiru'],  effect: 'Tribute all monsters, deal 2000 dmg (after 5th SS)', triggers: ['summon'] },
+  { names: ['infinite impermanence', 'imperm'], effect: 'Negate a monster\'s effects this turn', triggers: ['summon','field','fusion'] },
+  { names: ['effect veiler', 'veiler'], effect: 'Negate a monster\'s effects until End Phase', triggers: ['summon','field'] },
+  { names: ['droll', 'lock bird'], effect: 'Lock all searches after the first search this turn', triggers: ['search'] },
+  { names: ['called by the grave'], effect: 'Banish 1 GY monster, negate effects of that name', triggers: ['mill','fusion'] },
+];
+
+function getUsableHandTraps(triggerType) {
+  const results = [];
+  GS.player.hand.forEach((card, handIdx) => {
+    const nameLower = (card.name || '').toLowerCase();
+    for (const def of HAND_TRAP_DEFS) {
+      if (!def.triggers.includes(triggerType)) continue;
+      if (def.names.some(n => nameLower.includes(n))) {
+        results.push({ card, handIdx, effect: def.effect });
+        break;
+      }
+    }
+  });
+  return results;
+}
+
+function resolveHandTrap(card, handIdx, effect) {
+  GS.player.hand.splice(handIdx, 1);
+  GS.player.gy.push(card);
+  dlog(`<span style="color:#4ade80">✋ YOU activated <b>${card.name}</b> — ${effect}!</span>`);
+  GS.htCorrect = (GS.htCorrect || 0) + 1;
+  renderAll();
+}
+
+function handTrapWindow(triggerType, description) {
+  return new Promise(resolve => {
+    GS.htWindows = (GS.htWindows || 0) + 1;
+    const traps = getUsableHandTraps(triggerType);
+
+    if (!traps.length) {
+      // No hand traps available — log and auto-continue
+      setTimeout(() => resolve({ interrupted: false }), 350);
+      return;
+    }
+
+    const overlay = document.createElement('div');
+    overlay.className = 'ht-overlay';
+    let resolved = false;
+    let timerInterval = null;
+
+    const doResolve = (result) => {
+      if (resolved) return;
+      resolved = true;
+      clearInterval(timerInterval);
+      overlay.remove();
+      resolve(result);
+    };
+
+    overlay.innerHTML = `
+      <div class="ht-modal">
+        <div class="ht-header">
+          <span class="ht-title">⚡ HAND TRAP?</span>
+          <button class="ht-skip">PASS (no response)</button>
+        </div>
+        <div class="ht-trigger">OPP: ${description}</div>
+        <div class="ht-cards">
+          ${traps.map((t, i) => `
+            <button class="ht-card-btn" data-ti="${i}">
+              <span class="ht-card-name">${t.card.name}</span>
+              <span class="ht-card-eff">${t.effect}</span>
+            </button>`).join('')}
+        </div>
+        <div class="ht-timer-bar"><div class="ht-timer-fill" id="ht-fill" style="width:100%"></div></div>
+      </div>`;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('.ht-skip').onclick = () => {
+      GS.missedPlays.push({
+        turn: GS.turn,
+        description: `Passed on ${traps[0].card.name} — "${description}"`,
+        tip: (PROFILES[GS.profile]?.tips || []).find(t => t.trigger === triggerType)?.text || ''
+      });
+      doResolve({ interrupted: false });
+    };
+
+    overlay.querySelectorAll('.ht-card-btn').forEach((btn, i) => {
+      btn.onclick = () => {
+        const trap = traps[i];
+        resolveHandTrap(trap.card, trap.handIdx, trap.effect);
+        GS.comboLog.push({ turn: GS.turn, event: `Used ${trap.card.name} vs "${description}"`, optimal: true });
+        doResolve({ interrupted: true, handTrap: trap.card });
+      };
+    });
+
+    // 5-second countdown
+    const DURATION = 5000, INTERVAL = 80;
+    let elapsed = 0;
+    timerInterval = setInterval(() => {
+      elapsed += INTERVAL;
+      const fillEl = document.getElementById('ht-fill');
+      if (fillEl) fillEl.style.width = Math.max(0, 100 - (elapsed / DURATION * 100)) + '%';
+      if (elapsed >= DURATION) {
+        GS.missedPlays.push({
+          turn: GS.turn,
+          description: `Timed out — missed ${traps[0].card.name} vs "${description}"`,
+          tip: (PROFILES[GS.profile]?.tips || []).find(t => t.trigger === triggerType)?.text || ''
+        });
+        doResolve({ interrupted: false });
+      }
+    }, INTERVAL);
+  });
+}
+
+/* ============================================================
+   PHASE 3 — CHAMPION AI SCRIPTED COMBOS
+============================================================ */
+
+/* ---- helper: place a card directly into an AI field zone ---- */
+function aiPlaceBoss(card, position = 'ATK', zoneArr = null) {
+  const arr = zoneArr || GS.ai.field.monsters;
+  const slot = arr.findIndex(z => !z);
+  if (slot >= 0) arr[slot] = mkZone(card, position);
+  return slot;
+}
+
+/* ---- Dragon Link ---- */
+async function aiTakeTurn_dragonlink(wait) {
+  // DRAW
+  GS.phase = 'DRAW'; updatePhaseBar(); dlog('OPP: Draw Phase');
+  renderAll(); await wait(500);
+  if (!GS.ai.deck.length) { showEndScreen('player'); return; }
+  drawCards('ai', 1); dlog('OPP drew 1 card.'); renderOppHand(); await wait(500);
+
+  // STANDBY
+  GS.phase = 'STBY'; updatePhaseBar(); dlog('OPP: Standby Phase');
+  renderAll(); await wait(400);
+
+  // MAIN 1 — Scripted Dragon Link combo
+  GS.phase = 'MAIN1'; updatePhaseBar();
+  dlog('<b>OPP: Main Phase 1 — Dragon Link Turn 1 Combo begins!</b>');
+  renderAll(); await wait(600);
+
+  // Step 1: Normal Summon Striker Dragon
+  dlog('OPP: Normal Summon <b>Striker Dragon</b> (DARK/Dragon/Link-1)');
+  const striker = {id:73539069, name:'Striker Dragon', type:'Effect Monster', atk:1000, def:0, level:1, attribute:'DARK', desc:'Link 1. When Link Summoned: Add 1 "Boot Sector Launch" from Deck to hand.'};
+  aiPlaceBoss(striker, 'ATK');
+  renderAll(); await wait(800);
+
+  const htBSL = await handTrapWindow('search', 'Striker Dragon activates — search Boot Sector Launch from Deck');
+  let comboAlive = !htBSL.interrupted;
+
+  if (!comboAlive) {
+    dlog(`<span style="color:#f87171">OPP: Boot Sector Launch search NEGATED!</span>`);
+    dlog(`<span style="color:#facc15">💡 Great play! Without BSL the combo engine is dead. OPP plays around it...</span>`);
+    // Degraded: set a S/T
+    const st = GS.ai.hand.find(c => { const t=(c.type||'').toLowerCase(); return t.includes('spell')||t.includes('trap'); });
+    if (st) {
+      const slot = GS.ai.field.spells.findIndex(z=>!z);
+      if (slot>=0) { GS.ai.hand.splice(GS.ai.hand.indexOf(st),1); GS.ai.field.spells[slot]=mkZone(st,'SET',true); dlog('OPP Set a card.'); }
+    }
+  } else {
+    // Full combo
+    dlog('OPP: Added <b>Boot Sector Launch</b> to hand.');
+    await wait(500);
+
+    dlog('OPP: Activate <b>Boot Sector Launch</b> as Field Spell!');
+    const bsl = {id:81747831, name:'Boot Sector Launch', type:'Field Spell', atk:null, def:null, level:null, attribute:null, desc:'Rokkets gain 300 ATK/DEF. Once per turn: SS up to 2 Rokket monsters from hand/GY in DEF.'};
+    const bslSlot = GS.ai.field.spells.findIndex(z=>!z);
+    if (bslSlot>=0) GS.ai.field.spells[bslSlot] = mkZone(bsl,'SET',false);
+    renderAll(); await wait(600);
+
+    const htGhostBSL = await handTrapWindow('field', 'Boot Sector Launch activates — SS Rokket Tracer from Deck');
+    if (htGhostBSL.interrupted) {
+      dlog(`<span style="color:#f87171">OPP: Boot Sector Launch DESTROYED by Ghost Ogre!</span>`);
+      if (bslSlot>=0) { GS.ai.gy.push(bsl); GS.ai.field.spells[bslSlot]=null; }
+      comboAlive = false;
+    } else {
+      const tracer = {id:68120550, name:'Rokket Tracer', type:'Effect Monster', atk:1500, def:1000, level:4, attribute:'DARK', desc:'If a card is placed in your S/T Zone: SS from hand.'};
+      aiPlaceBoss(tracer, 'DEF');
+      dlog('OPP: Boot Sector Launch → <b>Special Summon Rokket Tracer</b> in DEF.'); await wait(600);
+      renderAll();
+
+      dlog('OPP: Link Summon <b>Crystron Halqifibrax</b> (Striker + Tracer)!');
+      // Remove Striker and Tracer, place Halq
+      for (let i=0;i<5;i++) { if (GS.ai.field.monsters[i]?.card?.name==='Striker Dragon') GS.ai.field.monsters[i]=null; }
+      for (let i=0;i<5;i++) { if (GS.ai.field.monsters[i]?.card?.name==='Rokket Tracer') GS.ai.field.monsters[i]=null; }
+      const halq = {id:27548460, name:'Crystron Halqifibrax', type:'Link Monster', atk:1500, def:null, level:2, attribute:'WATER', desc:'Link 2. When Link Summoned: SS 1 Lv3 or lower Tuner from Deck. Protects Tuners from effects.'};
+      aiPlaceBoss(halq, 'ATK');
+      renderAll(); await wait(700);
+
+      const htHalq = await handTrapWindow('search', 'Halqifibrax activates — Special Summon Rokket Synchron from Deck');
+      if (!htHalq.interrupted) {
+        dlog('OPP: <b>Special Summon Rokket Synchron</b> via Halqifibrax.'); await wait(500);
+        const sync = {id:13326348, name:'Rokket Synchron', type:'Effect Monster', atk:100, def:2100, level:1, attribute:'DARK', desc:'When used for Synchro Summon: That monster negates 1 monster effect.'};
+        aiPlaceBoss(sync, 'ATK');
+        renderAll(); await wait(600);
+
+        dlog('OPP: <b>SYNCHRO SUMMON — Borreload Savage Dragon</b> (Lv8, ATK 3000)!');
+        dlog('<span style="color:#f87171">⚠ Borreload Savage: equipped Link Monster = 1 Negate Counter per Link Rating. CANNOT be negated easily!</span>');
+        for (let i=0;i<5;i++) { if (GS.ai.field.monsters[i]?.card?.name==='Crystron Halqifibrax') GS.ai.field.monsters[i]=null; }
+        for (let i=0;i<5;i++) { if (GS.ai.field.monsters[i]?.card?.name==='Rokket Synchron') GS.ai.field.monsters[i]=null; }
+        aiPlaceBoss(BOSS_BORRELOAD_SAVAGE, 'ATK');
+        renderAll(); await wait(700);
+
+        dlog('OPP: Boot Sector Launch → <b>Special Summon Absorouter Dragon</b> in DEF.');
+        const absorouter = {id:61702177, name:'Absorouter Dragon', type:'Effect Monster', atk:1200, def:2800, level:7, attribute:'DARK', desc:'When a Dragon Link\'s effect is negated: Add 1 Rokket from Deck to hand.'};
+        aiPlaceBoss(absorouter, 'DEF');
+        renderAll(); await wait(600);
+
+        dlog('OPP: <b>LINK SUMMON — Apollousa, Bow of the Goddess</b> (ATK 2400, negates 3 monster effects)!');
+        for (let i=0;i<5;i++) { if (GS.ai.field.monsters[i]?.card?.name==='Absorouter Dragon') GS.ai.field.monsters[i]=null; }
+        aiPlaceBoss(BOSS_APOLLOUSA, 'ATK');
+        renderAll();
+
+        dlog(`<b style="color:#f87171">⚠ END BOARD: Borreload Savage Dragon (3000 ATK + negate) + Apollousa (2400 ATK, negate 3 effects). This is the Dragon Link Turn 1 board.</b>`);
+        dlog(`<span style="color:#facc15">💡 HOW TO BEAT IT: Ash on the BSL search (step 1) stops the whole combo before it starts.</span>`);
+      } else {
+        dlog('<span style="color:#f87171">OPP: Halqifibrax search negated! Combo interrupted — degraded board.</span>');
+      }
+    }
+  }
+
+  // BATTLE PHASE
+  GS.phase = 'BATTLE'; updatePhaseBar(); dlog('OPP: Battle Phase');
+  renderAll(); await wait(600);
+
+  for (let i = 0; i < 5; i++) {
+    const atkZ = GS.ai.field.monsters[i];
+    if (!atkZ || atkZ.hasAttacked || atkZ.position !== 'ATK') continue;
+    const atkVal = (atkZ.card.atk || 0) + atkZ.equipATK;
+    const pMons  = GS.player.field.monsters.map((z,idx)=>z?{z,idx}:null).filter(Boolean);
+    if (pMons.length) {
+      const target = pMons.reduce((a,b)=>(b.z.card.atk||0)<(a.z.card.atk||0)?b:a);
+      dlog(`OPP: <b>${atkZ.card.name}</b> attacks <b>${target.z.card.name}</b>!`);
+      await wait(400); doBattleAttack(i, target.idx); renderAll(); await wait(800);
+    } else {
+      GS.player.lp = Math.max(0, GS.player.lp - atkVal);
+      dlog(`OPP: <b>${atkZ.card.name}</b> attacks directly! You take <b style="color:#f87171">${atkVal}</b> damage!`);
+      flashScreen('player'); renderAll(); await wait(700);
+      atkZ.hasAttacked = true;
+    }
+    if (checkWin()) return;
+  }
+
+  // END
+  GS.phase = 'END'; updatePhaseBar(); dlog('OPP: End Phase');
+  while (GS.ai.hand.length > 6) { GS.ai.gy.push(GS.ai.hand.pop()); }
+  GS.ai.field.monsters.forEach(z => { if (z) z.hasAttacked = false; });
+  renderAll(); await wait(500);
+
+  GS.aiThinking = false; GS.active = 'player'; GS.phase = 'MAIN1';
+  GS.normalSummonUsed = false; GS.turn++;
+  document.getElementById('d-turn-who').textContent = 'YOUR TURN';
+  document.getElementById('d-turn-num').textContent = GS.turn;
+  if (!GS.player.deck.length) { showEndScreen('ai'); return; }
+  drawCards('player', 1);
+  dlog(`─── Your Turn ${GS.turn} ─── Drew 1 card.`);
+  dlog(PHASE_DESCS.MAIN1);
+  renderAll();
+}
+
+/* ---- Tearlaments ---- */
+async function aiTakeTurn_tearalaments(wait) {
+  GS.phase = 'DRAW'; updatePhaseBar(); dlog('OPP: Draw Phase');
+  renderAll(); await wait(500);
+  if (!GS.ai.deck.length) { showEndScreen('player'); return; }
+  drawCards('ai', 1); dlog('OPP drew 1 card.'); renderOppHand(); await wait(500);
+
+  GS.phase = 'STBY'; updatePhaseBar(); dlog('OPP: Standby Phase'); renderAll(); await wait(400);
+  GS.phase = 'MAIN1'; updatePhaseBar();
+  dlog('<b>OPP: Main Phase 1 — Tearlaments GY Fusion combo begins!</b>');
+  renderAll(); await wait(600);
+
+  // Step 1: Normal Summon Reinoheart → mills Scheiren
+  dlog('OPP: Normal Summon <b>Tearlaments Reinoheart</b> (WATER/Aqua, ATK 1500)!');
+  const reinoheart = {id:61318483, name:'Tearlaments Reinoheart', type:'Effect Monster', atk:1500, def:2000, level:4, attribute:'WATER', desc:'If Normal/SS\'d: Send 1 Tearlaments from Deck to GY. If sent to GY: SS 1 Tearlaments from hand.'};
+  aiPlaceBoss(reinoheart, 'ATK');
+  renderAll(); await wait(700);
+
+  const htMill1 = await handTrapWindow('mill', 'Reinoheart activates — send Tearlaments Scheiren from Deck to GY');
+  let kitkallosOnField = false;
+
+  if (htMill1.interrupted) {
+    dlog('<span style="color:#f87171">OPP: Reinoheart mill NEGATED! GY engine cannot start.</span>');
+    dlog('<span style="color:#facc15">💡 Perfect! Tearlaments = GY deck. No mills = no Fusion triggers. OPP boards only Reinoheart.</span>');
+  } else {
+    dlog('OPP: Sent <b>Tearlaments Scheiren</b> to GY via Reinoheart.');
+    GS.ai.gy.push({id:51638027, name:'Tearlaments Scheiren', type:'Effect Monster', atk:1800, def:0, level:4, attribute:'DARK', desc:'GY Fusion trigger.'});
+    await wait(600);
+
+    // Scheiren GY effect triggers
+    dlog('OPP: <b>Tearlaments Scheiren GY effect triggers</b> — send 3 more cards from Deck to GY!');
+    const htScheiren = await handTrapWindow('mill', 'Scheiren sends 3 cards from Deck to GY (may trigger more Tearlaments)');
+
+    if (htScheiren.interrupted) {
+      dlog('<span style="color:#f87171">OPP: Scheiren\'s mill NEGATED! Chain broken.</span>');
+    } else {
+      // Mill 3, simulate finding Merrli
+      for (let i=0;i<3;i++) { const c=GS.ai.deck.shift(); if(c) GS.ai.gy.push(c); }
+      dlog('OPP: Milled 3 cards — <b>Tearlaments Merrli</b> was sent to GY!');
+      await wait(600);
+
+      dlog('OPP: <b>Scheiren GY Fusion:</b> Fusing Scheiren + Reinoheart in GY → Tearlaments Kitkallos!');
+      const htFuse1 = await handTrapWindow('fusion', 'Scheiren GY Fusion activates — Fusion Summon Tearlaments Kitkallos');
+
+      if (!htFuse1.interrupted) {
+        for (let i=0;i<5;i++) { if(GS.ai.field.monsters[i]?.card?.name==='Tearlaments Reinoheart') GS.ai.field.monsters[i]=null; }
+        aiPlaceBoss(BOSS_KITKALLOS, 'ATK');
+        kitkallosOnField = true;
+        renderAll(); await wait(700);
+
+        dlog('OPP: <b>Kitkallos activates</b> — send Tearlaments Havnis from Deck to GY, add Merrli from GY to hand.');
+        const htKitkallos = await handTrapWindow('mill', 'Kitkallos sends Havnis from Deck to GY + retrieves Merrli');
+
+        if (!htKitkallos.interrupted) {
+          dlog('OPP: Havnis in GY triggers — Fusion Summon <b>Tearlaments Mirrorjade</b>!');
+          dlog('<span style="color:#f87171">⚠ Mirrorjade: once per turn banishes 1 Fusion from Extra Deck, at End Phase SS its effect. Extremely hard to out!</span>');
+          for (let i=0;i<5;i++) { if(GS.ai.field.monsters[i]?.card?.name==='Tearlaments Kitkallos') GS.ai.field.monsters[i]=null; }
+          aiPlaceBoss(BOSS_MIRRORJADE, 'ATK');
+          renderAll(); await wait(600);
+          dlog(`<b style="color:#f87171">⚠ END BOARD: Mirrorjade (3000 ATK + banish effect). Kitkallos in GY draws on next trigger.</b>`);
+          dlog(`<span style="color:#facc15">💡 HOW TO BEAT IT: Ash Blossom on the FIRST Reinoheart mill stops everything. Tearlaments need the chain — break link 1.</span>`);
+        }
+      }
+    }
+  }
+
+  // Battle Phase
+  GS.phase = 'BATTLE'; updatePhaseBar(); dlog('OPP: Battle Phase');
+  renderAll(); await wait(600);
+  for (let i=0;i<5;i++) {
+    const atkZ = GS.ai.field.monsters[i];
+    if (!atkZ || atkZ.hasAttacked || atkZ.position!=='ATK') continue;
+    const atkVal = (atkZ.card.atk||0)+atkZ.equipATK;
+    const pMons = GS.player.field.monsters.map((z,idx)=>z?{z,idx}:null).filter(Boolean);
+    if (pMons.length) {
+      const target = pMons.reduce((a,b)=>(b.z.card.atk||0)<(a.z.card.atk||0)?b:a);
+      dlog(`OPP: <b>${atkZ.card.name}</b> attacks <b>${target.z.card.name}</b>!`);
+      await wait(400); doBattleAttack(i, target.idx); renderAll(); await wait(800);
+    } else {
+      GS.player.lp = Math.max(0, GS.player.lp - atkVal);
+      dlog(`OPP: <b>${atkZ.card.name}</b> attacks directly! You take <b style="color:#f87171">${atkVal}</b>!`);
+      flashScreen('player'); renderAll(); await wait(700); atkZ.hasAttacked = true;
+    }
+    if (checkWin()) return;
+  }
+
+  GS.phase='END'; updatePhaseBar(); dlog('OPP: End Phase');
+  while(GS.ai.hand.length>6){GS.ai.gy.push(GS.ai.hand.pop());}
+  GS.ai.field.monsters.forEach(z=>{if(z)z.hasAttacked=false;});
+  renderAll(); await wait(500);
+  GS.aiThinking=false; GS.active='player'; GS.phase='MAIN1';
+  GS.normalSummonUsed=false; GS.turn++;
+  document.getElementById('d-turn-who').textContent='YOUR TURN';
+  document.getElementById('d-turn-num').textContent=GS.turn;
+  if(!GS.player.deck.length){showEndScreen('ai');return;}
+  drawCards('player',1);
+  dlog(`─── Your Turn ${GS.turn} ─── Drew 1 card. ${PHASE_DESCS.MAIN1}`);
+  renderAll();
+}
+
+/* ---- Snake-Eye ---- */
+async function aiTakeTurn_snakeeye(wait) {
+  GS.phase='DRAW'; updatePhaseBar(); dlog('OPP: Draw Phase');
+  renderAll(); await wait(500);
+  if(!GS.ai.deck.length){showEndScreen('player');return;}
+  drawCards('ai',1); dlog('OPP drew 1 card.'); renderOppHand(); await wait(500);
+
+  GS.phase='STBY'; updatePhaseBar(); dlog('OPP: Standby Phase'); renderAll(); await wait(400);
+  GS.phase='MAIN1'; updatePhaseBar();
+  dlog('<b>OPP: Main Phase 1 — Snake-Eye 2024 YCS Combo begins!</b>');
+  renderAll(); await wait(600);
+
+  // Step 1: Normal Summon Snake-Eye Ash
+  dlog('OPP: Normal Summon <b>Snake-Eye Ash</b> (FIRE/Pyro, ATK 1200)!');
+  const snakeAsh = {id:37961968, name:'Snake-Eye Ash', type:'Effect Monster', atk:1200, def:600, level:1, attribute:'FIRE', desc:'If Normal/SS\'d: Add 1 "Snake-Eye Oak" or "Original Sinful Spoils" from Deck to hand.'};
+  aiPlaceBoss(snakeAsh,'ATK');
+  renderAll(); await wait(700);
+
+  const htAshSearch = await handTrapWindow('search', 'Snake-Eye Ash activates — search Snake-Eye Oak from Deck');
+  let comboAlive = !htAshSearch.interrupted;
+
+  if (!comboAlive) {
+    dlog('<span style="color:#f87171">OPP: Oak search NEGATED! Snake-Eye combo disrupted at the root.</span>');
+    dlog('<span style="color:#facc15">💡 That\'s the play! Without Oak, Diabellstar can\'t SS, no Flamberge, no I:P Masquerena. Board stays naked.</span>');
+  } else {
+    dlog('OPP: Added <b>Snake-Eye Oak</b> to hand.'); await wait(500);
+
+    // Oak activates — SS Diabellstar
+    dlog('OPP: Activate <b>Snake-Eye Oak</b> effect from hand — SS Diabellstar the Black Witch!');
+    const htDiabellSS = await handTrapWindow('summon', 'Snake-Eye Oak effect — Special Summon Diabellstar from hand (DARK/Spellcaster, ATK 2500)');
+
+    if (htDiabellSS.interrupted) {
+      dlog('<span style="color:#f87171">OPP: Diabellstar SS negated! Extension cut.</span>');
+      // Oak gets placed
+      const oak = {id:38840952, name:'Snake-Eye Oak', type:'Effect Monster', atk:2400, def:800, level:4, attribute:'FIRE', desc:'Once per turn: SS 1 FIRE Lv1 from hand. If in GY: SS 1 Snake-Eye from Deck.'};
+      aiPlaceBoss(oak,'ATK'); renderAll();
+    } else {
+      const oak = {id:38840952, name:'Snake-Eye Oak', type:'Effect Monster', atk:2400, def:800, level:4, attribute:'FIRE', desc:'Once per turn: SS 1 FIRE Lv1 from hand. If in GY: SS 1 Snake-Eye from Deck.'};
+      aiPlaceBoss(oak,'ATK');
+      const diabell = {id:20012788, name:'Diabellstar the Black Witch', type:'Effect Monster', atk:2500, def:2000, level:7, attribute:'DARK', desc:'SS from hand if you control no or only FIRE monsters. Add 1 Sinful Spoils Spell from Deck to hand.'};
+      aiPlaceBoss(diabell,'ATK');
+      renderAll(); await wait(700);
+
+      dlog('OPP: Diabellstar activates — add <b>Original Sinful Spoils - Snake-Eye</b> from Deck to hand!');
+      const htSinful = await handTrapWindow('search', 'Diabellstar searches Original Sinful Spoils - Snake-Eye from Deck');
+
+      if (!htSinful.interrupted) {
+        dlog('OPP: Activate <b>Original Sinful Spoils</b> — place Snake-Eye Ash in the Spell/Trap Zone as a Continuous Spell!');
+        // Move Ash from field to S/T zone as Spell
+        for(let i=0;i<5;i++){if(GS.ai.field.monsters[i]?.card?.name==='Snake-Eye Ash')GS.ai.field.monsters[i]=null;}
+        const ashST = {id:37961968, name:'Snake-Eye Ash (Sinful Spoils)', type:'Continuous Spell', atk:null, def:null, level:null, attribute:null, desc:'Placed face-up by Sinful Spoils. Can be SS\'d back as a monster.'};
+        const stSlot=GS.ai.field.spells.findIndex(z=>!z);
+        if(stSlot>=0) GS.ai.field.spells[stSlot]=mkZone(ashST,'SET',false);
+        renderAll(); await wait(600);
+
+        dlog('OPP: Link Summon <b>I:P Masquerena</b> (Oak + Diabellstar)!');
+        dlog('<span style="color:#f87171">⚠ I:P Masquerena: cannot be destroyed by effects. During opponent\'s turn: Link Summon using this card — that monster cannot be destroyed!</span>');
+        for(let i=0;i<5;i++){if(GS.ai.field.monsters[i]?.card?.name==='Snake-Eye Oak')GS.ai.field.monsters[i]=null;}
+        for(let i=0;i<5;i++){if(GS.ai.field.monsters[i]?.card?.name==='Diabellstar the Black Witch')GS.ai.field.monsters[i]=null;}
+        aiPlaceBoss(BOSS_IP_MASQ,'ATK');
+        renderAll(); await wait(700);
+
+        dlog('OPP: Link Summon <b>Flamberge the Smoldering Swordsman</b> (I:P + another FIRE)!');
+        aiPlaceBoss(BOSS_FLAMBERGE,'ATK');
+        renderAll(); await wait(600);
+
+        dlog('<span style="color:#f87171">⚠ Flamberge: When FIRE monsters are sent to GY, all Snake-Eye monsters gain 500 ATK. Immune to monster effects while linked!</span>');
+        dlog(`<b style="color:#f87171">⚠ END BOARD: Flamberge (2400) + I:P Masquerena (800) + Snake-Eye Ash as face-up Sinful Spoils Spell. This is the 2024 YCS board.</b>`);
+        dlog(`<span style="color:#facc15">💡 HOW TO BEAT IT: Ash Blossom when Snake-Eye Ash searches Oak — that single interrupt collapses the whole tree.</span>`);
+      }
+    }
+  }
+
+  // Battle Phase
+  GS.phase='BATTLE'; updatePhaseBar(); dlog('OPP: Battle Phase'); renderAll(); await wait(600);
+  for(let i=0;i<5;i++){
+    const atkZ=GS.ai.field.monsters[i];
+    if(!atkZ||atkZ.hasAttacked||atkZ.position!=='ATK') continue;
+    const atkVal=(atkZ.card.atk||0)+atkZ.equipATK;
+    const pMons=GS.player.field.monsters.map((z,idx)=>z?{z,idx}:null).filter(Boolean);
+    if(pMons.length){
+      const target=pMons.reduce((a,b)=>(b.z.card.atk||0)<(a.z.card.atk||0)?b:a);
+      dlog(`OPP: <b>${atkZ.card.name}</b> attacks <b>${target.z.card.name}</b>!`);
+      await wait(400); doBattleAttack(i,target.idx); renderAll(); await wait(800);
+    } else {
+      GS.player.lp=Math.max(0,GS.player.lp-atkVal);
+      dlog(`OPP: <b>${atkZ.card.name}</b> attacks directly! You take <b style="color:#f87171">${atkVal}</b>!`);
+      flashScreen('player'); renderAll(); await wait(700); atkZ.hasAttacked=true;
+    }
+    if(checkWin()) return;
+  }
+
+  GS.phase='END'; updatePhaseBar(); dlog('OPP: End Phase');
+  while(GS.ai.hand.length>6){GS.ai.gy.push(GS.ai.hand.pop());}
+  GS.ai.field.monsters.forEach(z=>{if(z)z.hasAttacked=false;});
+  renderAll(); await wait(500);
+  GS.aiThinking=false; GS.active='player'; GS.phase='MAIN1'; GS.normalSummonUsed=false; GS.turn++;
+  document.getElementById('d-turn-who').textContent='YOUR TURN';
+  document.getElementById('d-turn-num').textContent=GS.turn;
+  if(!GS.player.deck.length){showEndScreen('ai');return;}
+  drawCards('player',1);
+  dlog(`─── Your Turn ${GS.turn} ─── Drew 1 card. ${PHASE_DESCS.MAIN1}`);
+  renderAll();
+}
+
+/* ---- Branded Despia ---- */
+async function aiTakeTurn_branded(wait) {
+  GS.phase='DRAW'; updatePhaseBar(); dlog('OPP: Draw Phase');
+  renderAll(); await wait(500);
+  if(!GS.ai.deck.length){showEndScreen('player');return;}
+  drawCards('ai',1); dlog('OPP drew 1 card.'); renderOppHand(); await wait(500);
+
+  GS.phase='STBY'; updatePhaseBar(); dlog('OPP: Standby Phase'); renderAll(); await wait(400);
+  GS.phase='MAIN1'; updatePhaseBar();
+  dlog('<b>OPP: Main Phase 1 — Branded Despia combo begins!</b>');
+  renderAll(); await wait(600);
+
+  // Step 1: Normal Summon Aluber
+  dlog('OPP: Normal Summon <b>Aluber the Jester of Despia</b> (DARK/Fairy, ATK 1800)!');
+  const aluber = {id:65247403, name:'Aluber the Jester of Despia', type:'Effect Monster', atk:1800, def:0, level:4, attribute:'DARK', desc:'If Normal/SS\'d: Add 1 Branded Spell/Trap from Deck to hand. If GY and you Fusion Summon: SS this.'};
+  aiPlaceBoss(aluber,'ATK');
+  renderAll(); await wait(700);
+
+  const htAluber = await handTrapWindow('search', 'Aluber activates — search Branded Fusion from Deck');
+  let comboAlive = !htAluber.interrupted;
+
+  if (!comboAlive) {
+    dlog('<span style="color:#f87171">OPP: Branded Fusion search NEGATED! No Fusion this turn.</span>');
+    dlog('<span style="color:#facc15">💡 Ghost Ogre destroys Aluber on search — no Branded Fusion, no Mirrorjade. Best possible hand trap here!</span>');
+  } else {
+    dlog('OPP: Added <b>Branded Fusion</b> to hand.'); await wait(500);
+
+    dlog('OPP: Activate <b>Branded Fusion</b>!');
+    const htBF = await handTrapWindow('spell', 'Branded Fusion activates — Fusion Summon using monsters from Deck/hand/Extra Deck');
+
+    if (htBF.interrupted) {
+      dlog('<span style="color:#f87171">OPP: Branded Fusion negated by Ash Blossom! No Fusion Summon.</span>');
+    } else {
+      dlog('OPP: Branded Fusion — Fusing <b>Fallen of Albaz</b> (Deck) + <b>Dramaturge of Despia</b> (Deck) → <b>Lubellion the Searing Dragon</b>!');
+      GS.ai.gy.push({id:68468459,name:'Fallen of Albaz',type:'Effect Monster',atk:1800,def:0,level:4,attribute:'DARK',desc:'Fusion material.'});
+      GS.ai.gy.push({id:38814750,name:'Dramaturge of Despia',type:'Effect Monster',atk:2500,def:2500,level:8,attribute:'LIGHT',desc:'Fusion material.'});
+      for(let i=0;i<5;i++){if(GS.ai.field.monsters[i]?.card?.name==='Aluber the Jester of Despia')GS.ai.field.monsters[i]=null;}
+      aiPlaceBoss(BOSS_LUBELLION,'ATK');
+      renderAll(); await wait(700);
+
+      dlog('OPP: <b>Lubellion activates</b> — send Branded card from Deck to GY!');
+      const c=GS.ai.deck.shift(); if(c) GS.ai.gy.push(c);
+      await wait(500);
+
+      dlog('OPP: Lubellion declares attack... then uses effect to Fusion Summon <b>Mirrorjade the Iceblade Dragon</b>!');
+      const htMirror = await handTrapWindow('fusion', 'Lubellion effect — Fusion Summon Mirrorjade using itself as material');
+
+      if (!htMirror.interrupted) {
+        for(let i=0;i<5;i++){if(GS.ai.field.monsters[i]?.card?.name==='Lubellion the Searing Dragon')GS.ai.field.monsters[i]=null;}
+        aiPlaceBoss(BOSS_MIRRORJADE,'ATK');
+        renderAll(); await wait(600);
+
+        // Aluber revives from GY
+        dlog('OPP: <b>Aluber revives from GY</b> (triggered by Fusion Summon)!');
+        aiPlaceBoss(aluber,'ATK');
+        renderAll(); await wait(600);
+
+        dlog('OPP: <b>Dramaturge of Despia</b> Fusion Summoned using Aluber + Albaz from GY!');
+        for(let i=0;i<5;i++){if(GS.ai.field.monsters[i]?.card?.name==='Aluber the Jester of Despia')GS.ai.field.monsters[i]=null;}
+        const dramFinal = {...BOSS_DRAMATURGE, atk: 2500 + GS.ai.gy.length * 200};
+        aiPlaceBoss(dramFinal,'ATK');
+        renderAll(); await wait(600);
+
+        dlog(`<b style="color:#f87171">⚠ END BOARD: Mirrorjade (3000 ATK) + Dramaturge (${dramFinal.atk} ATK, scales with GY). During End Phase Mirrorjade banishes 1 Fusion from Extra Deck.</b>`);
+        dlog(`<span style="color:#facc15">💡 HOW TO BEAT IT: Ghost Ogre destroys Aluber before it searches. No Branded Fusion = no Lubellion = no Mirrorjade chain.</span>`);
+      }
+    }
+  }
+
+  // Battle Phase
+  GS.phase='BATTLE'; updatePhaseBar(); dlog('OPP: Battle Phase'); renderAll(); await wait(600);
+  for(let i=0;i<5;i++){
+    const atkZ=GS.ai.field.monsters[i];
+    if(!atkZ||atkZ.hasAttacked||atkZ.position!=='ATK') continue;
+    const atkVal=(atkZ.card.atk||0)+atkZ.equipATK;
+    const pMons=GS.player.field.monsters.map((z,idx)=>z?{z,idx}:null).filter(Boolean);
+    if(pMons.length){
+      const target=pMons.reduce((a,b)=>(b.z.card.atk||0)<(a.z.card.atk||0)?b:a);
+      dlog(`OPP: <b>${atkZ.card.name}</b> attacks <b>${target.z.card.name}</b>!`);
+      await wait(400); doBattleAttack(i,target.idx); renderAll(); await wait(800);
+    } else {
+      GS.player.lp=Math.max(0,GS.player.lp-atkVal);
+      dlog(`OPP: <b>${atkZ.card.name}</b> attacks directly! You take <b style="color:#f87171">${atkVal}</b>!`);
+      flashScreen('player'); renderAll(); await wait(700); atkZ.hasAttacked=true;
+    }
+    if(checkWin()) return;
+  }
+
+  GS.phase='END'; updatePhaseBar(); dlog('OPP: End Phase');
+  while(GS.ai.hand.length>6){GS.ai.gy.push(GS.ai.hand.pop());}
+  GS.ai.field.monsters.forEach(z=>{if(z)z.hasAttacked=false;});
+  renderAll(); await wait(500);
+  GS.aiThinking=false; GS.active='player'; GS.phase='MAIN1'; GS.normalSummonUsed=false; GS.turn++;
+  document.getElementById('d-turn-who').textContent='YOUR TURN';
+  document.getElementById('d-turn-num').textContent=GS.turn;
+  if(!GS.player.deck.length){showEndScreen('ai');return;}
+  drawCards('player',1);
+  dlog(`─── Your Turn ${GS.turn} ─── Drew 1 card. ${PHASE_DESCS.MAIN1}`);
+  renderAll();
+}
+
+/* ============================================================
+   PHASE 3 — POST-DUEL ANALYSIS
+============================================================ */
+
+function computeEfficiencyScore() {
+  if (!GS) return 50;
+  let score = 50;
+
+  // Hand trap usage
+  const windows = GS.htWindows || 0;
+  const correct = GS.htCorrect || 0;
+  if (windows > 0) score += Math.round((correct / windows) * 25);
+
+  // Missed plays penalty
+  const missed = (GS.missedPlays || []).length;
+  score -= Math.min(20, missed * 7);
+
+  // Win bonus
+  if (GS.winner === 'player') score += 15;
+
+  // Fast win bonus (within 4 turns)
+  if (GS.winner === 'player' && GS.turn <= 4) score += 10;
+
+  return Math.max(0, Math.min(100, score));
+}
+
+function showComboAnalysis() {
+  if (!GS) return;
+  const score = computeEfficiencyScore();
+  const prof  = GS.profile || 'aggro';
+  const profDat = PROFILES[prof] || PROFILES.aggro;
+  const missed = GS.missedPlays || [];
+  const tips   = profDat.tips || [];
+
+  const scoreColor = score >= 80 ? '#4ade80' : score >= 50 ? '#facc15' : '#f87171';
+  const gradeLabel = score >= 80 ? 'EXPERT' : score >= 60 ? 'GOOD' : score >= 40 ? 'LEARNING' : 'KEEP PRACTICING';
+
+  let missedHTML = missed.length
+    ? missed.map(m => `<div class="missed-play">❌ Turn ${m.turn}: ${m.description}${m.tip ? `<br><span style="color:#facc15">💡 ${m.tip}</span>` : ''}</div>`).join('')
+    : '<div class="analysis-tip">✅ No missed plays recorded this duel!</div>';
+
+  let tipsHTML = tips.map(t => `<div class="analysis-tip"><b>${t.trigger.toUpperCase()}:</b> ${t.text}</div>`).join('');
+
+  const overlay = document.createElement('div');
+  overlay.className = 'analysis-overlay';
+  overlay.innerHTML = `
+    <div class="analysis-box">
+      <div class="analysis-title">📊 DUEL ANALYSIS</div>
+
+      <div class="analysis-score-ring">
+        <span class="score-number" style="color:${scoreColor}">${score}</span>
+        <span class="score-label">${gradeLabel} — vs ${profDat.name}</span>
+      </div>
+
+      <div class="analysis-section">
+        <div class="analysis-section-title">Hand Trap Windows</div>
+        <div class="analysis-tip">
+          ${GS.htWindows||0} trigger window(s) shown.
+          You responded correctly <b>${GS.htCorrect||0}</b> time(s).
+          ${(GS.htWindows||0)>(GS.htCorrect||0)
+            ? `<br><span style="color:#f87171">${(GS.htWindows||0)-(GS.htCorrect||0)} window(s) missed or timed out.</span>`
+            : '<br><span style="color:#4ade80">Great reactions!</span>'}
+        </div>
+      </div>
+
+      <div class="analysis-section">
+        <div class="analysis-section-title">Optimal Line</div>
+        <div class="optimal-line">⭐ ${profDat.optimalLine}</div>
+      </div>
+
+      <div class="analysis-section">
+        <div class="analysis-section-title">Missed Plays</div>
+        ${missedHTML}
+      </div>
+
+      <div class="analysis-section">
+        <div class="analysis-section-title">Hand Trap Guide for ${profDat.name}</div>
+        ${tipsHTML || '<div class="analysis-tip">No tips for this profile.</div>'}
+      </div>
+
+      <button class="analysis-close-btn" onclick="this.closest('.analysis-overlay').remove()">Close</button>
+    </div>`;
+
+  document.body.appendChild(overlay);
 }
 
 /* Close action popup on Escape */
