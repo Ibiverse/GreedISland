@@ -338,6 +338,48 @@
       100% { background-position: -200% 0; }
     }
 
+    /* ===== BROWSE / LOAD MORE ===== */
+    .browse-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 12px 0; gap: 8px;
+    }
+    .browse-all-btn {
+      flex: 1; padding: 9px 14px;
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: 10px; color: var(--text);
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 13px;
+      cursor: pointer; display: flex; align-items: center; gap: 6px;
+      transition: border-color .2s;
+    }
+    .browse-all-btn:hover { border-color: var(--gold); }
+    .browse-all-btn.active { border-color: var(--gold); color: var(--gold); }
+    .browse-meta {
+      font-size: 11px; color: var(--text-dim); white-space: nowrap;
+    }
+    .load-more-wrap { padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .load-more-btn {
+      width: 100%; max-width: 320px; padding: 13px;
+      background: var(--surface2); border: 1px solid var(--gold);
+      border-radius: 10px; color: var(--gold);
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px;
+      cursor: pointer; transition: background .2s;
+    }
+    .load-more-btn:hover { background: var(--surface3); }
+    .load-more-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .browse-count { font-size: 12px; color: var(--text-dim); }
+
+    /* Starter deck loading banner */
+    .starter-banner {
+      margin: 12px; padding: 14px 16px;
+      background: linear-gradient(135deg, var(--surface2), var(--surface3));
+      border: 1px solid var(--gold); border-radius: 12px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .starter-banner-icon { font-size: 28px; flex-shrink: 0; }
+    .starter-banner-text { flex: 1; font-size: 13px; line-height: 1.5; }
+    .starter-banner-title { font-weight: 700; color: var(--gold); font-size: 14px; }
+    .starter-banner-sub { color: var(--text-dim); }
+
     /* ===== DECK PANEL TOGGLE ===== */
     .dp-fab {
       position: fixed; bottom: calc(var(--tab-h) + 14px); right: 16px;
@@ -1275,14 +1317,14 @@
         <button class="ftab"        data-f="trap"     onclick="setFilter('trap',this)">Trap</button>
         <button class="ftab"        data-f="extra"    onclick="setFilter('extra',this)">Extra Deck</button>
       </div>
+      <div class="browse-bar">
+        <button class="browse-all-btn" id="browse-btn" onclick="toggleBrowse()">🗂 Browse All Cards</button>
+        <span class="browse-meta" id="browse-meta"></span>
+      </div>
     </div>
     <div class="screen-body" id="deck-body">
-      <div id="card-results">
-        <div class="empty">
-          <div class="empty-i">🔍</div>
-          <p>Search for cards to start building your deck.<br>Try "Dark Magician", "Blue-Eyes White Dragon", or "Ash Blossom".</p>
-        </div>
-      </div>
+      <div id="starter-area"></div>
+      <div id="card-results"></div>
     </div>
   </div>
 
@@ -1901,6 +1943,12 @@ function renderActivity() {
 /* ============================================================
    DECK BUILDER — SEARCH
 ============================================================ */
+/* Browse state */
+S.browseMode   = false;
+S.browseOffset = 0;
+S.browseTotal  = 0;
+S.browseCards  = [];
+
 function initDeckBuilder() {
   const inp = document.getElementById('card-search');
 
@@ -1908,13 +1956,162 @@ function initDeckBuilder() {
     const q = e.target.value.trim();
     document.getElementById('clear-btn').style.display = q ? 'flex' : 'none';
     clearTimeout(S.debounce);
-    if (q.length < 2) { if (!q) showEmpty(); return; }
-    S.debounce = setTimeout(() => doSearch(q), 380);
+    if (q) {
+      // Typing cancels browse mode
+      if (S.browseMode) { S.browseMode = false; document.getElementById('browse-btn').classList.remove('active'); }
+      if (q.length < 2) return;
+      S.debounce = setTimeout(() => doSearch(q), 380);
+    } else {
+      showEmpty();
+    }
   });
 
   inp.addEventListener('keydown', e => {
     if (e.key === 'Enter') { clearTimeout(S.debounce); doSearch(inp.value.trim()); }
   });
+
+  // Show starter deck banner if no deck exists yet
+  showStarterBanner();
+}
+
+/* ---- Starter deck banner & auto-builder ---- */
+function showStarterBanner() {
+  const hasDeck = DeckManager.list().length > 0 || S.deck.main.length > 0;
+  const area = document.getElementById('starter-area');
+  if (!area) return;
+  if (hasDeck) { area.innerHTML = ''; return; }
+  area.innerHTML = `
+    <div class="starter-banner">
+      <div class="starter-banner-icon">⚡</div>
+      <div class="starter-banner-text">
+        <div class="starter-banner-title">No deck yet!</div>
+        <div class="starter-banner-sub">Auto-build a starter deck from the online database, or browse all cards below.</div>
+      </div>
+      <button class="load-more-btn" style="max-width:120px;font-size:12px;" onclick="buildStarterDeck(this)">Auto-Build</button>
+    </div>`;
+  // Also open browse so they see cards immediately
+  if (!S.browseMode) toggleBrowse();
+}
+
+async function buildStarterDeck(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Loading…'; }
+  toast('Fetching starter deck from YGOPRODeck…', 'inf');
+  try {
+    const typeMap = {
+      monster: 'Effect%20Monster',
+      spell:   'Spell%20Card',
+      trap:    'Trap%20Card',
+    };
+    const [mResp, sResp, tResp] = await Promise.all([
+      fetch(`${CardDB.BASE}?num=20&offset=0&type=${typeMap.monster}`),
+      fetch(`${CardDB.BASE}?num=12&offset=0&type=${typeMap.spell}`),
+      fetch(`${CardDB.BASE}?num=8&offset=0&type=${typeMap.trap}`),
+    ]);
+    const [mData, sData, tData] = await Promise.all([mResp.json(), sResp.json(), tResp.json()]);
+    const allCards = [
+      ...(mData.data || []),
+      ...(sData.data || []),
+      ...(tData.data || []),
+    ].filter(Boolean);
+
+    allCards.forEach(c => { S.byId[c.id] = c; });
+    S.deck.name = 'Starter Deck';
+    S.deck.main  = allCards.filter(c => !isExtraCard(c)).map(c => ({ card: c, count: 1 }));
+    S.deck.extra = allCards.filter(c =>  isExtraCard(c)).map(c => ({ card: c, count: 1 }));
+    DeckManager.save(S.deck.name, S.deck);
+    updateDeckFAB();
+    document.getElementById('starter-area').innerHTML = '';
+    toast(`✅ Starter Deck ready — ${S.deck.main.length} cards! Go duel.`, 'ok');
+  } catch(e) {
+    toast('Could not reach card database. Check connection.', 'err');
+    if (btn) { btn.disabled = false; btn.textContent = 'Auto-Build'; }
+  }
+}
+
+/* ---- Browse All Cards ---- */
+async function toggleBrowse() {
+  const btn = document.getElementById('browse-btn');
+  if (S.browseMode) {
+    S.browseMode = false;
+    btn.classList.remove('active');
+    showEmpty();
+    return;
+  }
+  // Clear search input
+  document.getElementById('card-search').value = '';
+  document.getElementById('clear-btn').style.display = 'none';
+  S.query = '';
+  S.browseMode = true;
+  S.browseOffset = 0;
+  S.browseCards = [];
+  btn.classList.add('active');
+  await doBrowsePage();
+}
+
+function browseTypeParam() {
+  const map = { monster: 'Normal%20Monster,Effect%20Monster', spell: 'Spell%20Card', trap: 'Trap%20Card', extra: 'Fusion%20Monster,Synchro%20Monster,Xyz%20Monster,Link%20Monster' };
+  return map[S.filter] ? `&type=${map[S.filter]}` : '';
+}
+
+async function doBrowsePage(append = false) {
+  const metaEl = document.getElementById('browse-meta');
+  if (!append) {
+    showSkeletons();
+    metaEl.textContent = 'Loading…';
+  }
+  try {
+    const url = `${CardDB.BASE}?num=100&offset=${S.browseOffset}${browseTypeParam()}`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    const cards = data.data || [];
+    const meta  = data.meta || {};
+
+    cards.forEach(c => { S.byId[c.id] = c; });
+
+    if (append) {
+      S.browseCards.push(...cards);
+    } else {
+      S.browseCards = cards;
+      S.browseTotal = meta.total_rows || cards.length;
+    }
+
+    S.browseOffset += cards.length;
+    metaEl.textContent = `${S.browseCards.length} / ${S.browseTotal} cards`;
+    renderBrowseGrid(S.browseCards, meta.rows_remaining > 0);
+  } catch(e) {
+    metaEl.textContent = '';
+    document.getElementById('card-results').innerHTML = `
+      <div class="empty"><div class="empty-i">⚠️</div>
+      <p>Could not load card database.<br>Check your internet connection.</p></div>`;
+  }
+}
+
+function renderBrowseGrid(cards, hasMore) {
+  let h = '<div class="card-grid">';
+  cards.forEach(c => {
+    const img = CardDB.imgUrl(c);
+    const cls = typeClass(c);
+    const cnt = totalInDeck(c.id);
+    h += `<div class="cgi" onclick="openModal(${c.id})" data-id="${c.id}">
+      <img src="${img}" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
+      <div class="cgi-bar ${cls}"></div>
+      ${cnt ? `<div class="cgi-badge">${cnt}</div>` : ''}
+    </div>`;
+  });
+  h += '</div>';
+  if (hasMore) {
+    h += `<div class="load-more-wrap">
+      <button class="load-more-btn" id="load-more-btn" onclick="loadMoreCards(this)">Load More Cards</button>
+      <span class="browse-count">${S.browseCards.length} of ${S.browseTotal} loaded</span>
+    </div>`;
+  }
+  document.getElementById('card-results').innerHTML = h;
+}
+
+async function loadMoreCards(btn) {
+  btn.disabled = true;
+  btn.textContent = 'Loading…';
+  await doBrowsePage(true);
 }
 
 async function doSearch(q) {
@@ -1939,14 +2136,19 @@ function setFilter(f, btn) {
   S.filter = f;
   document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  if (S.query) doSearch(S.query);
+  if (S.browseMode) {
+    S.browseOffset = 0; S.browseCards = [];
+    doBrowsePage();
+  } else if (S.query) {
+    doSearch(S.query);
+  }
 }
 
 function showEmpty() {
   document.getElementById('card-results').innerHTML = `
     <div class="empty">
       <div class="empty-i">🔍</div>
-      <p>Search for cards to start building your deck.<br>Try "Blue-Eyes", "Ash Blossom", or any card name.</p>
+      <p>Search for a card above, or tap <b>Browse All Cards</b> to scroll the full database with images.</p>
     </div>`;
 }
 
