@@ -54,15 +54,104 @@
     html, body {
       width: 100%; height: 100%;
       overflow: hidden;
-      background: var(--bg);
+      background: #05050f;
       color: var(--text);
       font-family: 'Rajdhani', sans-serif;
+    }
+
+    /* ===== MASTER DUEL-STYLE BACKGROUND ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        /* top-center blue glow — main accent */
+        radial-gradient(ellipse 80% 45% at 50% -10%, rgba(56,139,253,0.18) 0%, transparent 70%),
+        /* bottom-left purple glow */
+        radial-gradient(ellipse 60% 50% at -10% 110%, rgba(120,60,220,0.16) 0%, transparent 65%),
+        /* bottom-right gold/amber glow */
+        radial-gradient(ellipse 55% 45% at 110% 100%, rgba(201,168,76,0.13) 0%, transparent 65%),
+        /* center subtle vignette core */
+        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(18,18,42,0.0) 0%, rgba(5,5,15,0.7) 100%),
+        /* base deep navy */
+        #05050f;
+      pointer-events: none;
+    }
+
+    /* Subtle hex/grid overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(56,139,253,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,139,253,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
+      pointer-events: none;
+    }
+
+    /* Floating energy orbs */
+    @keyframes floatOrb1 {
+      0%,100% { transform: translateY(0) scale(1); opacity: 0.5; }
+      50% { transform: translateY(-24px) scale(1.08); opacity: 0.75; }
+    }
+    @keyframes floatOrb2 {
+      0%,100% { transform: translateY(0) scale(1); opacity: 0.4; }
+      50% { transform: translateY(18px) scale(0.92); opacity: 0.65; }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(60px);
+    }
+    .bg-orb-1 {
+      width: 420px; height: 280px;
+      top: -80px; left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse, rgba(56,139,253,0.22) 0%, transparent 70%);
+      animation: floatOrb1 9s ease-in-out infinite;
+    }
+    .bg-orb-2 {
+      width: 320px; height: 320px;
+      bottom: -60px; left: -60px;
+      background: radial-gradient(ellipse, rgba(100,50,200,0.18) 0%, transparent 70%);
+      animation: floatOrb2 12s ease-in-out infinite;
+    }
+    .bg-orb-3 {
+      width: 280px; height: 200px;
+      bottom: -30px; right: -40px;
+      background: radial-gradient(ellipse, rgba(201,168,76,0.15) 0%, transparent 70%);
+      animation: floatOrb1 10s ease-in-out infinite 3s;
+    }
+    .bg-orb-4 {
+      width: 180px; height: 180px;
+      top: 40%; left: 12%;
+      background: radial-gradient(ellipse, rgba(56,200,180,0.09) 0%, transparent 70%);
+      animation: floatOrb2 14s ease-in-out infinite 1.5s;
+    }
+    .bg-orb-5 {
+      width: 150px; height: 150px;
+      top: 35%; right: 10%;
+      background: radial-gradient(ellipse, rgba(180,80,220,0.09) 0%, transparent 70%);
+      animation: floatOrb1 11s ease-in-out infinite 5s;
     }
 
     #app {
       width: 100%; height: 100%;
       display: flex; flex-direction: column;
       position: relative; overflow: hidden;
+      z-index: 1;
     }
 
     /* ===== SCREENS ===== */
@@ -74,8 +163,11 @@
     .screen.active { display: flex; }
 
     .screen-hdr {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      background: rgba(12,12,28,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(56,139,253,0.18);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.4);
       flex-shrink: 0;
     }
 
@@ -101,8 +193,11 @@
     #tab-bar {
       position: fixed; bottom: 0; left: 0; right: 0;
       height: var(--tab-h);
-      background: var(--surface);
-      border-top: 1px solid var(--border);
+      background: rgba(12,12,28,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(56,139,253,0.2);
+      box-shadow: 0 -4px 32px rgba(0,0,0,0.6), 0 -1px 0 rgba(56,139,253,0.08);
       display: flex; z-index: 100;
     }
 
@@ -114,8 +209,20 @@
       padding: 6px 4px; gap: 4px;
       transition: color .2s; min-height: 44px;
       font-family: 'Rajdhani', sans-serif;
+      position: relative;
+    }
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      width: 36px; height: 2px;
+      background: var(--gold);
+      border-radius: 2px 2px 0 0;
+      transition: transform .2s ease;
     }
     .tab-btn.active { color: var(--gold); }
+    .tab-btn.active::after { transform: translateX(-50%) scaleX(1); }
     .tab-btn .ti { font-size: 22px; line-height: 1; }
     .tab-btn .tl { font-size: 9px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
 
@@ -124,7 +231,7 @@
 
     .home-bg {
       position: absolute; inset: 0;
-      overflow: hidden; background: var(--bg);
+      overflow: hidden; background: transparent;
     }
 
     .home-bg::before {
@@ -263,7 +370,10 @@
 
     /* Search + filter header */
     .mdb-top {
-      background: var(--surface); border-bottom: 1px solid var(--border);
+      background: rgba(12,12,28,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(56,139,253,0.15);
       padding: 10px 12px 10px; flex-shrink: 0;
     }
 
@@ -273,11 +383,15 @@
 
     .mdb-search-box {
       flex: 1; display: flex; align-items: center;
-      background: #0d0d1e; border: 1px solid var(--border2);
+      background: rgba(5,5,15,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 8px; padding: 9px 12px; gap: 8px;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
     }
-    .mdb-search-box:focus-within { border-color: #388bfd; }
+    .mdb-search-box:focus-within {
+      border-color: #388bfd;
+      box-shadow: 0 0 0 2px rgba(56,139,253,0.15);
+    }
     .mdb-search-box input {
       flex: 1; background: none; border: none; color: var(--text);
       font-family: 'Rajdhani', sans-serif; font-size: 15px; outline: none;
@@ -353,9 +467,14 @@
       aspect-ratio: 59/86; border-radius: 5px;
       overflow: hidden; position: relative;
       cursor: pointer; background: var(--surface2);
-      border: 1px solid var(--border); transition: transform .15s, box-shadow .15s;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform .15s, box-shadow .15s, border-color .15s;
     }
-    .cgi:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.5); }
+    .cgi:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 6px 20px rgba(0,0,0,.6), 0 0 12px rgba(56,139,253,0.25);
+      border-color: rgba(56,139,253,0.4);
+    }
     .cgi:active { transform: scale(.94); }
     .cgi img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .cgi-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
@@ -377,9 +496,13 @@
 
     /* ===== MASTER DUEL DECK PANEL ===== */
     .mdb-deck {
-      width: 270px; background: #0d0d1e;
-      border-left: 1px solid var(--border);
+      width: 270px;
+      background: rgba(8,8,20,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-left: 1px solid rgba(56,139,253,0.2);
       display: flex; flex-direction: column; flex-shrink: 0;
+      box-shadow: -4px 0 24px rgba(0,0,0,0.5);
     }
 
     @media (max-width: 767px) {
@@ -394,7 +517,10 @@
     }
 
     .mdb-deck-hdr {
-      padding: 10px 10px 8px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+      padding: 10px 10px 8px;
+      border-bottom: 1px solid rgba(56,139,253,0.15);
+      background: rgba(56,139,253,0.04);
+      flex-shrink: 0;
     }
     .mdb-deck-name-row {
       display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
@@ -438,9 +564,12 @@
     }
     .mdb-card-row {
       display: flex; align-items: center; gap: 7px; padding: 4px 6px;
-      border-radius: 6px; cursor: pointer; transition: background .1s; margin-bottom: 2px;
+      border-radius: 6px; cursor: pointer; transition: background .15s, box-shadow .15s; margin-bottom: 2px;
     }
-    .mdb-card-row:hover { background: var(--surface2); }
+    .mdb-card-row:hover {
+      background: rgba(56,139,253,0.1);
+      box-shadow: inset 2px 0 0 #388bfd;
+    }
     .mdb-card-thumb {
       width: 30px; height: 44px; border-radius: 3px; object-fit: cover;
       flex-shrink: 0; background: var(--surface2);
@@ -464,7 +593,9 @@
 
     /* Deck footer stats */
     .mdb-deck-footer {
-      border-top: 1px solid var(--border); padding: 8px 10px;
+      border-top: 1px solid rgba(56,139,253,0.15);
+      background: rgba(56,139,253,0.04);
+      padding: 8px 10px;
       display: flex; align-items: center; gap: 6px; flex-shrink: 0;
     }
     .mdb-deck-stat { display: flex; flex-direction: column; align-items: center; flex: 1; }
@@ -977,11 +1108,25 @@
     .profile-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     @media (max-width: 480px) { .profile-list { grid-template-columns: 1fr; } }
     .profile-card {
-      background: var(--surface); border: 1px solid var(--border);
+      background: rgba(18,18,42,0.7);
+      border: 1px solid rgba(56,139,253,0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: 12px; padding: 16px; cursor: pointer;
-      transition: all .2s; position: relative; overflow: hidden;
+      transition: all .25s; position: relative; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
     }
-    .profile-card:hover:not(.locked) { border-color: var(--gold); transform: translateY(-2px); }
+    .profile-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(56,139,253,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .profile-card:hover:not(.locked) {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.3), 0 0 24px rgba(201,168,76,0.12);
+    }
     .profile-card.locked { opacity: .5; cursor: not-allowed; }
     .profile-icon { font-size: 32px; margin-bottom: 8px; }
     .profile-name { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--gold); margin-bottom: 6px; }
@@ -1423,6 +1568,12 @@
   </style>
 </head>
 <body>
+<!-- Background orbs (Master Duel atmosphere) -->
+<div class="bg-orb bg-orb-1" aria-hidden="true"></div>
+<div class="bg-orb bg-orb-2" aria-hidden="true"></div>
+<div class="bg-orb bg-orb-3" aria-hidden="true"></div>
+<div class="bg-orb bg-orb-4" aria-hidden="true"></div>
+<div class="bg-orb bg-orb-5" aria-hidden="true"></div>
 <div id="app">
 
   <!-- ======================== HOME ======================== -->
@@ -2513,6 +2664,7 @@ function addCard(card, sec) {
   else list.push({ card, count: 1 });
 
   refreshDeckUI();
+  renderDeckBody();
   refreshGridBadge(card.id);
   toast(`Added ${card.name}`, 'ok');
   if (navigator.vibrate) navigator.vibrate(8);
