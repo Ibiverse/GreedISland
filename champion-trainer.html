@@ -920,22 +920,61 @@
     .cm-btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
 
     /* ===== STATS ===== */
-    .stats-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 12px; padding: 16px;
-    }
+    /* ===== STATS SCREEN ===== */
+    .stats-grid { padding: 0; }
+    .chart-wrap { padding-bottom: 24px; }
 
-    .stat-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 16px; text-align: center;
+    .st-ring-wrap {
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px 0 8px; position: relative;
     }
-    .stat-v { font-family: 'Press Start 2P', monospace; font-size: 20px; color: var(--gold); margin-bottom: 8px; display: block; }
-    .stat-l { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+    .st-ring { width: 130px; height: 130px; filter: drop-shadow(0 0 12px rgba(212,170,80,.25)); }
+    .st-ring-inner {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      text-align: center; pointer-events: none;
+    }
+    .st-ring-pct { font-family: 'Press Start 2P', monospace; font-size: 20px; color: var(--text); line-height: 1; }
+    .st-ring-lbl { font-size: 9px; color: var(--text-dim); margin-top: 5px; }
 
-    /* Simple chart */
-    .chart-wrap { padding: 16px; }
-    .chart-title { font-size: 12px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-    .bar-chart { display: flex; flex-direction: column; gap: 8px; }
+    .st-summary { padding: 0 16px 12px; }
+    .st-sum-row { display: flex; gap: 8px; margin-bottom: 8px; }
+    .st-sum-item { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 8px; text-align: center; }
+    .st-sum-v { display: block; font-family: 'Press Start 2P', monospace; font-size: 15px; color: var(--text); line-height: 1; }
+    .st-sum-l { display: block; font-size: 8px; color: var(--text-dim); margin-top: 5px; text-transform: uppercase; letter-spacing: .5px; }
+
+    .st-section-title {
+      font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 1px; padding: 14px 16px 8px;
+      border-top: 1px solid var(--border);
+    }
+    .st-prof-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; padding: 0 16px 4px; }
+    .st-prof-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 8px; text-align: center;
+      transition: border-color .2s;
+    }
+    .st-prof-card:hover { border-color: var(--gold); }
+    .st-prof-icon { font-size: 26px; display: block; margin-bottom: 4px; }
+    .st-prof-name { font-size: 9px; color: var(--text-dim); margin-bottom: 6px; line-height: 1.3; }
+    .st-prof-record { font-size: 12px; font-weight: 700; color: var(--text); }
+    .st-prof-wr { font-size: 10px; font-weight: 700; margin-top: 3px; }
+    .st-prof-nodata { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+
+    .st-history { margin: 4px 16px 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .st-hist-row {
+      display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .st-hist-row:last-child { border-bottom: none; }
+    .st-hist-icon { font-size: 16px; flex-shrink: 0; }
+    .st-hist-name { flex: 1; color: var(--text); font-size: 12px; min-width: 0; }
+    .st-hist-score { font-size: 11px; color: var(--text-dim); flex-shrink: 0; margin-right: 4px; }
+    .st-hist-result { font-weight: 700; font-size: 10px; flex-shrink: 0; padding: 2px 8px; border-radius: 4px; }
+    .st-hist-result.win  { color: #4ade80; background: rgba(74,222,128,.12); }
+    .st-hist-result.loss { color: #f87171; background: rgba(248,113,113,.12); }
+
+    /* keep bar helpers for deck panel */
+    .bar-chart { display: flex; flex-direction: column; gap: 8px; padding: 4px 0; }
     .bar-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
     .bar-label { width: 80px; color: var(--text-dim); text-align: right; flex-shrink: 0; }
     .bar-track { flex: 1; height: 20px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
@@ -2088,13 +2127,19 @@
 
       <div class="settings-section">
         <div class="ss-title">Data</div>
-        <button class="danger-btn" onclick="clearAllData()">⚠️ Clear All Saved Data</button>
+        <div class="sr">
+          <span class="sr-label">Match History</span>
+          <button class="danger-btn" style="width:auto;padding:10px 20px;font-size:13px" onclick="resetStats()">Reset Stats</button>
+        </div>
+        <div class="sr" style="border-top:1px solid rgba(255,255,255,.04)">
+          <span class="sr-label" style="color:var(--danger)">Clear Everything</span>
+          <button class="danger-btn" style="width:auto;padding:10px 20px;font-size:13px" onclick="clearAllData()">⚠️ Wipe All Data</button>
+        </div>
       </div>
 
       <div class="footer-note">
-        Champion Trainer v1.0 (Phase 1)<br>
-        Card data: <span style="color:var(--gold)">YGOPRODeck API</span><br>
-        No backend required — runs entirely in your browser.
+        Champion Trainer v2.0<br>
+        Card data: <span style="color:var(--gold)">YGOPRODeck API</span> · All data stored locally in your browser.
       </div>
     </div>
   </div>
@@ -2334,14 +2379,14 @@ const DeckMgr = {
 ============================================================ */
 const Stats = {
   KEY: 'ct_stats',
-  blank() { return { duels:0, wins:0, losses:0, profiles:[], history:[] }; },
+  blank() { return { duels:0, wins:0, losses:0, history:[] }; },
   get() { try { return JSON.parse(localStorage.getItem(this.KEY)) || this.blank(); } catch { return this.blank(); } },
   save(s) { localStorage.setItem(this.KEY, JSON.stringify(s)); },
   record(r) {
     const s = this.get();
     s.duels++; if (r.won) s.wins++; else s.losses++;
     s.history.push({ ...r, ts: Date.now() });
-    if (s.history.length > 100) s.history = s.history.slice(-100);
+    if (s.history.length > 200) s.history = s.history.slice(-200);
     this.save(s);
   }
 };
@@ -3027,32 +3072,103 @@ function exportDeck() {
 /* ============================================================
    STATS
 ============================================================ */
+const PROF_META = {
+  aggro:        { icon:'🗡️', name:'Pure Aggro' },
+  dragonlink:   { icon:'🐉', name:'Dragon Link' },
+  tearalaments: { icon:'💧', name:'Tearlaments' },
+  snakeeye:     { icon:'🔥', name:'Snake-Eye' },
+  branded:      { icon:'⚔️', name:'Branded Despia' },
+};
+
 function renderStats() {
   const s = Stats.get();
+  const hist = s.history || [];
   const wr = s.duels ? Math.round(s.wins / s.duels * 100) : 0;
 
+  // Aggregate per-profile
+  const byProf = {};
+  let totalHtW = 0, totalHtC = 0, scoreSum = 0, scoreCount = 0, bestScore = 0;
+  hist.forEach(r => {
+    const p = r.profile || 'aggro';
+    if (!byProf[p]) byProf[p] = { wins:0, losses:0 };
+    r.won ? byProf[p].wins++ : byProf[p].losses++;
+    totalHtW += r.htWindows || 0;
+    totalHtC += r.htCorrect || 0;
+    if (r.score != null) { scoreSum += r.score; scoreCount++; if (r.score > bestScore) bestScore = r.score; }
+  });
+  const avgScore = scoreCount ? Math.round(scoreSum / scoreCount) : 0;
+  const htPct    = totalHtW  ? Math.round(totalHtC / totalHtW * 100) : 0;
+  const wrColor  = wr >= 60 ? '#4ade80' : wr >= 40 ? '#facc15' : '#f87171';
+  const circumference = 2 * Math.PI * 50;
+  const dash = wr / 100 * circumference;
+
+  // Win rate ring
   document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card"><span class="stat-v">${s.duels}</span><span class="stat-l">Duels Played</span></div>
-    <div class="stat-card"><span class="stat-v">${wr}%</span><span class="stat-l">Win Rate</span></div>
-    <div class="stat-card"><span class="stat-v">${s.wins}</span><span class="stat-l">Wins</span></div>
-    <div class="stat-card"><span class="stat-v">${s.losses}</span><span class="stat-l">Losses</span></div>
-    <div class="stat-card" style="grid-column:1/-1">
-      <span class="stat-v">${s.profiles?.length ?? 0}</span>
-      <span class="stat-l">Champion Profiles Defeated</span>
+    <div class="st-ring-wrap">
+      <svg class="st-ring" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border2)" stroke-width="10"/>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="${wrColor}"
+          stroke-width="10" stroke-linecap="round"
+          stroke-dasharray="${dash.toFixed(1)} ${circumference.toFixed(1)}"
+          transform="rotate(-90 60 60)" style="transition:stroke-dasharray .6s ease"/>
+      </svg>
+      <div class="st-ring-inner">
+        <div class="st-ring-pct">${wr}%</div>
+        <div class="st-ring-lbl">Win Rate</div>
+      </div>
+    </div>
+    <div class="st-summary">
+      <div class="st-sum-row">
+        <div class="st-sum-item"><span class="st-sum-v">${s.duels}</span><span class="st-sum-l">Duels</span></div>
+        <div class="st-sum-item"><span class="st-sum-v" style="color:#4ade80">${s.wins}</span><span class="st-sum-l">Wins</span></div>
+        <div class="st-sum-item"><span class="st-sum-v" style="color:#f87171">${s.losses}</span><span class="st-sum-l">Losses</span></div>
+      </div>
+      <div class="st-sum-row">
+        <div class="st-sum-item"><span class="st-sum-v" style="color:var(--gold)">${avgScore || '—'}</span><span class="st-sum-l">Avg Score</span></div>
+        <div class="st-sum-item"><span class="st-sum-v" style="color:var(--gold)">${bestScore || '—'}</span><span class="st-sum-l">Best Score</span></div>
+        <div class="st-sum-item"><span class="st-sum-v" style="color:#60a5fa">${totalHtW ? htPct + '%' : '—'}</span><span class="st-sum-l">HT Accuracy</span></div>
+      </div>
     </div>`;
 
-  const decks = DeckMgr.list();
-  const main = countSec('main');
-  document.getElementById('chart-wrap').innerHTML = `
-    <div class="chart-title">Deck Status</div>
-    <div class="bar-chart">
-      ${bar('Main Deck', main, 60)}
-      ${bar('Extra Deck', countSec('extra'), 15)}
-      ${bar('Side Deck', countSec('side'), 15)}
-      ${bar('Saved Decks', decks.length, 10)}
-    </div>
-    ${!s.duels ? `<p style="margin-top:16px;font-size:13px;color:var(--text-dim)">Complete duels to unlock match history and win-rate charts.</p>` : ''}
-  `;
+  // Per-profile breakdown
+  let profHTML = '<div class="st-section-title">By Opponent</div><div class="st-prof-grid">';
+  Object.entries(PROF_META).forEach(([key, info]) => {
+    const pd = byProf[key];
+    const total = pd ? pd.wins + pd.losses : 0;
+    const pWr = total ? Math.round(pd.wins / total * 100) : 0;
+    const pColor = pWr >= 60 ? '#4ade80' : pWr >= 40 ? '#facc15' : '#f87171';
+    profHTML += `<div class="st-prof-card">
+      <span class="st-prof-icon">${info.icon}</span>
+      <div class="st-prof-name">${info.name}</div>
+      ${total
+        ? `<div class="st-prof-record">${pd.wins}W / ${pd.losses}L</div>
+           <div class="st-prof-wr" style="color:${pColor}">${pWr}%&nbsp;WR</div>`
+        : '<div class="st-prof-nodata">No data</div>'
+      }
+    </div>`;
+  });
+  profHTML += '</div>';
+
+  // Recent matches (last 15)
+  const recent = hist.slice(-15).reverse();
+  let recentHTML = '<div class="st-section-title">Recent Matches</div>';
+  if (!recent.length) {
+    recentHTML += '<p style="color:var(--text-dim);font-size:13px;text-align:center;padding:16px">Start dueling to see match history!</p>';
+  } else {
+    recentHTML += '<div class="st-history">';
+    recent.forEach(r => {
+      const pi = PROF_META[r.profile] || PROF_META.aggro;
+      recentHTML += `<div class="st-hist-row">
+        <span class="st-hist-icon">${pi.icon}</span>
+        <span class="st-hist-name">${pi.name}</span>
+        <span class="st-hist-score">${r.score != null ? r.score + '/100' : ''}</span>
+        <span class="st-hist-result ${r.won ? 'win' : 'loss'}">${r.won ? 'WIN' : 'LOSS'}</span>
+      </div>`;
+    });
+    recentHTML += '</div>';
+  }
+
+  document.getElementById('chart-wrap').innerHTML = profHTML + recentHTML;
 }
 
 function bar(label, val, max) {
@@ -3074,6 +3190,12 @@ function loadSettings() {
   document.getElementById('s-ai').value   = Cfg.get('ai');
   document.getElementById('s-anim').value = Cfg.get('anim');
   document.getElementById('s-sound').checked = Cfg.get('sound');
+}
+
+function resetStats() {
+  if (!confirm('Reset all match history and stats? Decks and settings will be kept.')) return;
+  Stats.save(Stats.blank());
+  toast('Stats reset', 'inf');
 }
 
 function clearAllData() {
@@ -3960,9 +4082,12 @@ function showEndScreen(winner) {
   GS.winner = winner;
   const prof    = GS.profile || 'aggro';
   const profDat = PROFILES[prof] || PROFILES.aggro;
-  Stats.record({ won: winner === 'player', profile: prof });
-
   const score = computeEfficiencyScore();
+  Stats.record({
+    won: winner === 'player', profile: prof,
+    score, turns: GS.turn,
+    htWindows: GS.htWindows || 0, htCorrect: GS.htCorrect || 0
+  });
   const overlay = document.createElement('div');
   overlay.className = 'duel-end-overlay';
   overlay.innerHTML = `
