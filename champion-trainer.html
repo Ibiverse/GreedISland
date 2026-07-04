@@ -252,75 +252,116 @@
     }
     .act-sub { font-size: 11px; opacity: .6; margin-top: 2px; }
 
-    /* ===== DECK BUILDER ===== */
-    .search-bar-wrap { padding: 10px 12px 0; position: relative; }
+    /* ===== MASTER DUEL STYLE DECK BUILDER ===== */
 
-    .search-bar {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--surface2); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 10px 14px;
+    /* Three-panel layout */
+    #deck-screen { flex-direction: row; overflow: hidden; }
+
+    .mdb-browser {
+      display: flex; flex-direction: column; flex: 1; overflow: hidden; min-width: 0;
+    }
+
+    /* Search + filter header */
+    .mdb-top {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 10px 12px 10px; flex-shrink: 0;
+    }
+
+    .mdb-search-row {
+      display: flex; gap: 8px; align-items: center; margin-bottom: 10px;
+    }
+
+    .mdb-search-box {
+      flex: 1; display: flex; align-items: center;
+      background: #0d0d1e; border: 1px solid var(--border2);
+      border-radius: 8px; padding: 9px 12px; gap: 8px;
       transition: border-color .2s;
     }
-    .search-bar:focus-within { border-color: var(--gold); }
-
-    .search-bar input {
-      flex: 1; background: none; border: none;
-      color: var(--text); font-family: 'Rajdhani', sans-serif;
-      font-size: 16px; outline: none; min-width: 0;
+    .mdb-search-box:focus-within { border-color: #388bfd; }
+    .mdb-search-box input {
+      flex: 1; background: none; border: none; color: var(--text);
+      font-family: 'Rajdhani', sans-serif; font-size: 15px; outline: none;
     }
-    .search-bar input::placeholder { color: var(--text-dim); }
-
-    .si { color: var(--text-dim); font-size: 18px; flex-shrink: 0; }
-
+    .mdb-search-box input::placeholder { color: var(--text-dim); }
+    .si { color: var(--text-dim); font-size: 16px; flex-shrink: 0; }
     .clear-x {
-      background: none; border: none; color: var(--text-dim);
-      cursor: pointer; font-size: 16px; line-height: 1;
-      padding: 4px; min-width: 28px; min-height: 28px;
+      background: none; border: none; color: var(--text-dim); cursor: pointer;
+      font-size: 15px; padding: 2px; min-width: 24px; min-height: 24px;
       display: flex; align-items: center; justify-content: center;
     }
 
-    /* Filter tabs */
-    .filter-tabs {
-      display: flex; overflow-x: auto; scrollbar-width: none;
-      padding: 0 12px; margin-top: 6px;
+    /* Type pills */
+    .mdb-pills {
+      display: flex; gap: 6px; flex-wrap: nowrap;
+      overflow-x: auto; scrollbar-width: none; margin-bottom: 8px;
     }
-    .filter-tabs::-webkit-scrollbar { display: none; }
-
-    .ftab {
-      padding: 9px 16px; background: none; border: none;
-      border-bottom: 2px solid transparent;
-      color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
-      font-size: 13px; font-weight: 700; cursor: pointer;
-      white-space: nowrap; min-height: 40px; transition: all .2s;
+    .mdb-pills::-webkit-scrollbar { display: none; }
+    .mdb-pill {
+      padding: 5px 14px; border: 1px solid var(--border2); border-radius: 20px;
+      background: none; color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
+      font-weight: 700; font-size: 12px; cursor: pointer; white-space: nowrap;
+      transition: all .15s; min-height: 30px;
     }
-    .ftab.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .mdb-pill.active { background: #388bfd; border-color: #388bfd; color: #fff; }
 
-    /* Card grid */
+    /* Attribute row */
+    .mdb-attr-row {
+      display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px;
+    }
+    .mdb-attr {
+      padding: 4px 9px; border: 1px solid var(--border2); border-radius: 6px;
+      background: var(--surface2); color: var(--text-dim);
+      font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 700;
+      cursor: pointer; transition: all .15s;
+    }
+    .mdb-attr.active { border-color: #388bfd; color: #388bfd; background: rgba(56,139,253,.1); }
+
+    /* Sort + browse row */
+    .mdb-bottom-row {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .mdb-sort-label { font-size: 11px; color: var(--text-dim); font-weight: 700; }
+    .mdb-sort {
+      padding: 4px 10px; border: 1px solid var(--border2); border-radius: 6px;
+      background: none; color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
+      font-size: 11px; font-weight: 700; cursor: pointer; transition: all .15s;
+    }
+    .mdb-sort.active { color: var(--gold); border-color: var(--gold); }
+    .mdb-browse-btn {
+      margin-left: auto; padding: 4px 12px;
+      border: 1px dashed var(--border2); border-radius: 6px;
+      background: none; color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
+      font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap;
+    }
+    .mdb-browse-btn.active { border-color: var(--gold); color: var(--gold); }
+
+    /* Card grid area */
+    .mdb-grid-wrap {
+      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding-bottom: 8px;
+    }
     .card-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 8px; padding: 12px;
+      gap: 6px; padding: 10px;
     }
-
-    @media (min-width: 480px) { .card-grid { grid-template-columns: repeat(4, 1fr); } }
-    @media (min-width: 768px) { .card-grid { grid-template-columns: repeat(5, 1fr); } }
+    @media (min-width: 400px) { .card-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 600px) { .card-grid { grid-template-columns: repeat(5, 1fr); } }
+    @media (min-width: 900px) { .card-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 1100px) { .card-grid { grid-template-columns: repeat(5, 1fr); } }
 
     .cgi {
       aspect-ratio: 59/86; border-radius: 5px;
       overflow: hidden; position: relative;
       cursor: pointer; background: var(--surface2);
-      border: 1px solid var(--border); transition: transform .15s;
+      border: 1px solid var(--border); transition: transform .15s, box-shadow .15s;
     }
-    .cgi:active { transform: scale(.95); }
+    .cgi:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.5); }
+    .cgi:active { transform: scale(.94); }
     .cgi img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-    .cgi-bar {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 3px;
-    }
-
+    .cgi-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
     .cgi-badge {
       position: absolute; top: 3px; right: 3px;
-      background: var(--gold); color: var(--bg);
+      background: #388bfd; color: #fff;
       border-radius: 50%; width: 20px; height: 20px;
       display: flex; align-items: center; justify-content: center;
       font-size: 11px; font-weight: 700;
@@ -330,13 +371,123 @@
     .skel {
       background: linear-gradient(90deg,
         var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
-      background-size: 200% 100%;
-      animation: skel 1.4s infinite;
+      background-size: 200% 100%; animation: skel 1.4s infinite;
     }
-    @keyframes skel {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+    @keyframes skel { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ===== MASTER DUEL DECK PANEL ===== */
+    .mdb-deck {
+      width: 270px; background: #0d0d1e;
+      border-left: 1px solid var(--border);
+      display: flex; flex-direction: column; flex-shrink: 0;
     }
+
+    @media (max-width: 767px) {
+      .mdb-deck {
+        position: fixed; top: 0; right: 0; bottom: var(--tab-h);
+        width: min(300px, 90vw);
+        transform: translateX(100%); transition: transform .3s ease;
+        z-index: 200; box-shadow: -6px 0 32px rgba(0,0,0,.6);
+      }
+      .mdb-deck.open { transform: translateX(0); }
+      #deck-screen { flex-direction: column; }
+    }
+
+    .mdb-deck-hdr {
+      padding: 10px 10px 8px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .mdb-deck-name-row {
+      display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
+    }
+    .mdb-deck-name-inp {
+      flex: 1; background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: 6px; color: var(--text); font-family: 'Rajdhani', sans-serif;
+      font-weight: 700; font-size: 13px; padding: 5px 8px; outline: none;
+    }
+    .mdb-deck-name-inp:focus { border-color: #388bfd; }
+    .mdb-deck-actions { display: flex; gap: 5px; }
+    .mdb-deck-action-btn {
+      padding: 5px 8px; background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--text);
+      min-width: 32px; min-height: 32px; transition: border-color .15s;
+    }
+    .mdb-deck-action-btn:hover { border-color: #388bfd; }
+    .mdb-deck-action-btn.danger:hover { border-color: var(--danger); color: var(--danger); }
+
+    /* Deck section tabs */
+    .mdb-deck-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .mdb-dtab {
+      flex: 1; padding: 9px 4px; background: none; border: none;
+      border-bottom: 2px solid transparent; color: var(--text-dim);
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 11px;
+      cursor: pointer; transition: all .15s; text-align: center;
+    }
+    .mdb-dtab.active { color: #388bfd; border-bottom-color: #388bfd; }
+    .mdb-dtab-cnt {
+      background: var(--surface2); border-radius: 10px;
+      padding: 1px 5px; font-size: 10px; margin-left: 3px;
+    }
+
+    /* Deck card list */
+    .mdb-deck-list { flex: 1; overflow-y: auto; }
+    .mdb-deck-section { padding: 6px 8px 2px; }
+    .mdb-deck-sec-label {
+      font-size: 9px; color: var(--text-dim); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+      font-family: 'Press Start 2P', monospace;
+    }
+    .mdb-card-row {
+      display: flex; align-items: center; gap: 7px; padding: 4px 6px;
+      border-radius: 6px; cursor: pointer; transition: background .1s; margin-bottom: 2px;
+    }
+    .mdb-card-row:hover { background: var(--surface2); }
+    .mdb-card-thumb {
+      width: 30px; height: 44px; border-radius: 3px; object-fit: cover;
+      flex-shrink: 0; background: var(--surface2);
+    }
+    .mdb-card-info { flex: 1; min-width: 0; }
+    .mdb-card-row-name {
+      font-size: 11px; font-weight: 600; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .mdb-card-row-type { font-size: 9px; color: var(--text-dim); }
+    .mdb-count-ctrl { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+    .mdb-cnt-btn {
+      width: 20px; height: 20px; border-radius: 4px; border: 1px solid var(--border2);
+      background: var(--surface2); color: var(--text); font-size: 13px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; line-height: 1;
+      transition: all .15s;
+    }
+    .mdb-cnt-btn.add { border-color: #388bfd; color: #388bfd; }
+    .mdb-cnt-btn.rem { border-color: var(--danger); color: var(--danger); }
+    .mdb-cnt-num { font-size: 12px; font-weight: 700; color: var(--gold); min-width: 14px; text-align: center; }
+
+    /* Deck footer stats */
+    .mdb-deck-footer {
+      border-top: 1px solid var(--border); padding: 8px 10px;
+      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+    }
+    .mdb-deck-stat { display: flex; flex-direction: column; align-items: center; flex: 1; }
+    .mdb-deck-stat-label { font-size: 9px; color: var(--text-dim); font-weight: 700; }
+    .mdb-deck-stat-val { font-size: 13px; font-weight: 700; color: var(--text); }
+    .mdb-deck-stat-val.warn { color: var(--danger); }
+
+    /* Mobile toggle button */
+    .mdb-deck-toggle {
+      display: none; position: fixed;
+      bottom: calc(var(--tab-h) + 12px); right: 14px;
+      background: #388bfd; color: #fff; border: none; border-radius: 50px;
+      padding: 10px 18px; font-family: 'Rajdhani', sans-serif;
+      font-weight: 700; font-size: 14px; cursor: pointer; z-index: 50;
+      align-items: center; gap: 8px;
+      box-shadow: 0 4px 20px rgba(56,139,253,.45); min-height: 44px;
+    }
+    .mdb-toggle-badge {
+      background: rgba(255,255,255,.25); border-radius: 50%;
+      width: 22px; height: 22px; display: flex; align-items: center;
+      justify-content: center; font-size: 12px;
+    }
+    @media (max-width: 767px) { .mdb-deck-toggle { display: flex; } }
 
     /* ===== BROWSE / LOAD MORE ===== */
     .browse-bar {
@@ -1297,36 +1448,124 @@
 
   <!-- ======================== DECK BUILDER ======================== -->
   <div id="deck-screen" class="screen">
-    <div class="screen-hdr">
-      <div class="screen-hdr-row">
-        <span class="screen-title">DECK BUILDER</span>
-      </div>
-      <div class="search-bar-wrap">
-        <div class="search-bar">
-          <span class="si">🔍</span>
-          <input type="text" id="card-search"
-                 placeholder="Search cards by name…"
-                 autocomplete="off" autocorrect="off" spellcheck="false">
-          <button class="clear-x" id="clear-btn" onclick="clearSearch()" style="display:none">✕</button>
+
+    <!-- ── LEFT: Card Browser ── -->
+    <div class="mdb-browser">
+      <div class="mdb-top">
+
+        <!-- Search row -->
+        <div class="mdb-search-row">
+          <div class="mdb-search-box">
+            <span class="si">🔍</span>
+            <input type="text" id="card-search"
+                   placeholder="Search cards by name…"
+                   autocomplete="off" autocorrect="off" spellcheck="false">
+            <button class="clear-x" id="clear-btn" onclick="clearSearch()" style="display:none">✕</button>
+          </div>
+        </div>
+
+        <!-- Type pills -->
+        <div class="mdb-pills" id="filter-tabs">
+          <button class="mdb-pill active" data-f="all"     onclick="setFilter('all',this)">All</button>
+          <button class="mdb-pill"        data-f="monster"  onclick="setFilter('monster',this)">Monster</button>
+          <button class="mdb-pill"        data-f="spell"    onclick="setFilter('spell',this)">Spell</button>
+          <button class="mdb-pill"        data-f="trap"     onclick="setFilter('trap',this)">Trap</button>
+          <button class="mdb-pill"        data-f="extra"    onclick="setFilter('extra',this)">Extra</button>
+        </div>
+
+        <!-- Attribute filter -->
+        <div class="mdb-attr-row" id="mdb-attr-row">
+          <button class="mdb-attr" data-attr="DARK"   onclick="toggleAttr('DARK',this)">🌑 DARK</button>
+          <button class="mdb-attr" data-attr="LIGHT"  onclick="toggleAttr('LIGHT',this)">☀ LIGHT</button>
+          <button class="mdb-attr" data-attr="EARTH"  onclick="toggleAttr('EARTH',this)">🌍 EARTH</button>
+          <button class="mdb-attr" data-attr="WATER"  onclick="toggleAttr('WATER',this)">💧 WATER</button>
+          <button class="mdb-attr" data-attr="FIRE"   onclick="toggleAttr('FIRE',this)">🔥 FIRE</button>
+          <button class="mdb-attr" data-attr="WIND"   onclick="toggleAttr('WIND',this)">💨 WIND</button>
+          <button class="mdb-attr" data-attr="DIVINE" onclick="toggleAttr('DIVINE',this)">✨ DIVINE</button>
+        </div>
+
+        <!-- Sort + Browse row -->
+        <div class="mdb-bottom-row">
+          <span class="mdb-sort-label">Sort:</span>
+          <button class="mdb-sort active" onclick="setSort('name',this)">Name</button>
+          <button class="mdb-sort" onclick="setSort('atk',this)">ATK↓</button>
+          <button class="mdb-sort" onclick="setSort('def',this)">DEF↓</button>
+          <button class="mdb-sort" onclick="setSort('level',this)">Level↓</button>
+          <button class="mdb-browse-btn" id="browse-btn" onclick="toggleBrowse()">🗂 Browse All <span id="browse-meta"></span></button>
+        </div>
+
+      </div><!-- /.mdb-top -->
+
+      <!-- Card grid -->
+      <div class="mdb-grid-wrap" id="deck-body">
+        <div id="starter-area"></div>
+        <div id="card-results">
+          <div class="empty">
+            <div class="empty-i">🔍</div>
+            <p>Search for a card above, or tap <b>Browse All</b> to load the full database.</p>
+          </div>
         </div>
       </div>
-      <div class="filter-tabs" id="filter-tabs">
-        <button class="ftab active" data-f="all"     onclick="setFilter('all',this)">All</button>
-        <button class="ftab"        data-f="monster"  onclick="setFilter('monster',this)">Monster</button>
-        <button class="ftab"        data-f="spell"    onclick="setFilter('spell',this)">Spell</button>
-        <button class="ftab"        data-f="trap"     onclick="setFilter('trap',this)">Trap</button>
-        <button class="ftab"        data-f="extra"    onclick="setFilter('extra',this)">Extra Deck</button>
+    </div><!-- /.mdb-browser -->
+
+    <!-- ── RIGHT: Deck Panel ── -->
+    <div class="mdb-deck" id="mdb-deck">
+
+      <div class="mdb-deck-hdr">
+        <div class="mdb-deck-name-row">
+          <input class="mdb-deck-name-inp" id="mdb-deck-name" value="New Deck"
+                 onblur="renameDeckInline(this.value)" onkeydown="if(event.key==='Enter')this.blur()">
+          <div class="mdb-deck-actions">
+            <button class="mdb-deck-action-btn" onclick="saveDeckDialog()" title="Save">💾</button>
+            <button class="mdb-deck-action-btn" onclick="openLoadSheet()" title="Load">📂</button>
+            <button class="mdb-deck-action-btn" onclick="validateDeck()" title="Validate">✔</button>
+            <button class="mdb-deck-action-btn danger" onclick="newDeck()" title="New Deck">🗑</button>
+          </div>
+        </div>
       </div>
-      <div class="browse-bar">
-        <button class="browse-all-btn" id="browse-btn" onclick="toggleBrowse()">🗂 Browse All Cards</button>
-        <span class="browse-meta" id="browse-meta"></span>
+
+      <!-- Section tabs -->
+      <div class="mdb-deck-tabs">
+        <button class="mdb-dtab active" onclick="setDeckSecMdb('main',this)">
+          Main <span class="mdb-dtab-cnt" id="cnt-main">0</span>
+        </button>
+        <button class="mdb-dtab" onclick="setDeckSecMdb('extra',this)">
+          Extra <span class="mdb-dtab-cnt" id="cnt-extra">0</span>
+        </button>
+        <button class="mdb-dtab" onclick="setDeckSecMdb('side',this)">
+          Side <span class="mdb-dtab-cnt" id="cnt-side">0</span>
+        </button>
       </div>
-    </div>
-    <div class="screen-body" id="deck-body">
-      <div id="starter-area"></div>
-      <div id="card-results"></div>
-    </div>
-  </div>
+
+      <!-- Deck card list -->
+      <div class="mdb-deck-list" id="mdb-deck-list"></div>
+
+      <!-- Footer -->
+      <div class="mdb-deck-footer">
+        <div class="mdb-deck-stat">
+          <span class="mdb-deck-stat-label">MAIN</span>
+          <span class="mdb-deck-stat-val" id="footer-main">0/60</span>
+        </div>
+        <div class="mdb-deck-stat">
+          <span class="mdb-deck-stat-label">EXTRA</span>
+          <span class="mdb-deck-stat-val" id="footer-extra">0/15</span>
+        </div>
+        <div class="mdb-deck-stat">
+          <span class="mdb-deck-stat-label">SIDE</span>
+          <span class="mdb-deck-stat-val" id="footer-side">0/15</span>
+        </div>
+        <button class="mdb-deck-action-btn" onclick="exportDeck()" style="margin-left:auto">Export</button>
+      </div>
+
+    </div><!-- /.mdb-deck -->
+
+    <!-- Mobile toggle -->
+    <button class="mdb-deck-toggle" id="mdb-toggle" onclick="toggleMdbDeck()">
+      My Deck
+      <span class="mdb-toggle-badge" id="mdb-toggle-cnt">0</span>
+    </button>
+
+  </div><!-- /#deck-screen -->
 
   <!-- ======================== DUEL ======================== -->
   <div id="duel-screen" class="screen">
@@ -2050,7 +2289,9 @@ async function toggleBrowse() {
 
 function browseTypeParam() {
   const map = { monster: 'Normal%20Monster,Effect%20Monster', spell: 'Spell%20Card', trap: 'Trap%20Card', extra: 'Fusion%20Monster,Synchro%20Monster,Xyz%20Monster,Link%20Monster' };
-  return map[S.filter] ? `&type=${map[S.filter]}` : '';
+  let p = map[S.filter] ? `&type=${map[S.filter]}` : '';
+  if (S.attrFilter) p += `&attribute=${S.attrFilter}`;
+  return p;
 }
 
 async function doBrowsePage(append = false) {
@@ -2087,8 +2328,9 @@ async function doBrowsePage(append = false) {
 }
 
 function renderBrowseGrid(cards, hasMore) {
+  const sorted = sortCards(cards);
   let h = '<div class="card-grid">';
-  cards.forEach(c => {
+  sorted.forEach(c => {
     const img = CardDB.imgUrl(c);
     const cls = typeClass(c);
     const cnt = totalInDeck(c.id);
@@ -2121,7 +2363,7 @@ async function doSearch(q) {
   const cards = await CardDB.search(q, S.filter);
   S.results = cards;
   cards.forEach(c => { S.byId[c.id] = c; });
-  renderResults(cards);
+  renderResults(applyClientFilters(cards));
   S.isLoading = false;
 }
 
@@ -2134,7 +2376,7 @@ function clearSearch() {
 
 function setFilter(f, btn) {
   S.filter = f;
-  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mdb-pill').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   if (S.browseMode) {
     S.browseOffset = 0; S.browseCards = [];
@@ -2299,42 +2541,60 @@ function refreshGridBadge(id) {
 }
 
 function refreshDeckUI() {
-  document.getElementById('dp-badge').textContent  = countSec('main');
-  document.getElementById('cnt-main').textContent  = countSec('main');
-  document.getElementById('cnt-extra').textContent = countSec('extra');
-  document.getElementById('cnt-side').textContent  = countSec('side');
-  // hide validity on change
+  const main = countSec('main'), extra = countSec('extra'), side = countSec('side');
+
+  // Legacy panel elements (kept hidden but JS references them)
+  const dpBadge = document.getElementById('dp-badge');
+  if (dpBadge) dpBadge.textContent = main;
+  document.getElementById('cnt-main').textContent  = main;
+  document.getElementById('cnt-extra').textContent = extra;
+  document.getElementById('cnt-side').textContent  = side;
   const v = document.getElementById('dp-validity');
-  v.style.display = 'none';
+  if (v) v.style.display = 'none';
+
+  // MDB footer stats
+  const fm = document.getElementById('footer-main');
+  const fe = document.getElementById('footer-extra');
+  const fs = document.getElementById('footer-side');
+  if (fm) { fm.textContent = `${main}/60`; fm.className = 'mdb-deck-stat-val' + (main > 60 ? ' warn' : ''); }
+  if (fe) fe.textContent = `${extra}/15`;
+  if (fs) fs.textContent = `${side}/15`;
+
+  // Mobile toggle badge
+  const tc = document.getElementById('mdb-toggle-cnt');
+  if (tc) tc.textContent = main;
+
+  // Sync deck name input
+  const ni = document.getElementById('mdb-deck-name');
+  if (ni && ni.value !== S.deck.name) ni.value = S.deck.name;
 }
 
 function renderDeckBody() {
   const list = S.deck[S.deckSec];
-  const body = document.getElementById('dp-body');
 
-  if (!list.length) {
-    body.innerHTML = `<div class="empty" style="padding:24px">
-      <div class="empty-i">🃏</div><p>No cards in ${S.deckSec} deck yet</p></div>`;
-    return;
+  // Legacy panel (kept for compatibility)
+  const body = document.getElementById('dp-body');
+  if (body) {
+    if (!list.length) {
+      body.innerHTML = `<div class="empty" style="padding:24px">
+        <div class="empty-i">🃏</div><p>No cards in ${S.deckSec} deck yet</p></div>`;
+    } else {
+      const sorted = [...list].sort((a, b) => {
+        const to = { monster:0, spell:1, trap:2, extra:3 };
+        return (to[simpleType(a.card)] - to[simpleType(b.card)]) || a.card.name.localeCompare(b.card.name);
+      });
+      body.innerHTML = sorted.map(e => `
+        <div class="dk-row">
+          <img class="dk-thumb" src="${CardDB.imgUrl(e.card)}" alt="${e.card.name}" loading="lazy" onerror="this.style.opacity='.3'">
+          <div class="dk-info"><div class="dk-name">${e.card.name}</div><div class="dk-type">${e.card.type||''}</div></div>
+          <div class="dk-qty">×${e.count}</div>
+          <button class="dk-rm" onclick="removeCard(${e.card.id},'${S.deckSec}')">−</button>
+        </div>`).join('');
+    }
   }
 
-  const sorted = [...list].sort((a, b) => {
-    const to = { monster:0, spell:1, trap:2, extra:3 };
-    const ta = simpleType(a.card), tb = simpleType(b.card);
-    return (to[ta] - to[tb]) || a.card.name.localeCompare(b.card.name);
-  });
-
-  body.innerHTML = sorted.map(e => `
-    <div class="dk-row">
-      <img class="dk-thumb" src="${CardDB.imgUrl(e.card)}" alt="${e.card.name}"
-           loading="lazy" onerror="this.style.opacity='.3'">
-      <div class="dk-info">
-        <div class="dk-name">${e.card.name}</div>
-        <div class="dk-type">${e.card.type || ''}</div>
-      </div>
-      <div class="dk-qty">×${e.count}</div>
-      <button class="dk-rm" onclick="removeCard(${e.card.id},'${S.deckSec}')">−</button>
-    </div>`).join('');
+  // MDB deck list
+  renderMdbDeckList();
 }
 
 function simpleType(c) {
@@ -3616,6 +3876,134 @@ function viewGY(who) {
   if (!gy.length) { toast('Graveyard is empty', 'inf'); return; }
   const names = gy.slice(-5).map(c => c.name).join(', ');
   toast(`GY (${gy.length}): ${names}`, 'inf');
+}
+
+/* ============================================================
+   MASTER DUEL UI — SORT / ATTRIBUTE / DECK PANEL
+============================================================ */
+
+/* State additions */
+S.sortMode   = 'name';
+S.attrFilter = null;
+
+/* ---- Sort ---- */
+function setSort(type, btn) {
+  S.sortMode = type;
+  document.querySelectorAll('.mdb-sort').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (S.browseMode) {
+    renderBrowseGrid(S.browseCards, S.browseOffset < S.browseTotal);
+  } else if (S.results.length) {
+    renderResults(applyClientFilters(S.results));
+  }
+}
+
+/* ---- Attribute filter ---- */
+function toggleAttr(attr, btn) {
+  if (S.attrFilter === attr) {
+    S.attrFilter = null;
+    document.querySelectorAll('.mdb-attr').forEach(b => b.classList.remove('active'));
+  } else {
+    S.attrFilter = attr;
+    document.querySelectorAll('.mdb-attr').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  if (S.browseMode) {
+    S.browseOffset = 0; S.browseCards = [];
+    doBrowsePage();
+  } else if (S.results.length) {
+    renderResults(applyClientFilters(S.results));
+  }
+}
+
+function applyClientFilters(cards) {
+  let out = [...cards];
+  if (S.attrFilter) out = out.filter(c => (c.attribute || '').toUpperCase() === S.attrFilter);
+  return sortCards(out);
+}
+
+function sortCards(cards) {
+  const c = [...cards];
+  switch (S.sortMode) {
+    case 'atk':   return c.sort((a,b) => (b.atk ?? -1) - (a.atk ?? -1));
+    case 'def':   return c.sort((a,b) => (b.def ?? -1) - (a.def ?? -1));
+    case 'level': return c.sort((a,b) => ((b.level||b.rank||b.linkval||0) - (a.level||a.rank||a.linkval||0)));
+    default:      return c.sort((a,b) => a.name.localeCompare(b.name));
+  }
+}
+
+/* ---- MDB Deck Panel ---- */
+function renderMdbDeckList() {
+  const el = document.getElementById('mdb-deck-list');
+  if (!el) return;
+  const list = S.deck[S.deckSec];
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty" style="padding:24px">
+      <div class="empty-i">🃏</div>
+      <p>No cards in ${S.deckSec} deck yet.<br>Search or Browse All to find cards.</p></div>`;
+    return;
+  }
+
+  const sorted = [...list].sort((a, b) => {
+    const to = { monster:0, spell:1, trap:2, extra:3 };
+    return (to[simpleType(a.card)] - to[simpleType(b.card)]) || a.card.name.localeCompare(b.card.name);
+  });
+
+  // Group by type for headers
+  let html = '';
+  let lastType = null;
+  sorted.forEach(e => {
+    const t = simpleType(e.card);
+    if (t !== lastType) {
+      const label = { monster:'Monsters', spell:'Spells', trap:'Traps', extra:'Extra Deck' }[t] || t;
+      html += `<div class="mdb-deck-section"><div class="mdb-deck-sec-label">${label}</div>`;
+      lastType = t;
+    }
+    html += `
+      <div class="mdb-card-row" onclick="openModal(${e.card.id})">
+        <img class="mdb-card-thumb" src="${CardDB.imgUrl(e.card)}" alt="${e.card.name}" loading="lazy" onerror="this.style.opacity='.3'">
+        <div class="mdb-card-info">
+          <div class="mdb-card-row-name">${e.card.name}</div>
+          <div class="mdb-card-row-type">${e.card.type||''}</div>
+        </div>
+        <div class="mdb-count-ctrl">
+          <button class="mdb-cnt-btn add" onclick="event.stopPropagation();addCard(${e.card.id},'${S.deckSec}')">+</button>
+          <span class="mdb-cnt-num">${e.count}</span>
+          <button class="mdb-cnt-btn rem" onclick="event.stopPropagation();removeCard(${e.card.id},'${S.deckSec}')">−</button>
+        </div>
+      </div>`;
+  });
+  if (lastType) html += '</div>';
+  el.innerHTML = html;
+}
+
+function setDeckSecMdb(sec, btn) {
+  S.deckSec = sec;
+  document.querySelectorAll('.mdb-dtab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDeckBody();
+}
+
+function toggleMdbDeck() {
+  const panel = document.getElementById('mdb-deck');
+  if (!panel) return;
+  panel.classList.toggle('open');
+}
+
+function renameDeckInline(name) {
+  const n = name.trim() || 'New Deck';
+  S.deck.name = n;
+  const inp = document.getElementById('deck-name-inp');
+  if (inp) inp.value = n;
+}
+
+/* ---- Override updateDeckFAB to hide old FAB, use MDB toggle ---- */
+function updateDeckFAB() {
+  const fab = document.getElementById('dp-fab');
+  if (fab) fab.style.display = 'none'; // replaced by MDB toggle
+  refreshDeckUI();
+  renderMdbDeckList();
 }
 
 /* ============================================================
