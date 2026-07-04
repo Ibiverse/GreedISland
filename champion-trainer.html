@@ -496,7 +496,7 @@
 
     /* ===== MASTER DUEL DECK PANEL ===== */
     .mdb-deck {
-      width: 270px;
+      width: 300px;
       background: rgba(8,8,20,0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -563,27 +563,29 @@
       font-family: 'Press Start 2P', monospace;
     }
     .mdb-card-row {
-      display: flex; align-items: center; gap: 7px; padding: 4px 6px;
-      border-radius: 6px; cursor: pointer; transition: background .15s, box-shadow .15s; margin-bottom: 2px;
+      display: flex; align-items: center; gap: 9px; padding: 5px 8px;
+      border-radius: 6px; cursor: pointer; transition: background .15s, box-shadow .15s; margin-bottom: 3px;
     }
     .mdb-card-row:hover {
       background: rgba(56,139,253,0.1);
       box-shadow: inset 2px 0 0 #388bfd;
     }
     .mdb-card-thumb {
-      width: 30px; height: 44px; border-radius: 3px; object-fit: cover;
+      width: 44px; height: 64px; border-radius: 4px; object-fit: cover;
       flex-shrink: 0; background: var(--surface2);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
     .mdb-card-info { flex: 1; min-width: 0; }
     .mdb-card-row-name {
-      font-size: 11px; font-weight: 600; color: var(--text);
+      font-size: 13px; font-weight: 700; color: var(--text);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 2px;
     }
-    .mdb-card-row-type { font-size: 9px; color: var(--text-dim); }
-    .mdb-count-ctrl { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+    .mdb-card-row-type { font-size: 11px; color: var(--text-dim); }
+    .mdb-count-ctrl { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
     .mdb-cnt-btn {
-      width: 20px; height: 20px; border-radius: 4px; border: 1px solid var(--border2);
-      background: var(--surface2); color: var(--text); font-size: 13px; cursor: pointer;
+      width: 22px; height: 22px; border-radius: 4px; border: 1px solid var(--border2);
+      background: var(--surface2); color: var(--text); font-size: 14px; cursor: pointer;
       display: flex; align-items: center; justify-content: center; line-height: 1;
       transition: all .15s;
     }
