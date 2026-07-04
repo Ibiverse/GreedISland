@@ -219,103 +219,189 @@
     .tab-btn.active .tl { color: rgba(200,220,255,0.9); }
 
     /* ===== HOME ===== */
-    #home-screen { position: relative; }
+    /* ===== HOME SCREEN ===== */
+    #home-screen { overflow: hidden; }
 
-    .home-bg {
+    .home-hero {
+      position: relative; flex-shrink: 0;
+      height: clamp(200px, 38vh, 280px);
+      overflow: hidden;
+    }
+    .home-hero-imgs { position: absolute; inset: 0; }
+    .home-hero-img {
       position: absolute; inset: 0;
-      overflow: hidden; background: transparent;
+      width: 100%; height: 100%; object-fit: cover; object-position: center 20%;
+      opacity: 0; transition: opacity 1.8s ease;
     }
-
-    .home-bg::before {
-      content: '';
-      position: absolute; top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      background: var(--holographic);
-      opacity: .04;
-      animation: hbg 10s ease-in-out infinite alternate;
+    .home-hero-img.active { opacity: 1; }
+    .home-hero-overlay {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(180deg,
+        rgba(14,14,50,0.18) 0%,
+        rgba(14,14,50,0.52) 52%,
+        rgba(14,14,50,0.98) 100%);
     }
-
-    @keyframes hbg {
-      0%   { transform: rotate(0deg) scale(1); }
-      100% { transform: rotate(12deg) scale(1.15); }
+    .home-hero-side {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(90deg, rgba(14,14,50,0.5) 0%, transparent 40%, transparent 60%, rgba(14,14,50,0.4) 100%);
     }
-
-    .float-card {
-      position: absolute;
-      width: 70px; height: 98px;
-      border-radius: 5px;
-      background: var(--holographic);
-      opacity: 0; animation: floatUp linear infinite;
-      pointer-events: none;
+    .home-hero-text {
+      position: absolute; bottom: 18px; left: 20px; right: 20px; z-index: 2;
     }
-
-    @keyframes floatUp {
-      0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
-      8%   { opacity: .12; }
-      92%  { opacity: .12; }
-      100% { transform: translateY(-15vh) rotate(320deg); opacity: 0; }
-    }
-
-    .home-inner {
-      position: relative; z-index: 1;
-      display: flex; flex-direction: column;
-      align-items: center;
-      padding: 36px 20px 20px;
-      min-height: 100%;
-    }
-
-    .app-title {
+    .home-hero-title {
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(14px, 4vw, 22px);
-      color: var(--gold); text-align: center;
-      line-height: 1.6; letter-spacing: 2px;
-      text-shadow: 0 0 24px rgba(201,168,76,.7);
-      animation: titlePulse 3s ease-in-out infinite;
-      margin-bottom: 8px;
+      font-size: clamp(12px, 3.5vw, 20px); color: #fff; line-height: 1.5;
+      text-shadow: 0 2px 24px rgba(0,0,0,0.9), 0 0 48px rgba(212,170,80,0.35);
+      margin-bottom: 5px;
+    }
+    .home-hero-sub {
+      font-size: 11px; letter-spacing: 3px;
+      color: rgba(255,255,255,0.5); text-transform: uppercase;
+    }
+    .home-hero-dots {
+      position: absolute; bottom: 12px; right: 18px; z-index: 3;
+      display: flex; gap: 5px; align-items: center;
+    }
+    .home-hero-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.28); transition: all .3s;
+    }
+    .home-hero-dot.active { background: var(--gold); width: 18px; border-radius: 3px; }
+
+    /* Scrollable content below hero */
+    .home-content {
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: calc(var(--tab-h) + 12px);
     }
 
-    @keyframes titlePulse {
-      0%,100% { text-shadow: 0 0 24px rgba(201,168,76,.6); }
-      50%      { text-shadow: 0 0 48px rgba(201,168,76,1), 0 0 80px rgba(201,168,76,.3); }
+    /* Player card */
+    .home-player-card {
+      margin: -20px 14px 0; position: relative; z-index: 5;
+      background: linear-gradient(135deg, rgba(22,22,60,0.97) 0%, rgba(34,34,88,0.95) 100%);
+      border: 1px solid rgba(100,120,255,0.28);
+      border-radius: 14px; padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(60,80,200,0.1);
+      backdrop-filter: blur(16px);
+    }
+    .home-player-avatar {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+      box-shadow: 0 0 16px rgba(212,170,80,0.45);
+    }
+    .home-player-info { flex: 1; min-width: 0; }
+    .home-player-name {
+      font-family: 'Press Start 2P', monospace; font-size: 9px;
+      color: var(--text); margin-bottom: 5px; line-height: 1.4;
+    }
+    .home-player-stats { font-size: 12px; color: var(--text-dim); }
+    .home-rank-badge {
+      font-family: 'Press Start 2P', monospace; font-size: 7px;
+      color: var(--gold); background: rgba(212,170,80,0.1);
+      border: 1px solid rgba(212,170,80,0.3); border-radius: 6px;
+      padding: 5px 8px; white-space: nowrap;
     }
 
-    .app-sub {
-      font-size: 13px; letter-spacing: 3px;
-      color: var(--text-dim); margin-bottom: 32px;
-      text-transform: uppercase;
+    /* Action grid */
+    .home-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px 14px 0; }
+    .home-action-btn {
+      background: rgba(18,18,52,0.88); border: 1px solid rgba(70,90,180,0.22);
+      border-radius: 12px; padding: 14px 12px; cursor: pointer;
+      text-align: left; transition: all .2s;
+      display: flex; flex-direction: column; gap: 5px;
+      backdrop-filter: blur(8px); box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .home-action-btn:hover {
+      border-color: rgba(212,170,80,0.5);
+      box-shadow: 0 6px 28px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,170,80,0.15);
+      transform: translateY(-2px);
+    }
+    .home-action-btn.primary {
+      grid-column: 1/-1;
+      background: linear-gradient(135deg, rgba(160,110,10,0.28) 0%, rgba(100,65,5,0.4) 100%);
+      border-color: rgba(212,170,80,0.35);
+    }
+    .home-action-icon { font-size: 26px; line-height: 1; }
+    .home-action-label { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--text); }
+    .home-action-sub { font-size: 11px; color: var(--text-dim); }
+
+    /* Section header */
+    .home-section-hdr { padding: 18px 14px 8px; }
+    .home-section-title {
+      font-family: 'Press Start 2P', monospace; font-size: 8px;
+      color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px;
     }
 
-    .home-holo-card {
-      width: 120px; height: 168px;
-      border-radius: 8px;
-      background: var(--holographic);
-      margin-bottom: 36px;
-      position: relative; overflow: hidden;
-      box-shadow: 0 0 48px rgba(102,126,234,.5);
-      animation: cardPulse 4s ease-in-out infinite;
-      flex-shrink: 0;
+    /* Quick duel chips */
+    .home-opp-row {
+      display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+      padding: 0 14px 4px;
     }
-
-    @keyframes cardPulse {
-      0%   { box-shadow: 0 0 48px rgba(102,126,234,.5); }
-      33%  { box-shadow: 0 0 48px rgba(118,75,162,.6); }
-      66%  { box-shadow: 0 0 48px rgba(240,147,251,.4); }
-      100% { box-shadow: 0 0 48px rgba(201,168,76,.6); }
+    .home-opp-row::-webkit-scrollbar { display: none; }
+    .home-opp-chip {
+      flex-shrink: 0; display: flex; align-items: center; gap: 6px;
+      background: rgba(16,16,46,0.85); border: 1px solid rgba(70,90,180,0.22);
+      border-radius: 20px; padding: 8px 14px; cursor: pointer;
+      font-size: 12px; font-weight: 700; color: var(--text-dim);
+      transition: all .2s; white-space: nowrap;
     }
-
-    .home-holo-card::after {
-      content: '🐉';
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      font-size: 56px; opacity: .7;
+    .home-opp-chip:hover {
+      border-color: var(--gold); color: var(--text);
+      background: rgba(24,24,64,0.95);
+      box-shadow: 0 0 12px rgba(212,170,80,0.15);
     }
+    .opp-chip-icon { font-size: 15px; }
 
-    .quick-btns {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 10px; width: 100%; max-width: 320px;
-      margin-bottom: 28px;
+    /* Featured cards scroll row */
+    .home-cards-row {
+      display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none;
+      padding: 0 14px 4px;
     }
+    .home-cards-row::-webkit-scrollbar { display: none; }
+    .home-feat-card {
+      flex-shrink: 0; width: 72px; cursor: pointer;
+      border-radius: 6px; overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .home-feat-card:hover {
+      transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,170,80,0.4);
+    }
+    .home-feat-card img { width: 100%; display: block; }
 
+    /* Daily tip */
+    .home-tip {
+      margin: 4px 14px 0;
+      background: linear-gradient(135deg, rgba(12,12,44,0.92), rgba(18,18,58,0.88));
+      border: 1px solid rgba(212,170,80,0.18);
+      border-left: 3px solid var(--gold); border-radius: 10px;
+      padding: 14px 16px; backdrop-filter: blur(8px);
+    }
+    .home-tip-hdr { font-size: 8px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; }
+    .home-tip-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .home-tip-text { font-size: 12px; color: var(--text-dim); line-height: 1.65; }
+
+    /* Activity items */
+    .act-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 14px;
+      background: rgba(14,14,44,0.7); border: 1px solid rgba(60,80,160,0.18);
+      border-radius: 10px; margin-bottom: 8px;
+      font-size: 13px; color: var(--text-dim);
+      transition: border-color .2s;
+    }
+    .act-item:hover { border-color: rgba(100,120,220,0.35); }
+    .act-icon { font-size: 20px; flex-shrink: 0; }
+    .act-body { flex: 1; min-width: 0; }
+    .act-main { font-size: 13px; color: var(--text); font-weight: 600; margin-bottom: 2px; }
+    .act-sub { font-size: 11px; color: var(--text-dim); }
+
+    /* Keep qbtn for pre-duel analysis button */
     .qbtn {
       padding: 14px 8px;
       background: var(--surface); border: 1px solid var(--border);
@@ -324,33 +410,7 @@
       letter-spacing: .5px; cursor: pointer; text-align: center;
       transition: all .2s; min-height: 52px;
     }
-    .qbtn:hover, .qbtn:active {
-      border-color: var(--gold); color: var(--gold);
-      background: var(--surface2); transform: translateY(-2px);
-    }
-    .qbtn.primary {
-      grid-column: 1 / -1;
-      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-      color: var(--bg); border-color: var(--gold);
-      font-size: 15px; box-shadow: 0 4px 20px rgba(201,168,76,.3);
-    }
-    .qbtn.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,.4); }
-
-    .activity-wrap { width: 100%; max-width: 400px; }
-
-    .section-label {
-      font-size: 10px; font-weight: 700;
-      color: var(--text-dim); text-transform: uppercase;
-      letter-spacing: 2px; margin-bottom: 10px;
-    }
-
-    .act-item {
-      padding: 10px 14px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; margin-bottom: 8px;
-      font-size: 13px; color: var(--text-dim);
-    }
-    .act-sub { font-size: 11px; opacity: .6; margin-top: 2px; }
+    .qbtn:hover { border-color: var(--gold); color: var(--gold); background: var(--surface2); }
 
     /* ===== THREE-PANEL MASTER DUEL DECK BUILDER ===== */
     #deck-screen { flex-direction: row; overflow: hidden; }
@@ -1716,21 +1776,73 @@
 
   <!-- ======================== HOME ======================== -->
   <div id="home-screen" class="screen active">
-    <div class="home-bg" id="home-bg"></div>
-    <div class="screen-body">
-      <div class="home-inner">
-        <h1 class="app-title">CHAMPION<br>TRAINER</h1>
-        <p class="app-sub">Practice like the pros</p>
-        <div class="quick-btns">
-          <button class="qbtn primary" onclick="nav('deck')">🃏 Build Deck</button>
-          <button class="qbtn" onclick="nav('duel')">⚔️ Quick Duel</button>
-          <button class="qbtn" onclick="nav('stats')">📊 View Stats</button>
-        </div>
-        <div class="activity-wrap">
-          <div class="section-label">Recent Activity</div>
-          <div id="activity-list"></div>
-        </div>
+
+    <!-- Hero Banner — rotating card art -->
+    <div class="home-hero">
+      <div class="home-hero-imgs" id="home-hero-imgs"></div>
+      <div class="home-hero-overlay"></div>
+      <div class="home-hero-side"></div>
+      <div class="home-hero-text">
+        <div class="home-hero-title">CHAMPION<br>TRAINER</div>
+        <div class="home-hero-sub">Practice like the Pros</div>
       </div>
+      <div class="home-hero-dots" id="home-hero-dots"></div>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="home-content">
+
+      <!-- Player card — overlaps bottom of hero -->
+      <div class="home-player-card" id="home-player-card">
+        <div class="home-player-avatar">⚔️</div>
+        <div class="home-player-info">
+          <div class="home-player-name">DUELIST</div>
+          <div class="home-player-stats">No duels yet</div>
+        </div>
+        <div class="home-rank-badge">ROOKIE</div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="home-actions">
+        <button class="home-action-btn primary" onclick="nav('duel')">
+          <span class="home-action-icon">⚔️</span>
+          <span class="home-action-label">DUEL NOW</span>
+          <span class="home-action-sub">Challenge a Champion AI</span>
+        </button>
+        <button class="home-action-btn" onclick="nav('deck')">
+          <span class="home-action-icon">🃏</span>
+          <span class="home-action-label">DECK BUILDER</span>
+          <span class="home-action-sub">Build &amp; edit decks</span>
+        </button>
+        <button class="home-action-btn" onclick="nav('stats')">
+          <span class="home-action-icon">📊</span>
+          <span class="home-action-label">MY STATS</span>
+          <span class="home-action-sub">Track your progress</span>
+        </button>
+      </div>
+
+      <!-- Quick Duel opponent chips -->
+      <div class="home-section-hdr"><span class="home-section-title">Quick Duel</span></div>
+      <div class="home-opp-row">
+        <div class="home-opp-chip" onclick="nav('duel')"><span class="opp-chip-icon">🗡️</span>Pure Aggro</div>
+        <div class="home-opp-chip" onclick="nav('duel')"><span class="opp-chip-icon">🐉</span>Dragon Link</div>
+        <div class="home-opp-chip" onclick="nav('duel')"><span class="opp-chip-icon">💧</span>Tearlaments</div>
+        <div class="home-opp-chip" onclick="nav('duel')"><span class="opp-chip-icon">🔥</span>Snake-Eye</div>
+        <div class="home-opp-chip" onclick="nav('duel')"><span class="opp-chip-icon">⚔️</span>Branded</div>
+      </div>
+
+      <!-- Featured card art -->
+      <div class="home-section-hdr"><span class="home-section-title">Iconic Cards</span></div>
+      <div class="home-cards-row" id="home-cards-row"></div>
+
+      <!-- Daily tip -->
+      <div class="home-section-hdr"><span class="home-section-title">Daily Tip</span></div>
+      <div class="home-tip" id="home-tip"></div>
+
+      <!-- Recent activity -->
+      <div class="home-section-hdr"><span class="home-section-title">Recent Activity</span></div>
+      <div id="activity-list" style="padding:0 14px 8px"></div>
+
     </div>
   </div>
 
@@ -2431,60 +2543,135 @@ function nav(scr) {
   if (scr !== 'deck') closeDeckPanel();
   if (scr === 'stats')    renderStats();
   if (scr === 'settings') loadSettings();
-  if (scr === 'home')     renderActivity();
+  if (scr === 'home')     refreshHome();
 }
 
 /* ============================================================
    HOME
 ============================================================ */
+const HERO_CARD_IDS = [46986414, 89631139, 44508094, 14558127, 23935886, 84013237];
+const FEATURED_CARD_IDS = [46986414, 89631139, 44508094, 14558127, 23002693, 84013237, 58921041, 27548199, 33396948, 74677422];
+const DAILY_TIPS = [
+  { title: 'Ash Blossom Timing', text: 'Ash Blossom best stops searches and deck-to-hand effects. Chain it as soon as the opponent activates the effect — before they resolve it.' },
+  { title: 'Normal Summon Value', text: 'You only get 1 Normal Summon per turn — make it count. Prioritize monsters that search, draw, or extend your combo on summon.' },
+  { title: 'Infinite Impermanence', text: 'Impermanence negates monster effects on the field. If activated from hand, it also negates your own Spell/Trap cards in the same column.' },
+  { title: 'Tearlaments Interrupt', text: 'The key moment vs Tearlaments is when Reinoheart activates to mill Scheiren. Ashing the mill stops the entire GY fusion chain.' },
+  { title: 'Snake-Eye Pressure', text: 'Ash Blossom Snake-Eye Ash (the monster) when it searches Oak. Without Oak, Diabellstar can't extend into the full Flamberge + Masquerena board.' },
+  { title: 'Battle Phase Tactics', text: 'Attack DEF-position monsters even if you deal no damage — removing blockers opens a direct attack lane for your other monsters.' },
+  { title: 'Extra Deck Planning', text: 'A balanced Extra Deck has options for every situation: Link monsters for zone routing, Synchros for negation, Fusions for raw power.' },
+];
+
+let _heroIdx = 0;
+let _heroTimer = null;
+
 function initHome() {
-  const bg = document.getElementById('home-bg');
-  for (let i = 0; i < 6; i++) {
-    const d = document.createElement('div');
-    d.className = 'float-card';
-    d.style.cssText = [
-      `left:${Math.random() * 85}%`,
-      `animation-duration:${9 + Math.random() * 14}s`,
-      `animation-delay:-${Math.random() * 18}s`
-    ].join(';');
-    bg.appendChild(d);
-  }
+  // Build hero image crossfade
+  const imgWrap = document.getElementById('home-hero-imgs');
+  const dotsWrap = document.getElementById('home-hero-dots');
+  imgWrap.innerHTML = '';
+  dotsWrap.innerHTML = '';
+
+  HERO_CARD_IDS.forEach((id, i) => {
+    const img = document.createElement('img');
+    img.className = 'home-hero-img' + (i === 0 ? ' active' : '');
+    img.src = `https://images.ygoprodeck.com/images/cards_cropped/${id}.jpg`;
+    img.loading = 'lazy';
+    img.onerror = function() { this.style.display = 'none'; };
+    imgWrap.appendChild(img);
+
+    const dot = document.createElement('div');
+    dot.className = 'home-hero-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => setHeroSlide(i);
+    dotsWrap.appendChild(dot);
+  });
+
+  _heroIdx = 0;
+  clearInterval(_heroTimer);
+  _heroTimer = setInterval(() => setHeroSlide((_heroIdx + 1) % HERO_CARD_IDS.length), 5000);
+
+  // Featured cards
+  const row = document.getElementById('home-cards-row');
+  row.innerHTML = '';
+  FEATURED_CARD_IDS.forEach(id => {
+    const div = document.createElement('div');
+    div.className = 'home-feat-card';
+    div.innerHTML = `<img src="https://images.ygoprodeck.com/images/cards/${id}.jpg" loading="lazy" onerror="this.style.opacity='.15'">`;
+    row.appendChild(div);
+  });
+
+  // Daily tip (rotate by day-of-week)
+  const tipIdx = (new Date().getDay() + Math.floor(new Date().getDate() / 7)) % DAILY_TIPS.length;
+  const tip = DAILY_TIPS[tipIdx];
+  document.getElementById('home-tip').innerHTML = `
+    <div class="home-tip-hdr">💡 Tip of the Day</div>
+    <div class="home-tip-title">${tip.title}</div>
+    <div class="home-tip-text">${tip.text}</div>`;
+
+  refreshHome();
+}
+
+function setHeroSlide(idx) {
+  const imgs = document.querySelectorAll('.home-hero-img');
+  const dots = document.querySelectorAll('.home-hero-dot');
+  if (!imgs.length) return;
+  imgs[_heroIdx]?.classList.remove('active');
+  dots[_heroIdx]?.classList.remove('active');
+  _heroIdx = idx;
+  imgs[_heroIdx]?.classList.add('active');
+  dots[_heroIdx]?.classList.add('active');
+}
+
+function refreshHome() {
+  renderPlayerCard();
   renderActivity();
+}
+
+function renderPlayerCard() {
+  const st = Stats.get();
+  const name = (Cfg.get('name') || 'Duelist').toUpperCase();
+  const wr = st.duels ? Math.round(st.wins / st.duels * 100) : 0;
+  let rank = 'ROOKIE';
+  if      (st.duels >= 50 && wr >= 70) rank = 'CHAMPION';
+  else if (st.duels >= 20 && wr >= 60) rank = 'EXPERT';
+  else if (st.duels >= 10)             rank = 'APPRENTICE';
+  else if (st.duels >= 3)              rank = 'DUELIST';
+  const statsText = st.duels ? `${st.wins}W · ${st.losses}L · ${wr}% Win Rate` : 'No duels yet';
+  document.getElementById('home-player-card').innerHTML = `
+    <div class="home-player-avatar">⚔️</div>
+    <div class="home-player-info">
+      <div class="home-player-name">${name}</div>
+      <div class="home-player-stats">${statsText}</div>
+    </div>
+    <div class="home-rank-badge">${rank}</div>`;
 }
 
 function renderActivity() {
   const st = Stats.get();
   const decks = DeckMgr.list();
-  let html = '';
+  const mc = countSec('main');
+  const items = [];
 
   if (st.duels > 0) {
-    const wr = Math.round(st.wins / st.duels * 100);
-    html += `<div class="act-item">
-      📊 ${st.wins}W / ${st.losses}L — ${wr}% win rate
-      <div class="act-sub">Overall record</div>
-    </div>`;
+    const last = (st.history || []).slice(-1)[0];
+    const lastProf = last ? (PROF_META[last.profile] || PROF_META.aggro) : null;
+    items.push({ icon: '📊', main: `${st.wins}W / ${st.losses}L — ${Math.round(st.wins/st.duels*100)}% win rate`, sub: lastProf ? `Last duel: ${lastProf.icon} ${lastProf.name} — ${last.won ? 'WIN' : 'LOSS'}` : 'Overall record' });
   }
-
   if (decks.length > 0) {
-    html += `<div class="act-item">
-      🃏 ${decks.length} deck${decks.length !== 1 ? 's' : ''} saved
-      <div class="act-sub">Latest: ${decks[decks.length - 1]}</div>
-    </div>`;
+    items.push({ icon: '🃏', main: `${decks.length} saved deck${decks.length !== 1 ? 's' : ''}`, sub: `Latest: ${decks[decks.length-1]}` });
   }
-
-  const mc = countSec('main');
   if (mc > 0) {
-    html += `<div class="act-item">
-      🔧 Current deck: ${mc} main / ${countSec('extra')} extra cards
-      <div class="act-sub">Unsaved draft</div>
-    </div>`;
+    items.push({ icon: '🔧', main: `Current deck: ${mc} main / ${countSec('extra')} extra`, sub: 'Unsaved draft' });
+  }
+  if (!items.length) {
+    items.push({ icon: '🎴', main: 'Welcome to Champion Trainer!', sub: 'Build a deck or jump into a duel to get started' });
   }
 
-  if (!html) {
-    html = `<div class="act-item">🎴 Welcome! Build your first deck to get started.<div class="act-sub">Tap Deck Builder below</div></div>`;
-  }
-
-  document.getElementById('activity-list').innerHTML = html;
+  document.getElementById('activity-list').innerHTML = items.map(it =>
+    `<div class="act-item">
+      <span class="act-icon">${it.icon}</span>
+      <div class="act-body"><div class="act-main">${it.main}</div><div class="act-sub">${it.sub}</div></div>
+    </div>`
+  ).join('');
 }
 
 /* ============================================================
