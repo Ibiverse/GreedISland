@@ -359,253 +359,288 @@
     }
     .act-sub { font-size: 11px; opacity: .6; margin-top: 2px; }
 
-    /* ===== MASTER DUEL STYLE DECK BUILDER ===== */
-
-    /* Three-panel layout */
+    /* ===== THREE-PANEL MASTER DUEL DECK BUILDER ===== */
     #deck-screen { flex-direction: row; overflow: hidden; }
 
-    .mdb-browser {
-      display: flex; flex-direction: column; flex: 1; overflow: hidden; min-width: 0;
+    /* LEFT: Card detail panel */
+    #md-detail {
+      width: 210px; flex-shrink: 0;
+      background: rgba(6,6,18,0.97);
+      border-right: 1px solid rgba(56,139,253,0.18);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    #md-detail-empty {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: var(--text-dim); padding: 20px; text-align: center;
+    }
+    #md-detail-empty .ei { font-size: 40px; margin-bottom: 14px; opacity: .3; }
+    #md-detail-empty p { font-size: 11px; line-height: 1.7; }
+    #md-detail-card {
+      display: none; flex-direction: column; height: 100%;
+    }
+    #md-card-img-wrap {
+      padding: 12px 12px 6px; display: flex; justify-content: center; flex-shrink: 0;
+    }
+    #md-card-img {
+      width: 132px; border-radius: 6px; display: block;
+      box-shadow: 0 6px 24px rgba(0,0,0,.8);
+    }
+    #md-card-info {
+      padding: 6px 12px 8px; flex-shrink: 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    #md-card-name {
+      font-family: 'Press Start 2P', monospace; font-size: 7px;
+      color: var(--gold); line-height: 1.8; margin-bottom: 5px;
+    }
+    .md-type-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      font-size: 10px; font-weight: 700; margin-bottom: 4px;
+    }
+    #md-card-lvl { font-size: 11px; color: var(--gold); margin-bottom: 2px; letter-spacing: .5px; }
+    #md-card-ad  { font-size: 13px; font-weight: 700; color: var(--text); margin-top: 2px; }
+    #md-card-desc {
+      flex: 1; overflow-y: auto; padding: 8px 12px;
+      font-size: 10px; color: var(--text-dim); line-height: 1.8;
+      -webkit-overflow-scrolling: touch;
+    }
+    #md-card-actions {
+      padding: 10px 12px; flex-shrink: 0;
+      border-top: 1px solid rgba(56,139,253,.15);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .md-count-row {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .md-count-label { font-size: 11px; color: var(--text-dim); font-weight: 700; }
+    .md-count-val { font-size: 16px; font-weight: 700; color: var(--gold); }
+    .md-btn-row { display: flex; gap: 5px; }
+    .md-btn-add {
+      flex: 1; padding: 9px 6px; background: rgba(56,139,253,.15);
+      border: 1px solid #388bfd; border-radius: 8px; color: #388bfd;
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px;
+      cursor: pointer; transition: background .15s;
+    }
+    .md-btn-add:hover { background: rgba(56,139,253,.3); }
+    .md-btn-rem {
+      flex: 1; padding: 9px 6px; background: rgba(224,48,48,.1);
+      border: 1px solid var(--danger); border-radius: 8px; color: var(--danger);
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px;
+      cursor: pointer; transition: background .15s;
+    }
+    .md-btn-rem:hover { background: rgba(224,48,48,.25); }
+    .md-btn-fav {
+      width: 40px; padding: 9px; background: var(--surface2);
+      border: 1px solid var(--border2); border-radius: 8px;
+      font-size: 16px; cursor: pointer; transition: all .15s; text-align: center;
+    }
+    .md-btn-fav.on { background: rgba(201,168,76,.2); border-color: var(--gold); }
+
+    /* CENTER: Deck grid */
+    #md-center {
+      flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden;
+      border-right: 1px solid rgba(56,139,253,.12);
+    }
+    #md-center-hdr {
+      padding: 8px 12px; flex-shrink: 0;
+      background: rgba(10,10,26,.94);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(56,139,253,.18);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .md-hdr-name {
+      flex: 1; background: transparent; border: none; outline: none;
+      color: var(--text); font-family: 'Rajdhani', sans-serif;
+      font-size: 16px; font-weight: 700; padding: 3px 0;
+      border-bottom: 1px solid transparent; transition: border-color .2s;
+    }
+    .md-hdr-name:focus { border-bottom-color: #388bfd; }
+    .md-hdr-btn {
+      width: 32px; height: 32px; background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 6px;
+      color: var(--text-dim); font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: all .15s;
+    }
+    .md-hdr-btn:hover { border-color: #388bfd; color: #388bfd; }
+    .md-hdr-btn.danger:hover { border-color: var(--danger); color: var(--danger); }
+    #md-deck-scroll {
+      flex: 1; overflow-y: auto; padding: 12px 14px 24px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .md-sec-hdr {
+      display: flex; align-items: baseline; gap: 8px;
+      margin-bottom: 8px; margin-top: 10px;
+    }
+    .md-sec-hdr:first-child { margin-top: 0; }
+    .md-sec-title {
+      font-family: 'Press Start 2P', monospace; font-size: 8px; color: #bbb;
+    }
+    .md-sec-count { font-size: 13px; color: var(--text-dim); font-weight: 700; }
+    .md-sec-limit { font-size: 11px; color: rgba(255,255,255,.3); }
+    .md-card-grid {
+      display: flex; flex-wrap: wrap; gap: 4px;
+      margin-bottom: 6px; min-height: 76px; align-content: flex-start;
+    }
+    .md-card-grid.is-empty {
+      border: 1px dashed rgba(255,255,255,.07); border-radius: 8px;
+      align-items: center; justify-content: center;
+    }
+    .md-empty-msg { font-size: 11px; color: rgba(255,255,255,.25); padding: 10px; }
+    .md-thumb {
+      width: 52px; position: relative; cursor: pointer; flex-shrink: 0;
+      transition: transform .15s; border-radius: 4px;
+    }
+    .md-thumb:hover { transform: translateY(-4px); z-index: 2; }
+    .md-thumb.sel { outline: 2px solid var(--gold); outline-offset: 1px; z-index: 3; }
+    .md-thumb img {
+      width: 52px; height: 76px; object-fit: cover; border-radius: 4px; display: block;
+      background: var(--surface2); box-shadow: 0 2px 8px rgba(0,0,0,.7);
+    }
+    .md-thumb-cnt {
+      position: absolute; top: 2px; right: 2px;
+      background: rgba(0,0,0,.82); color: var(--gold);
+      border-radius: 3px; font-size: 10px; font-weight: 700;
+      padding: 1px 4px; pointer-events: none; line-height: 1.3;
+      border: 1px solid rgba(201,168,76,.35);
     }
 
-    /* Search + filter header */
-    .mdb-top {
-      background: rgba(12,12,28,0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(56,139,253,0.15);
-      padding: 10px 12px 10px; flex-shrink: 0;
+    /* RIGHT: Collection panel */
+    #md-collection {
+      width: 290px; flex-shrink: 0;
+      display: flex; flex-direction: column; overflow: hidden;
+      background: rgba(8,8,20,.92);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
     }
-
-    .mdb-search-row {
-      display: flex; gap: 8px; align-items: center; margin-bottom: 10px;
+    #md-collection > #deck-body { flex: 1; }
+    #md-coll-hdr {
+      flex-shrink: 0; padding: 8px 10px;
+      background: rgba(10,10,26,.95);
+      border-bottom: 1px solid rgba(56,139,253,.18);
     }
+    .md-coll-tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+    .md-coll-tab {
+      flex: 1; padding: 7px 4px; border: 1px solid var(--border2); border-radius: 8px;
+      background: none; color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
+      font-weight: 700; font-size: 12px; cursor: pointer; transition: all .15s; text-align: center;
+    }
+    .md-coll-tab.active { background: #388bfd; border-color: #388bfd; color: #fff; }
+    #md-coll-grid { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
+    #deck-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
 
+    /* Search / filter UI */
+    .mdb-search-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
     .mdb-search-box {
       flex: 1; display: flex; align-items: center;
-      background: rgba(5,5,15,0.6);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 8px; padding: 9px 12px; gap: 8px;
+      background: rgba(5,5,15,.6); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 8px; padding: 8px 10px; gap: 8px;
       transition: border-color .2s, box-shadow .2s;
     }
-    .mdb-search-box:focus-within {
-      border-color: #388bfd;
-      box-shadow: 0 0 0 2px rgba(56,139,253,0.15);
-    }
+    .mdb-search-box:focus-within { border-color: #388bfd; box-shadow: 0 0 0 2px rgba(56,139,253,.15); }
     .mdb-search-box input {
       flex: 1; background: none; border: none; color: var(--text);
-      font-family: 'Rajdhani', sans-serif; font-size: 15px; outline: none;
+      font-family: 'Rajdhani', sans-serif; font-size: 14px; outline: none;
     }
     .mdb-search-box input::placeholder { color: var(--text-dim); }
-    .si { color: var(--text-dim); font-size: 16px; flex-shrink: 0; }
+    .si { color: var(--text-dim); font-size: 15px; flex-shrink: 0; }
     .clear-x {
       background: none; border: none; color: var(--text-dim); cursor: pointer;
-      font-size: 15px; padding: 2px; min-width: 24px; min-height: 24px;
+      font-size: 14px; padding: 2px; min-width: 22px; min-height: 22px;
       display: flex; align-items: center; justify-content: center;
     }
-
-    /* Type pills */
     .mdb-pills {
-      display: flex; gap: 6px; flex-wrap: nowrap;
-      overflow-x: auto; scrollbar-width: none; margin-bottom: 8px;
+      display: flex; gap: 5px; flex-wrap: nowrap;
+      overflow-x: auto; scrollbar-width: none; margin-bottom: 7px;
     }
     .mdb-pills::-webkit-scrollbar { display: none; }
     .mdb-pill {
-      padding: 5px 14px; border: 1px solid var(--border2); border-radius: 20px;
+      padding: 4px 12px; border: 1px solid var(--border2); border-radius: 20px;
       background: none; color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
-      font-weight: 700; font-size: 12px; cursor: pointer; white-space: nowrap;
-      transition: all .15s; min-height: 30px;
+      font-weight: 700; font-size: 11px; cursor: pointer; white-space: nowrap;
+      transition: all .15s; min-height: 28px;
     }
     .mdb-pill.active { background: #388bfd; border-color: #388bfd; color: #fff; }
-
-    /* Attribute row */
-    .mdb-attr-row {
-      display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px;
-    }
+    .mdb-attr-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 7px; }
     .mdb-attr {
-      padding: 4px 9px; border: 1px solid var(--border2); border-radius: 6px;
+      padding: 3px 7px; border: 1px solid var(--border2); border-radius: 5px;
       background: var(--surface2); color: var(--text-dim);
-      font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 700;
+      font-family: 'Rajdhani', sans-serif; font-size: 10px; font-weight: 700;
       cursor: pointer; transition: all .15s;
     }
     .mdb-attr.active { border-color: #388bfd; color: #388bfd; background: rgba(56,139,253,.1); }
-
-    /* Sort + browse row */
-    .mdb-bottom-row {
-      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-    }
-    .mdb-sort-label { font-size: 11px; color: var(--text-dim); font-weight: 700; }
+    .mdb-bottom-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .mdb-sort-label { font-size: 10px; color: var(--text-dim); font-weight: 700; }
     .mdb-sort {
-      padding: 4px 10px; border: 1px solid var(--border2); border-radius: 6px;
+      padding: 3px 8px; border: 1px solid var(--border2); border-radius: 5px;
       background: none; color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
-      font-size: 11px; font-weight: 700; cursor: pointer; transition: all .15s;
+      font-size: 10px; font-weight: 700; cursor: pointer; transition: all .15s;
     }
     .mdb-sort.active { color: var(--gold); border-color: var(--gold); }
     .mdb-browse-btn {
-      margin-left: auto; padding: 4px 12px;
-      border: 1px dashed var(--border2); border-radius: 6px;
+      margin-left: auto; padding: 3px 10px;
+      border: 1px dashed var(--border2); border-radius: 5px;
       background: none; color: var(--text-dim); font-family: 'Rajdhani', sans-serif;
-      font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap;
+      font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap;
     }
     .mdb-browse-btn.active { border-color: var(--gold); color: var(--gold); }
 
-    /* Card grid area */
-    .mdb-grid-wrap {
-      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-      padding-bottom: 8px;
-    }
+    /* Collection card grid */
     .card-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 6px; padding: 10px;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 5px; padding: 8px;
     }
-    @media (min-width: 400px) { .card-grid { grid-template-columns: repeat(4, 1fr); } }
-    @media (min-width: 600px) { .card-grid { grid-template-columns: repeat(5, 1fr); } }
-    @media (min-width: 900px) { .card-grid { grid-template-columns: repeat(4, 1fr); } }
-    @media (min-width: 1100px) { .card-grid { grid-template-columns: repeat(5, 1fr); } }
-
     .cgi {
-      aspect-ratio: 59/86; border-radius: 5px;
-      overflow: hidden; position: relative;
+      aspect-ratio: 59/86; border-radius: 4px; overflow: hidden; position: relative;
       cursor: pointer; background: var(--surface2);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,.06);
       transition: transform .15s, box-shadow .15s, border-color .15s;
     }
     .cgi:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 6px 20px rgba(0,0,0,.6), 0 0 12px rgba(56,139,253,0.25);
-      border-color: rgba(56,139,253,0.4);
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 4px 14px rgba(0,0,0,.6), 0 0 8px rgba(56,139,253,.2);
+      border-color: rgba(56,139,253,.4);
     }
-    .cgi:active { transform: scale(.94); }
+    .cgi.sel { border-color: var(--gold) !important; box-shadow: 0 0 0 1px var(--gold); }
+    .cgi:active { transform: scale(.93); }
     .cgi img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .cgi-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
     .cgi-badge {
-      position: absolute; top: 3px; right: 3px;
-      background: #388bfd; color: #fff;
-      border-radius: 50%; width: 20px; height: 20px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 700;
+      position: absolute; top: 2px; right: 2px;
+      background: #388bfd; color: #fff; border-radius: 50%;
+      width: 18px; height: 18px; display: flex; align-items: center;
+      justify-content: center; font-size: 10px; font-weight: 700;
     }
-
-    /* Skeleton */
     .skel {
-      background: linear-gradient(90deg,
-        var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
       background-size: 200% 100%; animation: skel 1.4s infinite;
     }
-    @keyframes skel { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    @keyframes skel { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-    /* ===== MASTER DUEL DECK PANEL ===== */
-    .mdb-deck {
-      width: 300px;
-      background: rgba(8,8,20,0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-left: 1px solid rgba(56,139,253,0.2);
-      display: flex; flex-direction: column; flex-shrink: 0;
-      box-shadow: -4px 0 24px rgba(0,0,0,0.5);
+    /* Browse / Load more */
+    .load-more-wrap { padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .load-more-btn {
+      width: 100%; padding: 11px; background: var(--surface2); border: 1px solid var(--gold);
+      border-radius: 8px; color: var(--gold);
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 13px;
+      cursor: pointer; transition: background .2s;
     }
+    .load-more-btn:hover { background: var(--surface3); }
+    .browse-count { font-size: 11px; color: var(--text-dim); }
+    .browse-meta { font-size: 11px; color: var(--text-dim); }
+    .browse-all-btn { display: none; }
 
-    @media (max-width: 767px) {
-      .mdb-deck {
+    /* Mobile */
+    @media (max-width: 900px) {
+      #md-detail { display: none; }
+      #md-center { border-right: none; }
+      #md-collection {
         position: fixed; top: 0; right: 0; bottom: var(--tab-h);
-        width: min(300px, 90vw);
+        width: min(290px, 93vw);
         transform: translateX(100%); transition: transform .3s ease;
-        z-index: 200; box-shadow: -6px 0 32px rgba(0,0,0,.6);
+        z-index: 200; box-shadow: -6px 0 32px rgba(0,0,0,.7);
       }
-      .mdb-deck.open { transform: translateX(0); }
-      #deck-screen { flex-direction: column; }
+      #md-collection.open { transform: translateX(0); }
     }
-
-    .mdb-deck-hdr {
-      padding: 10px 10px 8px;
-      border-bottom: 1px solid rgba(56,139,253,0.15);
-      background: rgba(56,139,253,0.04);
-      flex-shrink: 0;
-    }
-    .mdb-deck-name-row {
-      display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
-    }
-    .mdb-deck-name-inp {
-      flex: 1; background: var(--surface2); border: 1px solid var(--border2);
-      border-radius: 6px; color: var(--text); font-family: 'Rajdhani', sans-serif;
-      font-weight: 700; font-size: 13px; padding: 5px 8px; outline: none;
-    }
-    .mdb-deck-name-inp:focus { border-color: #388bfd; }
-    .mdb-deck-actions { display: flex; gap: 5px; }
-    .mdb-deck-action-btn {
-      padding: 5px 8px; background: var(--surface2); border: 1px solid var(--border2);
-      border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--text);
-      min-width: 32px; min-height: 32px; transition: border-color .15s;
-    }
-    .mdb-deck-action-btn:hover { border-color: #388bfd; }
-    .mdb-deck-action-btn.danger:hover { border-color: var(--danger); color: var(--danger); }
-
-    /* Deck section tabs */
-    .mdb-deck-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-    .mdb-dtab {
-      flex: 1; padding: 9px 4px; background: none; border: none;
-      border-bottom: 2px solid transparent; color: var(--text-dim);
-      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 11px;
-      cursor: pointer; transition: all .15s; text-align: center;
-    }
-    .mdb-dtab.active { color: #388bfd; border-bottom-color: #388bfd; }
-    .mdb-dtab-cnt {
-      background: var(--surface2); border-radius: 10px;
-      padding: 1px 5px; font-size: 10px; margin-left: 3px;
-    }
-
-    /* Deck card list */
-    .mdb-deck-list { flex: 1; overflow-y: auto; }
-    .mdb-deck-section { padding: 6px 8px 2px; }
-    .mdb-deck-sec-label {
-      font-size: 9px; color: var(--text-dim); font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
-      font-family: 'Press Start 2P', monospace;
-    }
-    .mdb-card-row {
-      display: flex; align-items: center; gap: 9px; padding: 5px 8px;
-      border-radius: 6px; cursor: pointer; transition: background .15s, box-shadow .15s; margin-bottom: 3px;
-    }
-    .mdb-card-row:hover {
-      background: rgba(56,139,253,0.1);
-      box-shadow: inset 2px 0 0 #388bfd;
-    }
-    .mdb-card-thumb {
-      width: 44px; height: 64px; border-radius: 4px; object-fit: cover;
-      flex-shrink: 0; background: var(--surface2);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    }
-    .mdb-card-info { flex: 1; min-width: 0; }
-    .mdb-card-row-name {
-      font-size: 13px; font-weight: 700; color: var(--text);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      margin-bottom: 2px;
-    }
-    .mdb-card-row-type { font-size: 11px; color: var(--text-dim); }
-    .mdb-count-ctrl { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-    .mdb-cnt-btn {
-      width: 22px; height: 22px; border-radius: 4px; border: 1px solid var(--border2);
-      background: var(--surface2); color: var(--text); font-size: 14px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; line-height: 1;
-      transition: all .15s;
-    }
-    .mdb-cnt-btn.add { border-color: #388bfd; color: #388bfd; }
-    .mdb-cnt-btn.rem { border-color: var(--danger); color: var(--danger); }
-    .mdb-cnt-num { font-size: 12px; font-weight: 700; color: var(--gold); min-width: 14px; text-align: center; }
-
-    /* Deck footer stats */
-    .mdb-deck-footer {
-      border-top: 1px solid rgba(56,139,253,0.15);
-      background: rgba(56,139,253,0.04);
-      padding: 8px 10px;
-      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
-    }
-    .mdb-deck-stat { display: flex; flex-direction: column; align-items: center; flex: 1; }
-    .mdb-deck-stat-label { font-size: 9px; color: var(--text-dim); font-weight: 700; }
-    .mdb-deck-stat-val { font-size: 13px; font-weight: 700; color: var(--text); }
-    .mdb-deck-stat-val.warn { color: var(--danger); }
-
-    /* Mobile toggle button */
     .mdb-deck-toggle {
       display: none; position: fixed;
       bottom: calc(var(--tab-h) + 12px); right: 14px;
@@ -620,35 +655,7 @@
       width: 22px; height: 22px; display: flex; align-items: center;
       justify-content: center; font-size: 12px;
     }
-    @media (max-width: 767px) { .mdb-deck-toggle { display: flex; } }
-
-    /* ===== BROWSE / LOAD MORE ===== */
-    .browse-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 6px 12px 0; gap: 8px;
-    }
-    .browse-all-btn {
-      flex: 1; padding: 9px 14px;
-      background: var(--surface2); border: 1px solid var(--border2);
-      border-radius: 10px; color: var(--text);
-      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 13px;
-      cursor: pointer; display: flex; align-items: center; gap: 6px;
-      transition: border-color .2s;
-    }
-    .browse-all-btn:hover { border-color: var(--gold); }
-    .browse-all-btn.active { border-color: var(--gold); color: var(--gold); }
-    .browse-meta {
-      font-size: 11px; color: var(--text-dim); white-space: nowrap;
-    }
-    .load-more-wrap { padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .load-more-btn {
-      width: 100%; max-width: 320px; padding: 13px;
-      background: var(--surface2); border: 1px solid var(--gold);
-      border-radius: 10px; color: var(--gold);
-      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px;
-      cursor: pointer; transition: background .2s;
-    }
-    .load-more-btn:hover { background: var(--surface3); }
+    @media (max-width: 900px) { .mdb-deck-toggle { display: flex; } }
     .load-more-btn:disabled { opacity: .4; cursor: not-allowed; }
     .browse-count { font-size: 12px; color: var(--text-dim); }
 
@@ -1602,42 +1609,107 @@
   <!-- ======================== DECK BUILDER ======================== -->
   <div id="deck-screen" class="screen">
 
-    <!-- ── LEFT: Card Browser ── -->
-    <div class="mdb-browser">
-      <div class="mdb-top">
+    <!-- ── LEFT: Card Detail Panel ── -->
+    <div id="md-detail">
+      <div id="md-detail-empty">
+        <div class="ei">🃏</div>
+        <p>Click any card to view details and add it to your deck</p>
+      </div>
+      <div id="md-detail-card">
+        <div id="md-card-img-wrap">
+          <img id="md-card-img" src="" alt="" loading="lazy" onerror="this.style.opacity='.35'">
+        </div>
+        <div id="md-card-info">
+          <div id="md-card-name"></div>
+          <span class="md-type-badge" id="md-card-badge"></span>
+          <div id="md-card-lvl"></div>
+          <div id="md-card-ad"></div>
+        </div>
+        <div id="md-card-desc"></div>
+        <div id="md-card-actions">
+          <div class="md-count-row">
+            <span class="md-count-label">In Deck</span>
+            <span class="md-count-val" id="md-in-deck">0/3</span>
+          </div>
+          <div class="md-btn-row">
+            <button class="md-btn-add" onclick="mdAdd()">+1 Add</button>
+            <button class="md-btn-rem" onclick="mdRem()">−1</button>
+            <button class="md-btn-fav" id="md-fav-btn" onclick="mdFav()" title="Favorite">☆</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <!-- Search row -->
+    <!-- ── CENTER: Deck Grid ── -->
+    <div id="md-center">
+      <div id="md-center-hdr">
+        <input class="md-hdr-name" id="mdb-deck-name" value="New Deck"
+               onblur="renameDeckInline(this.value)" onkeydown="if(event.key==='Enter')this.blur()">
+        <button class="md-hdr-btn" onclick="saveDeckDialog()" title="Save">💾</button>
+        <button class="md-hdr-btn" onclick="openLoadSheet()" title="Load">📂</button>
+        <button class="md-hdr-btn" onclick="validateDeck()" title="Validate">✔</button>
+        <button class="md-hdr-btn danger" onclick="newDeck()" title="New">🗑</button>
+        <button class="md-hdr-btn" onclick="exportDeck()" title="Export">↗</button>
+      </div>
+      <div id="md-deck-scroll">
+        <div class="md-sec-hdr">
+          <span class="md-sec-title">Main Deck</span>
+          <span class="md-sec-count" id="cnt-main">0</span>
+          <span class="md-sec-limit">/ 60</span>
+        </div>
+        <div class="md-card-grid is-empty" id="md-main-grid">
+          <div class="md-empty-msg">Add cards from the right panel</div>
+        </div>
+        <div class="md-sec-hdr">
+          <span class="md-sec-title">Extra Deck</span>
+          <span class="md-sec-count" id="cnt-extra">0</span>
+          <span class="md-sec-limit">/ 15</span>
+        </div>
+        <div class="md-card-grid is-empty" id="md-extra-grid">
+          <div class="md-empty-msg">Fusion / Synchro / XYZ / Link</div>
+        </div>
+        <div class="md-sec-hdr">
+          <span class="md-sec-title">Side Deck</span>
+          <span class="md-sec-count" id="cnt-side">0</span>
+          <span class="md-sec-limit">/ 15</span>
+        </div>
+        <div class="md-card-grid is-empty" id="md-side-grid">
+          <div class="md-empty-msg">Side deck cards</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: Card Collection / Search ── -->
+    <div id="md-collection">
+      <div id="md-coll-hdr">
+        <div class="md-coll-tabs">
+          <button class="md-coll-tab active" onclick="setCollTab('all',this)">Card List</button>
+          <button class="md-coll-tab" onclick="setCollTab('fav',this)">★ Favorites</button>
+        </div>
         <div class="mdb-search-row">
           <div class="mdb-search-box">
             <span class="si">🔍</span>
             <input type="text" id="card-search"
-                   placeholder="Search cards by name…"
+                   placeholder="Search by card name…"
                    autocomplete="off" autocorrect="off" spellcheck="false">
             <button class="clear-x" id="clear-btn" onclick="clearSearch()" style="display:none">✕</button>
           </div>
         </div>
-
-        <!-- Type pills -->
         <div class="mdb-pills" id="filter-tabs">
-          <button class="mdb-pill active" data-f="all"     onclick="setFilter('all',this)">All</button>
-          <button class="mdb-pill"        data-f="monster"  onclick="setFilter('monster',this)">Monster</button>
-          <button class="mdb-pill"        data-f="spell"    onclick="setFilter('spell',this)">Spell</button>
-          <button class="mdb-pill"        data-f="trap"     onclick="setFilter('trap',this)">Trap</button>
-          <button class="mdb-pill"        data-f="extra"    onclick="setFilter('extra',this)">Extra</button>
+          <button class="mdb-pill active" data-f="all"    onclick="setFilter('all',this)">All</button>
+          <button class="mdb-pill" data-f="monster"        onclick="setFilter('monster',this)">Monster</button>
+          <button class="mdb-pill" data-f="spell"          onclick="setFilter('spell',this)">Spell</button>
+          <button class="mdb-pill" data-f="trap"           onclick="setFilter('trap',this)">Trap</button>
+          <button class="mdb-pill" data-f="extra"          onclick="setFilter('extra',this)">Extra</button>
         </div>
-
-        <!-- Attribute filter -->
         <div class="mdb-attr-row" id="mdb-attr-row">
-          <button class="mdb-attr" data-attr="DARK"   onclick="toggleAttr('DARK',this)">🌑 DARK</button>
-          <button class="mdb-attr" data-attr="LIGHT"  onclick="toggleAttr('LIGHT',this)">☀ LIGHT</button>
-          <button class="mdb-attr" data-attr="EARTH"  onclick="toggleAttr('EARTH',this)">🌍 EARTH</button>
-          <button class="mdb-attr" data-attr="WATER"  onclick="toggleAttr('WATER',this)">💧 WATER</button>
-          <button class="mdb-attr" data-attr="FIRE"   onclick="toggleAttr('FIRE',this)">🔥 FIRE</button>
-          <button class="mdb-attr" data-attr="WIND"   onclick="toggleAttr('WIND',this)">💨 WIND</button>
-          <button class="mdb-attr" data-attr="DIVINE" onclick="toggleAttr('DIVINE',this)">✨ DIVINE</button>
+          <button class="mdb-attr" data-attr="DARK"  onclick="toggleAttr('DARK',this)">DARK</button>
+          <button class="mdb-attr" data-attr="LIGHT" onclick="toggleAttr('LIGHT',this)">LIGHT</button>
+          <button class="mdb-attr" data-attr="EARTH" onclick="toggleAttr('EARTH',this)">EARTH</button>
+          <button class="mdb-attr" data-attr="WATER" onclick="toggleAttr('WATER',this)">WATER</button>
+          <button class="mdb-attr" data-attr="FIRE"  onclick="toggleAttr('FIRE',this)">FIRE</button>
+          <button class="mdb-attr" data-attr="WIND"  onclick="toggleAttr('WIND',this)">WIND</button>
         </div>
-
-        <!-- Sort + Browse row -->
         <div class="mdb-bottom-row">
           <span class="mdb-sort-label">Sort:</span>
           <button class="mdb-sort active" onclick="setSort('name',this)">Name</button>
@@ -1646,75 +1718,21 @@
           <button class="mdb-sort" onclick="setSort('level',this)">Level↓</button>
           <button class="mdb-browse-btn" id="browse-btn" onclick="toggleBrowse()">🗂 Browse All <span id="browse-meta"></span></button>
         </div>
-
-      </div><!-- /.mdb-top -->
-
-      <!-- Card grid -->
-      <div class="mdb-grid-wrap" id="deck-body">
+      </div>
+      <div id="deck-body">
         <div id="starter-area"></div>
         <div id="card-results">
           <div class="empty">
             <div class="empty-i">🔍</div>
-            <p>Search for a card above, or tap <b>Browse All</b> to load the full database.</p>
+            <p>Search for a card above, or tap <b>Browse All</b> to load cards.</p>
           </div>
         </div>
       </div>
-    </div><!-- /.mdb-browser -->
+    </div>
 
-    <!-- ── RIGHT: Deck Panel ── -->
-    <div class="mdb-deck" id="mdb-deck">
-
-      <div class="mdb-deck-hdr">
-        <div class="mdb-deck-name-row">
-          <input class="mdb-deck-name-inp" id="mdb-deck-name" value="New Deck"
-                 onblur="renameDeckInline(this.value)" onkeydown="if(event.key==='Enter')this.blur()">
-          <div class="mdb-deck-actions">
-            <button class="mdb-deck-action-btn" onclick="saveDeckDialog()" title="Save">💾</button>
-            <button class="mdb-deck-action-btn" onclick="openLoadSheet()" title="Load">📂</button>
-            <button class="mdb-deck-action-btn" onclick="validateDeck()" title="Validate">✔</button>
-            <button class="mdb-deck-action-btn danger" onclick="newDeck()" title="New Deck">🗑</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section tabs -->
-      <div class="mdb-deck-tabs">
-        <button class="mdb-dtab active" onclick="setDeckSecMdb('main',this)">
-          Main <span class="mdb-dtab-cnt" id="cnt-main">0</span>
-        </button>
-        <button class="mdb-dtab" onclick="setDeckSecMdb('extra',this)">
-          Extra <span class="mdb-dtab-cnt" id="cnt-extra">0</span>
-        </button>
-        <button class="mdb-dtab" onclick="setDeckSecMdb('side',this)">
-          Side <span class="mdb-dtab-cnt" id="cnt-side">0</span>
-        </button>
-      </div>
-
-      <!-- Deck card list -->
-      <div class="mdb-deck-list" id="mdb-deck-list"></div>
-
-      <!-- Footer -->
-      <div class="mdb-deck-footer">
-        <div class="mdb-deck-stat">
-          <span class="mdb-deck-stat-label">MAIN</span>
-          <span class="mdb-deck-stat-val" id="footer-main">0/60</span>
-        </div>
-        <div class="mdb-deck-stat">
-          <span class="mdb-deck-stat-label">EXTRA</span>
-          <span class="mdb-deck-stat-val" id="footer-extra">0/15</span>
-        </div>
-        <div class="mdb-deck-stat">
-          <span class="mdb-deck-stat-label">SIDE</span>
-          <span class="mdb-deck-stat-val" id="footer-side">0/15</span>
-        </div>
-        <button class="mdb-deck-action-btn" onclick="exportDeck()" style="margin-left:auto">Export</button>
-      </div>
-
-    </div><!-- /.mdb-deck -->
-
-    <!-- Mobile toggle -->
+    <!-- Mobile: toggle search panel -->
     <button class="mdb-deck-toggle" id="mdb-toggle" onclick="toggleMdbDeck()">
-      My Deck
+      Search Cards
       <span class="mdb-toggle-badge" id="mdb-toggle-cnt">0</span>
     </button>
 
@@ -2255,9 +2273,10 @@ const S = {
     extra: [],
     side:  []
   },
-  deckSec:     'main',
-  deckOpen:    false,
-  prevScroll:  {}
+  deckSec:      'main',
+  deckOpen:     false,
+  selectedCard: null,
+  prevScroll:   {}
 };
 
 /* ============================================================
@@ -2487,7 +2506,7 @@ function renderBrowseGrid(cards, hasMore) {
     const img = CardDB.imgUrl(c);
     const cls = typeClass(c);
     const cnt = totalInDeck(c.id);
-    h += `<div class="cgi" onclick="openModal(${c.id})" data-id="${c.id}">
+    h += `<div class="cgi" onclick="pickCard(${c.id})" data-id="${c.id}">
       <img src="${img}" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
       <div class="cgi-bar ${cls}"></div>
       ${cnt ? `<div class="cgi-badge">${cnt}</div>` : ''}
@@ -2569,7 +2588,7 @@ function renderResults(cards) {
     const img = CardDB.imgUrl(c);
     const cls = typeClass(c);
     const cnt = totalInDeck(c.id);
-    h += `<div class="cgi" onclick="openModal(${c.id})" data-id="${c.id}">
+    h += `<div class="cgi" onclick="pickCard(${c.id})" data-id="${c.id}">
       <img src="${img}" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
       <div class="cgi-bar ${cls}"></div>
       ${cnt ? `<div class="cgi-badge">${cnt}</div>` : ''}
@@ -2668,6 +2687,10 @@ function addCard(card, sec) {
   refreshDeckUI();
   renderDeckBody();
   refreshGridBadge(card.id);
+  if (S.selectedCard && S.selectedCard.id == card.id) {
+    const el = document.getElementById('md-in-deck');
+    if (el) el.textContent = `${totalInDeck(card.id)}/3`;
+  }
   toast(`Added ${card.name}`, 'ok');
   if (navigator.vibrate) navigator.vibrate(8);
 }
@@ -2681,6 +2704,10 @@ function removeCard(id, sec) {
   refreshDeckUI();
   renderDeckBody();
   refreshGridBadge(id);
+  if (S.selectedCard && S.selectedCard.id == id) {
+    const el = document.getElementById('md-in-deck');
+    if (el) el.textContent = `${totalInDeck(id)}/3`;
+  }
 }
 
 function refreshGridBadge(id) {
@@ -2696,59 +2723,48 @@ function refreshGridBadge(id) {
 
 function refreshDeckUI() {
   const main = countSec('main'), extra = countSec('extra'), side = countSec('side');
-
-  // Legacy panel elements (kept hidden but JS references them)
-  const dpBadge = document.getElementById('dp-badge');
-  if (dpBadge) dpBadge.textContent = main;
-  document.getElementById('cnt-main').textContent  = main;
-  document.getElementById('cnt-extra').textContent = extra;
-  document.getElementById('cnt-side').textContent  = side;
-  const v = document.getElementById('dp-validity');
-  if (v) v.style.display = 'none';
-
-  // MDB footer stats
-  const fm = document.getElementById('footer-main');
-  const fe = document.getElementById('footer-extra');
-  const fs = document.getElementById('footer-side');
-  if (fm) { fm.textContent = `${main}/60`; fm.className = 'mdb-deck-stat-val' + (main > 60 ? ' warn' : ''); }
-  if (fe) fe.textContent = `${extra}/15`;
-  if (fs) fs.textContent = `${side}/15`;
-
-  // Mobile toggle badge
+  const cm = document.getElementById('cnt-main');
+  const ce = document.getElementById('cnt-extra');
+  const cs = document.getElementById('cnt-side');
+  if (cm) { cm.textContent = main; cm.style.color = main > 60 ? 'var(--danger)' : ''; }
+  if (ce) ce.textContent = extra;
+  if (cs) cs.textContent = side;
   const tc = document.getElementById('mdb-toggle-cnt');
-  if (tc) tc.textContent = main;
-
-  // Sync deck name input
+  if (tc) tc.textContent = main + extra;
   const ni = document.getElementById('mdb-deck-name');
   if (ni && ni.value !== S.deck.name) ni.value = S.deck.name;
 }
 
 function renderDeckBody() {
-  const list = S.deck[S.deckSec];
+  renderDeckGrid('main');
+  renderDeckGrid('extra');
+  renderDeckGrid('side');
+}
 
-  // Legacy panel (kept for compatibility)
-  const body = document.getElementById('dp-body');
-  if (body) {
-    if (!list.length) {
-      body.innerHTML = `<div class="empty" style="padding:24px">
-        <div class="empty-i">🃏</div><p>No cards in ${S.deckSec} deck yet</p></div>`;
-    } else {
-      const sorted = [...list].sort((a, b) => {
-        const to = { monster:0, spell:1, trap:2, extra:3 };
-        return (to[simpleType(a.card)] - to[simpleType(b.card)]) || a.card.name.localeCompare(b.card.name);
-      });
-      body.innerHTML = sorted.map(e => `
-        <div class="dk-row">
-          <img class="dk-thumb" src="${CardDB.imgUrl(e.card)}" alt="${e.card.name}" loading="lazy" onerror="this.style.opacity='.3'">
-          <div class="dk-info"><div class="dk-name">${e.card.name}</div><div class="dk-type">${e.card.type||''}</div></div>
-          <div class="dk-qty">×${e.count}</div>
-          <button class="dk-rm" onclick="removeCard(${e.card.id},'${S.deckSec}')">−</button>
-        </div>`).join('');
-    }
+function renderDeckGrid(sec) {
+  const el = document.getElementById(`md-${sec}-grid`);
+  if (!el) return;
+  const list = S.deck[sec];
+  if (!list.length) {
+    el.classList.add('is-empty');
+    const msgs = { main:'Add cards from the right panel', extra:'Fusion / Synchro / XYZ / Link', side:'Side deck cards' };
+    el.innerHTML = `<div class="md-empty-msg">${msgs[sec]||''}</div>`;
+    return;
   }
-
-  // MDB deck list
-  renderMdbDeckList();
+  el.classList.remove('is-empty');
+  const selId = S.selectedCard ? S.selectedCard.id : null;
+  const sorted = [...list].sort((a,b) => {
+    const to = {monster:0,spell:1,trap:2,extra:3};
+    return (to[simpleType(a.card)] - to[simpleType(b.card)]) || a.card.name.localeCompare(b.card.name);
+  });
+  el.innerHTML = sorted.map(e => {
+    const sel = e.card.id == selId ? ' sel' : '';
+    const badge = e.count > 1 ? `<div class="md-thumb-cnt">×${e.count}</div>` : '';
+    return `<div class="md-thumb${sel}" onclick="pickCard(${e.card.id})" data-deck-id="${e.card.id}">
+      <img src="${CardDB.imgUrl(e.card)}" alt="${e.card.name}" loading="lazy" onerror="this.style.opacity='.35'">
+      ${badge}
+    </div>`;
+  }).join('');
 }
 
 function simpleType(c) {
@@ -4086,78 +4102,134 @@ function sortCards(cards) {
   }
 }
 
-/* ---- MDB Deck Panel ---- */
-function renderMdbDeckList() {
-  const el = document.getElementById('mdb-deck-list');
-  if (!el) return;
-  const list = S.deck[S.deckSec];
-
-  if (!list.length) {
-    el.innerHTML = `<div class="empty" style="padding:24px">
-      <div class="empty-i">🃏</div>
-      <p>No cards in ${S.deckSec} deck yet.<br>Search or Browse All to find cards.</p></div>`;
-    return;
-  }
-
-  const sorted = [...list].sort((a, b) => {
-    const to = { monster:0, spell:1, trap:2, extra:3 };
-    return (to[simpleType(a.card)] - to[simpleType(b.card)]) || a.card.name.localeCompare(b.card.name);
-  });
-
-  // Group by type for headers
-  let html = '';
-  let lastType = null;
-  sorted.forEach(e => {
-    const t = simpleType(e.card);
-    if (t !== lastType) {
-      const label = { monster:'Monsters', spell:'Spells', trap:'Traps', extra:'Extra Deck' }[t] || t;
-      html += `<div class="mdb-deck-section"><div class="mdb-deck-sec-label">${label}</div>`;
-      lastType = t;
-    }
-    html += `
-      <div class="mdb-card-row" onclick="openModal(${e.card.id})">
-        <img class="mdb-card-thumb" src="${CardDB.imgUrl(e.card)}" alt="${e.card.name}" loading="lazy" onerror="this.style.opacity='.3'">
-        <div class="mdb-card-info">
-          <div class="mdb-card-row-name">${e.card.name}</div>
-          <div class="mdb-card-row-type">${e.card.type||''}</div>
-        </div>
-        <div class="mdb-count-ctrl">
-          <button class="mdb-cnt-btn add" onclick="event.stopPropagation();addCard(${e.card.id},'${S.deckSec}')">+</button>
-          <span class="mdb-cnt-num">${e.count}</span>
-          <button class="mdb-cnt-btn rem" onclick="event.stopPropagation();removeCard(${e.card.id},'${S.deckSec}')">−</button>
-        </div>
-      </div>`;
-  });
-  if (lastType) html += '</div>';
-  el.innerHTML = html;
-}
-
-function setDeckSecMdb(sec, btn) {
-  S.deckSec = sec;
-  document.querySelectorAll('.mdb-dtab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderDeckBody();
-}
-
 function toggleMdbDeck() {
-  const panel = document.getElementById('mdb-deck');
+  const panel = document.getElementById('md-collection');
   if (!panel) return;
   panel.classList.toggle('open');
 }
 
 function renameDeckInline(name) {
-  const n = name.trim() || 'New Deck';
-  S.deck.name = n;
-  const inp = document.getElementById('deck-name-inp');
-  if (inp) inp.value = n;
+  S.deck.name = name.trim() || 'New Deck';
 }
 
-/* ---- Override updateDeckFAB to hide old FAB, use MDB toggle ---- */
 function updateDeckFAB() {
   const fab = document.getElementById('dp-fab');
-  if (fab) fab.style.display = 'none'; // replaced by MDB toggle
+  if (fab) fab.style.display = 'none';
   refreshDeckUI();
-  renderMdbDeckList();
+  renderDeckBody();
+}
+
+/* ---- Card detail panel ---- */
+function showCardDetail(card) {
+  S.selectedCard = card;
+  S.byId[card.id] = card;
+
+  const empty  = document.getElementById('md-detail-empty');
+  const detail = document.getElementById('md-detail-card');
+  if (!empty || !detail) return;
+  empty.style.display  = 'none';
+  detail.style.display = 'flex';
+
+  document.getElementById('md-card-img').src = CardDB.imgUrl(card);
+  document.getElementById('md-card-name').textContent = card.name;
+
+  const badge = document.getElementById('md-card-badge');
+  badge.textContent  = card.type || '';
+  badge.className    = 'md-type-badge ' + typeClass(card);
+
+  let lvl = '';
+  if (card.level)   lvl = '★'.repeat(Math.min(card.level,12)) + ` Lv.${card.level}`;
+  if (card.rank)    lvl = '★'.repeat(Math.min(card.rank,12))  + ` Rank ${card.rank}`;
+  if (card.linkval) lvl = `Link-${card.linkval}`;
+  document.getElementById('md-card-lvl').textContent = lvl;
+
+  let ad = '';
+  if (card.atk !== undefined) ad += `ATK ${card.atk ?? '?'}`;
+  if (card.def !== undefined) ad += ` / DEF ${card.def ?? '?'}`;
+  document.getElementById('md-card-ad').textContent  = ad;
+  document.getElementById('md-card-desc').textContent = card.desc || '';
+
+  const cnt = totalInDeck(card.id);
+  document.getElementById('md-in-deck').textContent = `${cnt}/3`;
+
+  const favs   = getFavorites();
+  const favBtn = document.getElementById('md-fav-btn');
+  if (favBtn) {
+    const isFav = favs.has(String(card.id));
+    favBtn.textContent = isFav ? '★' : '☆';
+    favBtn.className   = 'md-btn-fav' + (isFav ? ' on' : '');
+  }
+
+  // Highlight selection in both grids
+  document.querySelectorAll('.md-thumb, .cgi').forEach(el => {
+    const eid = el.dataset.id || el.dataset.deckId;
+    if (eid == card.id) el.classList.add('sel');
+    else el.classList.remove('sel');
+  });
+}
+
+async function pickCard(id) {
+  let card = S.byId[id];
+  if (!card) card = await CardDB.fetchById(id);
+  if (!card) { toast('Card not found', 'err'); return; }
+  showCardDetail(card);
+}
+
+function mdAdd() {
+  if (!S.selectedCard) { toast('Select a card first', 'err'); return; }
+  const sec = isExtraCard(S.selectedCard) ? 'extra' : 'main';
+  addCard(S.selectedCard, sec);
+}
+
+function mdRem() {
+  if (!S.selectedCard) return;
+  const id = S.selectedCard.id;
+  let sec = 'main';
+  if (S.deck.extra.find(e => e.card.id == id)) sec = 'extra';
+  else if (S.deck.side.find(e => e.card.id == id)) sec = 'side';
+  removeCard(id, sec);
+}
+
+function mdFav() {
+  if (!S.selectedCard) return;
+  const favs = getFavorites();
+  const key  = String(S.selectedCard.id);
+  if (favs.has(key)) favs.delete(key); else favs.add(key);
+  saveFavorites(favs);
+  const btn = document.getElementById('md-fav-btn');
+  if (btn) { btn.textContent = favs.has(key) ? '★' : '☆'; btn.className = 'md-btn-fav' + (favs.has(key) ? ' on' : ''); }
+  toast(favs.has(key) ? 'Added to Favorites ★' : 'Removed from Favorites', 'ok');
+}
+
+function getFavorites() {
+  try { return new Set(JSON.parse(localStorage.getItem('ygo_favs') || '[]')); } catch { return new Set(); }
+}
+function saveFavorites(set) {
+  localStorage.setItem('ygo_favs', JSON.stringify([...set]));
+}
+
+function setCollTab(tab, btn) {
+  document.querySelectorAll('.md-coll-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (tab === 'fav') showFavoriteCards();
+  else {
+    document.getElementById('starter-area').style.display = '';
+    document.getElementById('card-results').style.display = '';
+  }
+}
+
+async function showFavoriteCards() {
+  const favs = [...getFavorites()];
+  const cr = document.getElementById('card-results');
+  if (!favs.length) {
+    cr.innerHTML = `<div class="empty"><div class="empty-i">☆</div><p>No favorites yet.<br>Click ☆ on any card to favorite it.</p></div>`;
+    return;
+  }
+  cr.innerHTML = `<div class="empty"><div class="empty-i">⏳</div><p>Loading favorites…</p></div>`;
+  const cards = await Promise.all(favs.map(id => S.byId[id] ? Promise.resolve(S.byId[id]) : CardDB.fetchById(id)));
+  const valid = cards.filter(Boolean);
+  valid.forEach(c => { S.byId[c.id] = c; });
+  renderResults(valid);
 }
 
 /* ============================================================
