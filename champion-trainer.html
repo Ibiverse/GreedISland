@@ -6,7 +6,7 @@
   <title>Champion Trainer — Yu-Gi-Oh!</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* ===== CSS VARIABLES ===== */
     :root {
@@ -168,7 +168,7 @@
     }
 
     .screen-title {
-      font-family: 'Press Start 2P', monospace;
+      font-family: 'Exo 2', sans-serif;
       font-size: 11px; color: var(--gold);
       letter-spacing: 1px;
     }
@@ -249,7 +249,7 @@
       position: absolute; bottom: 18px; left: 20px; right: 20px; z-index: 2;
     }
     .home-hero-title {
-      font-family: 'Press Start 2P', monospace;
+      font-family: 'Exo 2', sans-serif;
       font-size: clamp(12px, 3.5vw, 20px); color: #fff; line-height: 1.5;
       text-shadow: 0 2px 24px rgba(0,0,0,0.9), 0 0 48px rgba(212,170,80,0.35);
       margin-bottom: 5px;
@@ -294,12 +294,12 @@
     }
     .home-player-info { flex: 1; min-width: 0; }
     .home-player-name {
-      font-family: 'Press Start 2P', monospace; font-size: 9px;
+      font-family: 'Exo 2', sans-serif; font-size: 9px;
       color: var(--text); margin-bottom: 5px; line-height: 1.4;
     }
     .home-player-stats { font-size: 12px; color: var(--text-dim); }
     .home-rank-badge {
-      font-family: 'Press Start 2P', monospace; font-size: 7px;
+      font-family: 'Exo 2', sans-serif; font-size: 7px;
       color: var(--gold); background: rgba(212,170,80,0.1);
       border: 1px solid rgba(212,170,80,0.3); border-radius: 6px;
       padding: 5px 8px; white-space: nowrap;
@@ -325,35 +325,47 @@
       border-color: rgba(212,170,80,0.35);
     }
     .home-action-icon { font-size: 26px; line-height: 1; }
-    .home-action-label { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--text); }
+    .home-action-label { font-family: 'Exo 2', sans-serif; font-size: 8px; color: var(--text); }
     .home-action-sub { font-size: 11px; color: var(--text-dim); }
 
     /* Section header */
     .home-section-hdr { padding: 18px 14px 8px; }
     .home-section-title {
-      font-family: 'Press Start 2P', monospace; font-size: 8px;
+      font-family: 'Exo 2', sans-serif; font-size: 8px;
       color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px;
     }
 
-    /* Quick duel chips */
+    /* Quick duel card thumbnails */
     .home-opp-row {
-      display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+      display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none;
       padding: 0 14px 4px;
     }
     .home-opp-row::-webkit-scrollbar { display: none; }
-    .home-opp-chip {
-      flex-shrink: 0; display: flex; align-items: center; gap: 6px;
-      background: rgba(16,16,46,0.85); border: 1px solid rgba(70,90,180,0.22);
-      border-radius: 20px; padding: 8px 14px; cursor: pointer;
-      font-size: 12px; font-weight: 700; color: var(--text-dim);
-      transition: all .2s; white-space: nowrap;
+    .home-opp-card {
+      flex-shrink: 0; width: 88px; cursor: pointer; border-radius: 10px;
+      overflow: hidden; background: rgba(10,10,36,0.95);
+      border: 1px solid rgba(70,90,180,0.25);
+      transition: all .22s; box-shadow: 0 4px 20px rgba(0,0,0,0.55);
     }
-    .home-opp-chip:hover {
-      border-color: var(--gold); color: var(--text);
-      background: rgba(24,24,64,0.95);
-      box-shadow: 0 0 12px rgba(212,170,80,0.15);
+    .home-opp-card:hover {
+      transform: translateY(-5px) scale(1.04);
+      border-color: var(--gold);
+      box-shadow: 0 10px 32px rgba(0,0,0,0.65), 0 0 0 1px rgba(212,170,80,0.35);
     }
-    .opp-chip-icon { font-size: 15px; }
+    .home-opp-card-art {
+      width: 100%; height: 88px;
+      object-fit: cover; object-position: center 15%;
+      display: block;
+    }
+    .home-opp-card-label {
+      font-family: 'Exo 2', sans-serif; font-weight: 800; font-size: 9px;
+      color: var(--text); text-align: center; text-transform: uppercase;
+      letter-spacing: .5px; line-height: 1.3; padding: 6px 4px 2px;
+    }
+    .home-opp-card-diff {
+      font-size: 9px; color: var(--text-dim); text-align: center;
+      padding: 0 4px 7px; line-height: 1.3;
+    }
 
     /* Featured cards scroll row */
     .home-cards-row {
@@ -444,7 +456,7 @@
       border-bottom: 1px solid rgba(255,255,255,.06);
     }
     #md-card-name {
-      font-family: 'Press Start 2P', monospace; font-size: 7px;
+      font-family: 'Exo 2', sans-serif; font-size: 7px;
       color: var(--gold); line-height: 1.8; margin-bottom: 5px;
     }
     .md-type-badge {
@@ -527,7 +539,7 @@
     }
     .md-sec-hdr:first-child { margin-top: 0; }
     .md-sec-title {
-      font-family: 'Press Start 2P', monospace; font-size: 8px; color: #bbb;
+      font-family: 'Exo 2', sans-serif; font-size: 8px; color: #bbb;
     }
     .md-sec-count { font-size: 13px; color: var(--text-dim); font-weight: 700; }
     .md-sec-limit { font-size: 11px; color: rgba(255,255,255,.3); }
@@ -811,7 +823,7 @@
     }
 
     .dp-title {
-      font-family: 'Press Start 2P', monospace;
+      font-family: 'Exo 2', sans-serif;
       font-size: 9px; color: var(--gold);
     }
 
@@ -993,17 +1005,17 @@
       position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
       text-align: center; pointer-events: none;
     }
-    .st-ring-pct { font-family: 'Press Start 2P', monospace; font-size: 20px; color: var(--text); line-height: 1; }
+    .st-ring-pct { font-family: 'Exo 2', sans-serif; font-size: 20px; color: var(--text); line-height: 1; }
     .st-ring-lbl { font-size: 9px; color: var(--text-dim); margin-top: 5px; }
 
     .st-summary { padding: 0 16px 12px; }
     .st-sum-row { display: flex; gap: 8px; margin-bottom: 8px; }
     .st-sum-item { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 8px; text-align: center; }
-    .st-sum-v { display: block; font-family: 'Press Start 2P', monospace; font-size: 15px; color: var(--text); line-height: 1; }
+    .st-sum-v { display: block; font-family: 'Exo 2', sans-serif; font-size: 15px; color: var(--text); line-height: 1; }
     .st-sum-l { display: block; font-size: 8px; color: var(--text-dim); margin-top: 5px; text-transform: uppercase; letter-spacing: .5px; }
 
     .st-section-title {
-      font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--text-dim);
+      font-family: 'Exo 2', sans-serif; font-size: 8px; color: var(--text-dim);
       text-transform: uppercase; letter-spacing: 1px; padding: 14px 16px 8px;
       border-top: 1px solid var(--border);
     }
@@ -1098,7 +1110,7 @@
       height: 100%; gap: 16px; text-align: center; padding: 24px;
     }
     .cs-icon { font-size: 64px; opacity: .4; }
-    .cs-h { font-family: 'Press Start 2P', monospace; font-size: 11px; color: var(--gold); }
+    .cs-h { font-family: 'Exo 2', sans-serif; font-size: 11px; color: var(--gold); }
     .cs-p { font-size: 14px; color: var(--text-dim); line-height: 1.7; max-width: 280px; }
 
     /* ===== MODALS (name / load) ===== */
@@ -1115,7 +1127,7 @@
       width: 90%; max-width: 340px;
     }
     .modal-box h3 {
-      font-family: 'Press Start 2P', monospace;
+      font-family: 'Exo 2', sans-serif;
       font-size: 10px; color: var(--gold);
       text-align: center; margin-bottom: 18px;
     }
@@ -1151,7 +1163,7 @@
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 16px;
     }
-    .load-hdr span { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--gold); }
+    .load-hdr span { font-family: 'Exo 2', sans-serif; font-size: 9px; color: var(--gold); }
     .load-close {
       background: none; border: none; color: var(--text-dim);
       font-size: 20px; cursor: pointer;
@@ -1234,7 +1246,7 @@
     }
     .pre-duel-inner { width: 100%; max-width: 600px; }
     .pre-duel-title {
-      font-family: 'Press Start 2P', monospace;
+      font-family: 'Exo 2', sans-serif;
       font-size: 13px; color: var(--gold); text-align: center;
       margin-bottom: 28px; letter-spacing: 2px;
     }
@@ -1262,7 +1274,7 @@
     }
     .profile-card.locked { opacity: .5; cursor: not-allowed; }
     .profile-icon { font-size: 32px; margin-bottom: 8px; }
-    .profile-name { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--gold); margin-bottom: 6px; }
+    .profile-name { font-family: 'Exo 2', sans-serif; font-size: 9px; color: var(--gold); margin-bottom: 6px; }
     .profile-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-bottom: 8px; }
     .profile-diff { font-size: 11px; font-weight: 700; color: #4ade80; }
     .locked-badge { color: var(--text-dim) !important; }
@@ -1470,7 +1482,7 @@
       border-radius: 4px; height: 100%; padding: 0 8px;
     }
     .d-phase-name {
-      font-family: 'Press Start 2P', monospace;
+      font-family: 'Exo 2', sans-serif;
       font-size: clamp(7px,.9vw,11px); color: var(--gold); letter-spacing: 1px;
     }
     .d-phase-desc { font-size: clamp(7px,.75vw,10px); color: var(--text-dim); text-align: center; }
@@ -1576,7 +1588,7 @@
       animation: slideUp .3s ease;
     }
     .duel-end-icon { font-size: 64px; margin-bottom: 16px; }
-    .duel-end-title { font-family: 'Press Start 2P', monospace; font-size: 18px; color: var(--gold); margin-bottom: 24px; }
+    .duel-end-title { font-family: 'Exo 2', sans-serif; font-size: 18px; color: var(--gold); margin-bottom: 24px; }
     .duel-end-btns { display: flex; gap: 10px; justify-content: center; }
     .deb { padding: 14px 24px; border-radius: 10px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; min-height: 48px; }
     .deb.primary { background: var(--gold); color: var(--bg); border: none; }
@@ -1596,7 +1608,7 @@
       width: 100%; max-width: 540px;
     }
     .ht-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .ht-title { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--gold); }
+    .ht-title { font-family: 'Exo 2', sans-serif; font-size: 8px; color: var(--gold); }
     .ht-skip {
       font-size: 12px; color: var(--text-dim); background: none;
       border: 1px solid var(--border2); cursor: pointer;
@@ -1633,7 +1645,7 @@
       max-width: 340px; width: 90%;
     }
     .chain-title {
-      font-family: 'Press Start 2P', monospace; font-size: 8px;
+      font-family: 'Exo 2', sans-serif; font-size: 8px;
       color: #4a90e2; margin-bottom: 14px; text-align: center;
     }
     .chain-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
@@ -1666,17 +1678,17 @@
       width: 100%; max-width: 500px;
     }
     .analysis-title {
-      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      font-family: 'Exo 2', sans-serif; font-size: 10px;
       color: var(--gold); text-align: center; margin-bottom: 20px;
     }
     .analysis-score-ring { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
-    .score-number { font-family: 'Press Start 2P', monospace; font-size: 44px; color: var(--gold); line-height: 1; }
+    .score-number { font-family: 'Exo 2', sans-serif; font-size: 44px; color: var(--gold); line-height: 1; }
     .score-label { font-size: 12px; color: var(--text-dim); margin-top: 6px; font-weight: 600; }
     .analysis-section { margin-bottom: 16px; }
     .analysis-section-title {
       font-size: 9px; color: var(--text-dim); text-transform: uppercase;
       letter-spacing: 1px; font-weight: 700; margin-bottom: 8px;
-      font-family: 'Press Start 2P', monospace;
+      font-family: 'Exo 2', sans-serif;
     }
     .analysis-tip {
       background: var(--surface2); border-radius: 10px; padding: 12px 14px;
@@ -1697,6 +1709,41 @@
       border: none; border-radius: 10px; cursor: pointer;
       font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 15px; margin-top: 8px;
     }
+
+    /* ===== EXO 2 DISPLAY FONT — weight + size corrections ===== */
+    /* All elements that used the old pixel font now use Exo 2 at 800w */
+    .screen-title, .home-hero-title, .home-player-name, .home-rank-badge,
+    .home-section-title, .home-action-label, .home-tip-hdr,
+    .pre-duel-title, .profile-name, .d-phase-name, .d-pbtn.active,
+    .d-turn-label, .d-side-label, .d-log-hdr, .d-log-hdr,
+    .ht-title, .chain-title, .analysis-title, .analysis-section-title,
+    .duel-end-title, .st-ring-lbl, .st-section-title, .st-sum-l,
+    .st-prof-name, .home-opp-card-label, .load-hdr span,
+    .cs-h, .score-label, .home-opp-card-diff { font-weight: 800; }
+
+    /* Size bumps — Exo 2 renders smaller than pixel font at same px value */
+    .screen-title         { font-size: 15px !important; letter-spacing: 2px; }
+    .home-hero-title      { font-size: clamp(16px, 4.5vw, 26px) !important; letter-spacing: 2px; }
+    .home-player-name     { font-size: 13px !important; letter-spacing: 1px; }
+    .home-rank-badge      { font-size: 10px !important; letter-spacing: 1.5px; }
+    .home-section-title   { font-size: 11px !important; letter-spacing: 2px; }
+    .home-action-label    { font-size: 11px !important; letter-spacing: .5px; }
+    .home-tip-hdr         { font-size: 10px !important; letter-spacing: 1.5px; }
+    .pre-duel-title       { font-size: 16px !important; letter-spacing: 2px; }
+    .profile-name         { font-size: 12px !important; letter-spacing: .5px; }
+    .d-phase-name         { font-size: clamp(10px, 1.1vw, 14px) !important; letter-spacing: 1px; }
+    .d-turn-label         { font-size: 11px !important; letter-spacing: 1px; }
+    .ht-title             { font-size: 12px !important; letter-spacing: 1px; }
+    .chain-title          { font-size: 12px !important; letter-spacing: 1px; }
+    .analysis-title       { font-size: 13px !important; letter-spacing: 1px; }
+    .analysis-section-title { font-size: 11px !important; letter-spacing: 1px; }
+    .duel-end-title       { font-size: 22px !important; letter-spacing: 2px; }
+    .st-section-title     { font-size: 11px !important; letter-spacing: 1.5px; }
+    .st-sum-v             { font-size: 18px !important; }
+    .st-ring-pct          { font-size: 24px !important; }
+    .score-number         { font-size: 52px !important; }
+    .cs-h                 { font-size: 14px !important; letter-spacing: 1px; }
+    .load-hdr span        { font-size: 13px !important; letter-spacing: 1px; }
 
     /* ===== GY / BANISH MODAL ===== */
     .gy-overlay {
@@ -1821,14 +1868,34 @@
         </button>
       </div>
 
-      <!-- Quick Duel opponent chips -->
+      <!-- Quick Duel — card art thumbnails -->
       <div class="home-section-hdr"><span class="home-section-title">Quick Duel</span></div>
       <div class="home-opp-row">
-        <div class="home-opp-chip" onclick="nav('duel')"><span class="opp-chip-icon">🗡️</span>Pure Aggro</div>
-        <div class="home-opp-chip" onclick="nav('duel')"><span class="opp-chip-icon">🐉</span>Dragon Link</div>
-        <div class="home-opp-chip" onclick="nav('duel')"><span class="opp-chip-icon">💧</span>Tearlaments</div>
-        <div class="home-opp-chip" onclick="nav('duel')"><span class="opp-chip-icon">🔥</span>Snake-Eye</div>
-        <div class="home-opp-chip" onclick="nav('duel')"><span class="opp-chip-icon">⚔️</span>Branded</div>
+        <div class="home-opp-card" onclick="nav('duel')">
+          <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/70095154.jpg" alt="Cyber Dragon" onerror="this.style.opacity='.15'">
+          <div class="home-opp-card-label">Pure Aggro</div>
+          <div class="home-opp-card-diff">⭐ Beginner</div>
+        </div>
+        <div class="home-opp-card" onclick="nav('duel')">
+          <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/58921041.jpg" alt="Borreload Savage" onerror="this.style.opacity='.15'">
+          <div class="home-opp-card-label">Dragon Link</div>
+          <div class="home-opp-card-diff">⭐⭐⭐ Advanced</div>
+        </div>
+        <div class="home-opp-card" onclick="nav('duel')">
+          <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/71572567.jpg" alt="Kitkallos" onerror="this.style.opacity='.15'">
+          <div class="home-opp-card-label">Tearlaments</div>
+          <div class="home-opp-card-diff">⭐⭐⭐⭐ Expert</div>
+        </div>
+        <div class="home-opp-card" onclick="nav('duel')">
+          <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/73979678.jpg" alt="Snake-Eye Ash" onerror="this.style.opacity='.15'">
+          <div class="home-opp-card-label">Snake-Eye</div>
+          <div class="home-opp-card-diff">⭐⭐⭐⭐⭐ Champion</div>
+        </div>
+        <div class="home-opp-card" onclick="nav('duel')">
+          <img class="home-opp-card-art" src="https://images.ygoprodeck.com/images/cards_cropped/75375465.jpg" alt="Mirrorjade" onerror="this.style.opacity='.15'">
+          <div class="home-opp-card-label">Branded</div>
+          <div class="home-opp-card-diff">⭐⭐⭐⭐⭐ Champion</div>
+        </div>
       </div>
 
       <!-- Featured card art -->
