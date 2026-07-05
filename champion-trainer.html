@@ -1346,7 +1346,26 @@
     .d-main {
       flex: 1; display: flex; flex-direction: column;
       overflow: hidden; min-width: 0;
-      background: radial-gradient(ellipse at 50% 50%, #1a2d4a 0%, #0e1628 60%, #070d18 100%);
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.85) 0%, transparent 100%),
+        radial-gradient(1px 1px at 88% 8%,  rgba(255,255,255,.7)  0%, transparent 100%),
+        radial-gradient(1px 1px at 52% 42%, rgba(255,255,255,.9)  0%, transparent 100%),
+        radial-gradient(1px 1px at 33% 62%, rgba(255,255,255,.65) 0%, transparent 100%),
+        radial-gradient(1px 1px at 72% 78%, rgba(255,255,255,.75) 0%, transparent 100%),
+        radial-gradient(1px 1px at 22% 88%, rgba(255,255,255,.6)  0%, transparent 100%),
+        radial-gradient(1px 1px at 84% 54%, rgba(255,255,255,.8)  0%, transparent 100%),
+        radial-gradient(1px 1px at 43% 27%, rgba(255,255,255,.55) 0%, transparent 100%),
+        radial-gradient(1px 1px at 61% 72%, rgba(255,255,255,.7)  0%, transparent 100%),
+        radial-gradient(1px 1px at 17% 47%, rgba(255,255,255,.6)  0%, transparent 100%),
+        radial-gradient(1px 1px at 77% 32%, rgba(255,255,255,.8)  0%, transparent 100%),
+        radial-gradient(1px 1px at 6%  73%, rgba(255,255,255,.5)  0%, transparent 100%),
+        radial-gradient(1px 1px at 94% 38%, rgba(255,255,255,.65) 0%, transparent 100%),
+        radial-gradient(1px 1px at 48% 83%, rgba(255,255,255,.7)  0%, transparent 100%),
+        radial-gradient(1px 1px at 57% 12%, rgba(255,255,255,.55) 0%, transparent 100%),
+        radial-gradient(2px 2px at 27% 33%, rgba(180,210,255,.5)  0%, transparent 100%),
+        radial-gradient(2px 2px at 67% 58%, rgba(180,210,255,.45) 0%, transparent 100%),
+        radial-gradient(2px 2px at 38% 92%, rgba(180,210,255,.5)  0%, transparent 100%),
+        radial-gradient(ellipse at 50% 40%, #0d1a35 0%, #060e1e 55%, #020810 100%);
     }
 
     /* LP top bar */
@@ -1409,6 +1428,21 @@
     .d-field-row {
       flex: 1; display: flex; align-items: stretch; gap: 3px; min-height: 0;
     }
+
+    /* Opponent section: rotated 180° so their cards appear upside-down facing the player */
+    .d-opp-section {
+      flex: 1; display: flex; flex-direction: column;
+      gap: 3px;
+      transform: rotate(180deg);
+      transform-origin: center center;
+    }
+
+    /* Player section: standard orientation */
+    .d-player-section {
+      flex: 1; display: flex; flex-direction: column;
+      gap: 3px;
+    }
+
     .d-center-bar {
       height: 34px; flex-shrink: 0;
       display: flex; align-items: center; gap: 4px;
@@ -2258,67 +2292,71 @@
         <!-- FIELD AREA -->
         <div class="d-field-area">
 
-          <!-- AI: monster row -->
-          <div class="d-field-row">
-            <div class="d-side-col" onclick="viewGY('ai')">
-              <div class="d-side-label">GY</div>
-              <img class="d-side-img" id="opp-gy-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="" style="display:none">
-              <div class="d-side-count" id="opp-gy-cnt">0</div>
-            </div>
-            <div class="d-zones-5" id="opp-m-zones"></div>
-            <div class="d-side-col">
-              <div class="d-side-label">DECK</div>
-              <img class="d-side-img" id="opp-deck-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="">
-              <div class="d-side-count" id="opp-deck-cnt">0</div>
-            </div>
-          </div>
+          <!-- OPPONENT SECTION — rotated 180° (Master Duel style: cards face player) -->
+          <div class="d-opp-section">
 
-          <!-- AI: spell/trap row -->
-          <div class="d-field-row">
-            <div class="d-side-col">
-              <div class="d-side-label">FIELD</div>
+            <!-- Monster row: first in HTML → appears at bottom of section after 180° rotation (closest to center) -->
+            <div class="d-field-row">
+              <div class="d-side-col" onclick="viewGY('ai')">
+                <div class="d-side-label">GY</div>
+                <img class="d-side-img" id="opp-gy-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="" style="display:none">
+                <div class="d-side-count" id="opp-gy-cnt">0</div>
+              </div>
+              <div class="d-zones-5" id="opp-m-zones"></div>
+              <div class="d-side-col">
+                <div class="d-side-label">DECK</div>
+                <img class="d-side-img" id="opp-deck-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="">
+                <div class="d-side-count" id="opp-deck-cnt">0</div>
+              </div>
             </div>
-            <div class="d-zones-5" id="opp-st-zones"></div>
-            <div class="d-side-col">
-              <div class="d-side-label">EXTRA</div>
+
+            <!-- ST row: second in HTML → appears at top of screen after rotation -->
+            <div class="d-field-row">
+              <div class="d-side-col"><div class="d-side-label">FIELD</div></div>
+              <div class="d-zones-5" id="opp-st-zones"></div>
+              <div class="d-side-col"><div class="d-side-label">EXTRA</div></div>
             </div>
+
           </div>
 
           <!-- CENTER -->
           <div class="d-center-bar">
-            <div class="d-link-zone">LINK</div>
+            <div class="d-link-zone">EMZ</div>
             <div class="d-phase-center">
               <div class="d-phase-name" id="d-phase-name">MAIN 1</div>
               <div class="d-phase-desc" id="d-phase-desc">Main Phase 1 — Summon, Set or Activate</div>
             </div>
-            <div class="d-link-zone">LINK</div>
+            <div class="d-link-zone">EMZ</div>
           </div>
 
-          <!-- PLAYER: spell/trap row -->
-          <div class="d-field-row">
-            <div class="d-side-col">
-              <div class="d-side-label">FIELD</div>
-            </div>
-            <div class="d-zones-5" id="my-st-zones"></div>
-            <div class="d-side-col">
-              <div class="d-side-label">EXTRA</div>
-              <div class="d-side-count" id="my-extra-cnt">0</div>
-            </div>
-          </div>
+          <!-- PLAYER SECTION -->
+          <div class="d-player-section">
 
-          <!-- PLAYER: monster row -->
-          <div class="d-field-row">
-            <div class="d-side-col" onclick="viewGY('player')">
-              <div class="d-side-label">GY</div>
-              <img class="d-side-img" id="my-gy-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="" style="display:none">
-              <div class="d-side-count" id="my-gy-cnt">0</div>
+            <!-- Monster row: first in HTML → appears just below center -->
+            <div class="d-field-row">
+              <div class="d-side-col" onclick="viewGY('player')">
+                <div class="d-side-label">GY</div>
+                <img class="d-side-img" id="my-gy-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="" style="display:none">
+                <div class="d-side-count" id="my-gy-cnt">0</div>
+              </div>
+              <div class="d-zones-5" id="my-m-zones"></div>
+              <div class="d-side-col">
+                <div class="d-side-label">DECK</div>
+                <img class="d-side-img" id="my-deck-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="">
+                <div class="d-side-count" id="my-deck-cnt">0</div>
+              </div>
             </div>
-            <div class="d-zones-5" id="my-m-zones"></div>
-            <div class="d-side-col">
-              <div class="d-side-label">DECK</div>
-              <img class="d-side-img" id="my-deck-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="">
-              <div class="d-side-count" id="my-deck-cnt">0</div>
+
+            <!-- ST row: second in HTML → appears at the bottom of player section -->
+            <div class="d-field-row">
+              <div class="d-side-col"><div class="d-side-label">FIELD</div></div>
+              <div class="d-zones-5" id="my-st-zones"></div>
+              <div class="d-side-col">
+                <div class="d-side-label">EXTRA</div>
+                <div class="d-side-count" id="my-extra-cnt">0</div>
+              </div>
             </div>
+
           </div>
 
         </div>
