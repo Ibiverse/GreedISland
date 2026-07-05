@@ -1426,7 +1426,7 @@
     .d-side-col:hover { border-color: rgba(80,160,255,.45); background: rgba(30,60,140,.45); }
     .d-side-label { font-size: 8px; color: var(--text-dim); font-weight: 700; text-transform: uppercase; text-align: center; }
     .d-side-count { font-size: 14px; font-weight: 700; color: var(--gold); }
-    .d-side-img { width: 100%; height: 55px; object-fit: cover; border-radius: 3px; }
+    .d-side-img { width: 100%; height: 52px; object-fit: cover; border-radius: 3px; flex-shrink: 0; }
 
     /* 5-zone grid */
     .d-zones-5 {
@@ -1555,6 +1555,14 @@
     .d-hand-card:active { transform: translateY(-4px) scale(1.02); }
     .d-hand-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .d-hand-card.selected { border-color: var(--gold); box-shadow: 0 0 10px rgba(201,168,76,.6); }
+    .d-hand-name {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      font-size: 7px; font-weight: 700; line-height: 1.2;
+      color: #fff; text-align: center;
+      background: rgba(0,0,0,.65); padding: 2px 2px 1px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      pointer-events: none;
+    }
 
     /* Phase bar */
     .d-phase-bar {
@@ -2234,11 +2242,13 @@
           <div class="d-field-row">
             <div class="d-side-col" onclick="viewGY('ai')">
               <div class="d-side-label">GY</div>
+              <img class="d-side-img" id="opp-gy-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="" style="display:none">
               <div class="d-side-count" id="opp-gy-cnt">0</div>
             </div>
             <div class="d-zones-5" id="opp-m-zones"></div>
             <div class="d-side-col">
               <div class="d-side-label">DECK</div>
+              <img class="d-side-img" id="opp-deck-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="">
               <div class="d-side-count" id="opp-deck-cnt">0</div>
             </div>
           </div>
@@ -2280,11 +2290,13 @@
           <div class="d-field-row">
             <div class="d-side-col" onclick="viewGY('player')">
               <div class="d-side-label">GY</div>
+              <img class="d-side-img" id="my-gy-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="" style="display:none">
               <div class="d-side-count" id="my-gy-cnt">0</div>
             </div>
             <div class="d-zones-5" id="my-m-zones"></div>
             <div class="d-side-col">
               <div class="d-side-label">DECK</div>
+              <img class="d-side-img" id="my-deck-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="">
               <div class="d-side-count" id="my-deck-cnt">0</div>
             </div>
           </div>
@@ -4067,11 +4079,33 @@ function renderLPs() {
 }
 
 function renderCounters() {
-  document.getElementById('opp-deck-cnt').textContent = GS.ai.deck.length;
-  document.getElementById('opp-gy-cnt').textContent   = GS.ai.gy.length;
-  document.getElementById('my-deck-cnt').textContent  = GS.player.deck.length;
-  document.getElementById('my-gy-cnt').textContent    = GS.player.gy.length;
-  document.getElementById('my-extra-cnt').textContent = GS.player.extraDeck.length;
+  const ai = GS.ai, pl = GS.player;
+
+  document.getElementById('opp-deck-cnt').textContent = ai.deck.length;
+  document.getElementById('opp-gy-cnt').textContent   = ai.gy.length;
+  document.getElementById('my-deck-cnt').textContent  = pl.deck.length;
+  document.getElementById('my-gy-cnt').textContent    = pl.gy.length;
+  document.getElementById('my-extra-cnt').textContent = pl.extraDeck.length;
+
+  // Deck images — show card back only if deck has cards
+  const oppDeckImg = document.getElementById('opp-deck-img');
+  const myDeckImg  = document.getElementById('my-deck-img');
+  if (oppDeckImg) oppDeckImg.style.display = ai.deck.length ? 'block' : 'none';
+  if (myDeckImg)  myDeckImg.style.display  = pl.deck.length ? 'block' : 'none';
+
+  // GY images — show top card face-up when GY has cards
+  const oppGyImg = document.getElementById('opp-gy-img');
+  const myGyImg  = document.getElementById('my-gy-img');
+  if (oppGyImg) {
+    const top = ai.gy[ai.gy.length - 1];
+    oppGyImg.style.display = top ? 'block' : 'none';
+    if (top) oppGyImg.src = `https://images.ygoprodeck.com/images/cards/${top.id}.jpg`;
+  }
+  if (myGyImg) {
+    const top = pl.gy[pl.gy.length - 1];
+    myGyImg.style.display = top ? 'block' : 'none';
+    if (top) myGyImg.src = `https://images.ygoprodeck.com/images/cards/${top.id}.jpg`;
+  }
 }
 
 function renderOppHand() {
@@ -4089,7 +4123,7 @@ function renderPlayerHand() {
   GS.player.hand.forEach((card, i) => {
     const div = document.createElement('div');
     div.className = 'd-hand-card' + (GS.turn === 1 ? ' new-card' : '');
-    div.innerHTML = `<img src="https://images.ygoprodeck.com/images/cards/${card.id}.jpg" alt="${card.name}" loading="lazy" onerror="this.src='https://images.ygoprodeck.com/images/cards/back.jpg'">`;
+    div.innerHTML = `<img src="https://images.ygoprodeck.com/images/cards/${card.id}.jpg" alt="${card.name}" onerror="this.src='https://images.ygoprodeck.com/images/cards/back.jpg'"><div class="d-hand-name">${card.name}</div>`;
     div.onclick = () => { if (GS.active === 'player' && !GS.aiThinking) showHandActions(card, i); };
     div.title = card.name;
     el.appendChild(div);
@@ -4444,12 +4478,14 @@ function goToPhase(phase) {
 
 function advancePhase() {
   if (!GS || GS.active !== 'player' || GS.aiThinking) return;
-  const idx = PHASE_ORDER.indexOf(GS.phase);
-  if (idx < PHASE_ORDER.length - 1) {
-    goToPhase(PHASE_ORDER[idx + 1]);
-  } else {
-    endPlayerTurn();
+  // "END TURN" always ends the turn immediately — run end-phase cleanup first
+  if (GS.phase !== 'END') {
+    doEndPhase();
+    GS.phase = 'END';
+    updatePhaseBar();
+    renderAll();
   }
+  endPlayerTurn();
 }
 
 function doEndPhase() {
