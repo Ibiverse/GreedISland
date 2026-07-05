@@ -3707,9 +3707,9 @@ const AI_DECK_TEMPLATE = [
   {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A mystical genie of the lamp — not to be trifled with.'},
   {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A mystical genie of the lamp — not to be trifled with.'},
   {id:97590747,  name:'La Jinn the Mystical Genie',   type:'Normal Monster', atk:1800, def:1000, level:4, attribute:'DARK', desc:'A mystical genie of the lamp — not to be trifled with.'},
-  {id:42285799,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
-  {id:42285799,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
-  {id:42285799,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
+  {id:69140098,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
+  {id:69140098,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
+  {id:69140098,  name:'Gemini Elf',                   type:'Normal Monster', atk:1900, def:900,  level:4, attribute:'EARTH', desc:'Twin elves who attack opponents with a combination of cunning magic.'},
   {id:64631466,  name:'Vorse Raider',                 type:'Normal Monster', atk:1900, def:1200, level:4, attribute:'DARK', desc:'A brutal, bloodthirsty raider who wields a large battle-ax.'},
   {id:64631466,  name:'Vorse Raider',                 type:'Normal Monster', atk:1900, def:1200, level:4, attribute:'DARK', desc:'A brutal, bloodthirsty raider who wields a large battle-ax.'},
   {id:64631466,  name:'Vorse Raider',                 type:'Normal Monster', atk:1900, def:1200, level:4, attribute:'DARK', desc:'A brutal, bloodthirsty raider who wields a large battle-ax.'},
@@ -3729,7 +3729,7 @@ const AI_DECK_TEMPLATE = [
   {id:53129443,  name:'Dark Hole',                    type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Destroy all monsters on the field.'},
   {id:83764718,  name:'Monster Reborn',               type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Target 1 monster in either GY; Special Summon it.'},
   {id:83764718,  name:'Monster Reborn',               type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Target 1 monster in either GY; Special Summon it.'},
-  {id:74789026,  name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Destroy all monsters your opponent controls.'},
+  {id:12580477,  name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Destroy all monsters your opponent controls.'},
   {id:55144522,  name:'Pot of Greed',                 type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Draw 2 cards.'},
   {id:72302403,  name:'Mystical Space Typhoon',       type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Target 1 Spell/Trap on the field; destroy that target.'},
   {id:72302403,  name:'Mystical Space Typhoon',       type:'Spell Card',     atk:null, def:null, level:null, attribute:null, desc:'Target 1 Spell/Trap on the field; destroy that target.'},
@@ -3758,10 +3758,10 @@ function padDeck(cards, filler) {
   while (out.length < 40) out.push({...filler});
   return out.slice(0, 40);
 }
-const FILLER_MON = {id:42285799, name:'Gemini Elf', type:'Normal Monster', atk:1900, def:900, level:4, attribute:'EARTH', desc:'Twin elves.'};
+const FILLER_MON = {id:69140098, name:'Gemini Elf', type:'Normal Monster', atk:1900, def:900, level:4, attribute:'EARTH', desc:'Twin elves.'};
 const FILLER_SPL = {id:53129443, name:'Dark Hole',   type:'Spell Card', atk:null, def:null, level:null, attribute:null, desc:'Destroy all monsters.'};
 
-const DECK_DRAGONLINK = padDeck([
+const DECK_DRAGONLINK = [
   // --- Monsters (21) ---
   {id:73539069, name:'Striker Dragon',              type:'Effect Monster', atk:1000, def:0,    level:1, attribute:'DARK',  desc:'Link 1. When Link Summoned: Add 1 "Boot Sector Launch" from Deck to hand.'},
   {id:73539069, name:'Striker Dragon',              type:'Effect Monster', atk:1000, def:0,    level:1, attribute:'DARK',  desc:'Link 1. When Link Summoned: Add 1 "Boot Sector Launch" from Deck to hand.'},
@@ -3791,7 +3791,7 @@ const DECK_DRAGONLINK = padDeck([
   {id:95745687, name:'Quick Launch',                 type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'SS 1 Rokket monster from Deck. During End Phase it is destroyed.'},
   {id:95745687, name:'Quick Launch',                 type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'SS 1 Rokket monster from Deck. During End Phase it is destroyed.'},
   {id:53129443, name:'Dark Hole',                    type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all monsters on the field.'},
-  {id:74789026, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all monsters your opponent controls.'},
+  {id:12580477, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all monsters your opponent controls.'},
   {id:83764718, name:'Monster Reborn',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Special Summon 1 monster from either GY.'},
   {id:72302403, name:'Mystical Space Typhoon',       type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Target 1 Spell/Trap; destroy it.'},
   {id:72302403, name:'Mystical Space Typhoon',       type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Target 1 Spell/Trap; destroy it.'},
@@ -3800,9 +3800,9 @@ const DECK_DRAGONLINK = padDeck([
   {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy all ATK-position monsters they control.'},
   {id:4206964,  name:'Trap Hole',                    type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent Normal/Flip Summons 1000+ ATK monster: Destroy it.'},
   {id:4206964,  name:'Trap Hole',                    type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent Normal/Flip Summons 1000+ ATK monster: Destroy it.'},
-], FILLER_MON);
+];
 
-const DECK_TEARALAMENTS = padDeck([
+const DECK_TEARALAMENTS = [
   // --- Monsters (22) ---
   {id:51638027, name:'Tearlaments Scheiren',         type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'SS this from hand, then send 3 cards from Deck to GY. If this or another Tearlaments is sent to GY: Fusion Summon using GY monsters.'},
   {id:51638027, name:'Tearlaments Scheiren',         type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'SS this from hand, then send 3 cards from Deck to GY. If this or another Tearlaments is sent to GY: Fusion Summon using GY monsters.'},
@@ -3825,14 +3825,14 @@ const DECK_TEARALAMENTS = padDeck([
   {id:93087019, name:'Tearlaments Scream',           type:'Continuous Trap',atk:null, def:null, level:null,attribute:null, desc:'All DARK monsters gain 500 ATK/DEF. Once per turn: Send top 3 Deck to GY, if Tearlaments sent trigger its GY effect.'},
   {id:93087019, name:'Tearlaments Scream',           type:'Continuous Trap',atk:null, def:null, level:null,attribute:null, desc:'All DARK monsters gain 500 ATK/DEF. Once per turn: Send top 3 Deck to GY, if Tearlaments sent trigger its GY effect.'},
   {id:53129443, name:'Dark Hole',                    type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all monsters.'},
-  {id:74789026, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all opponent monsters.'},
+  {id:12580477, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all opponent monsters.'},
   {id:83764718, name:'Monster Reborn',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'SS 1 monster from either GY.'},
   {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
   {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
   {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy all their ATK-position monsters.'},
-], FILLER_MON);
+];
 
-const DECK_SNAKEEYE = padDeck([
+const DECK_SNAKEEYE = [
   // --- Monsters (21) ---
   {id:37961968, name:'Snake-Eye Ash',                type:'Effect Monster', atk:1200, def:600,  level:1, attribute:'FIRE',  desc:'If Normal or SS\'d: Add 1 "Snake-Eye Oak" or "Original Sinful Spoils" from Deck to hand.'},
   {id:37961968, name:'Snake-Eye Ash',                type:'Effect Monster', atk:1200, def:600,  level:1, attribute:'FIRE',  desc:'If Normal or SS\'d: Add 1 "Snake-Eye Oak" or "Original Sinful Spoils" from Deck to hand.'},
@@ -3856,14 +3856,14 @@ const DECK_SNAKEEYE = padDeck([
   {id:46986811, name:'Bonfire',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'If opponent has more cards: Add 1 FIRE Effect Monster from Deck to hand. Can only use once per turn.'},
   {id:46986811, name:'Bonfire',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'If opponent has more cards: Add 1 FIRE Effect Monster from Deck to hand. Can only use once per turn.'},
   {id:53129443, name:'Dark Hole',                    type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all monsters.'},
-  {id:74789026, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all opponent monsters.'},
+  {id:12580477, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all opponent monsters.'},
   {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
   {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
   {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy their ATK-position monsters.'},
   {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy their ATK-position monsters.'},
-], FILLER_MON);
+];
 
-const DECK_BRANDED = padDeck([
+const DECK_BRANDED = [
   // --- Monsters (18) ---
   {id:65247403, name:'Aluber the Jester of Despia',  type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'If Normal or SS\'d: Add 1 "Branded" Spell/Trap from Deck to hand. If this card is in GY and you Fusion Summon: SS this.'},
   {id:65247403, name:'Aluber the Jester of Despia',  type:'Effect Monster', atk:1800, def:0,    level:4, attribute:'DARK',  desc:'If Normal or SS\'d: Add 1 "Branded" Spell/Trap from Deck to hand. If this card is in GY and you Fusion Summon: SS this.'},
@@ -3884,13 +3884,13 @@ const DECK_BRANDED = padDeck([
   {id:43898403, name:'Branded in Red',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Target 1 Fusion Monster in your GY or face-up field; destroy it, then add 1 "Fallen of Albaz" or "Despia" monster from Deck/GY to hand.'},
   {id:43898403, name:'Branded in Red',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Target 1 Fusion Monster in your GY or face-up field; destroy it, then add 1 "Fallen of Albaz" or "Despia" monster from Deck/GY to hand.'},
   {id:53129443, name:'Dark Hole',                    type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all monsters.'},
-  {id:74789026, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all opponent monsters.'},
+  {id:12580477, name:'Raigeki',                      type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'Destroy all opponent monsters.'},
   {id:83764718, name:'Monster Reborn',               type:'Spell Card',     atk:null, def:null, level:null,attribute:null, desc:'SS 1 monster from either GY.'},
   {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
   {id:10045474, name:'Infinite Impermanence',        type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'Negate a monster effect.'},
   {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy their ATK-position monsters.'},
   {id:44095762, name:'Mirror Force',                 type:'Trap Card',      atk:null, def:null, level:null,attribute:null, desc:'When opponent attacks: Destroy their ATK-position monsters.'},
-], FILLER_MON);
+];
 
 /* ---- Boss monster card data (placed by scripted combos) ---- */
 const BOSS_BORRELSWORD       = {id:29301450, name:'Borrelsword Dragon',          type:'Link Monster', atk:3000, def:null, level:4, attribute:'DARK',  desc:'Cannot be destroyed by card effects. Once per turn: Target 1 ATK-position monster; attack it, halve its ATK. Negates its own destruction.'};
@@ -4413,15 +4413,9 @@ function renderPlayerHand() {
     const bg = cardTypeBg(card);
     div.style.background = bg;
     const img = document.createElement('img');
-    img.src = `https://images.ygoprodeck.com/images/cards/${card.id}.jpg`;
     img.alt = card.name;
     img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0';
-    img.onerror = function() {
-      if (!this._triedCropped) {
-        this._triedCropped = true;
-        this.src = 'https://images.ygoprodeck.com/images/cards_cropped/' + card.id + '.jpg';
-      } else { this.style.display = 'none'; }
-    };
+    loadCardImg(img, card);
     div.style.position = 'relative';
     div.appendChild(img);
     const nameEl = document.createElement('div');
@@ -4432,6 +4426,38 @@ function renderPlayerHand() {
     div.title = card.name;
     el.appendChild(div);
   });
+}
+
+/* ---- Robust card image loader: ID → cropped → API name lookup ---- */
+var _cardImgCache = {};
+function loadCardImg(imgEl, card) {
+  var name = card.name;
+  if (_cardImgCache[name]) { imgEl.src = _cardImgCache[name]; return; }
+  var id = card.id;
+  imgEl.src = 'https://images.ygoprodeck.com/images/cards/' + id + '.jpg';
+  imgEl._cref  = card;
+  imgEl._cst   = 0;
+  imgEl.onerror = function() {
+    var c = this._cref;
+    if (this._cst === 0) {
+      this._cst = 1;
+      this.src = 'https://images.ygoprodeck.com/images/cards_cropped/' + c.id + '.jpg';
+    } else if (this._cst === 1) {
+      this._cst = 2;
+      var el = this;
+      fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?name=' + encodeURIComponent(c.name))
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          var imgs = d && d.data && d.data[0] && d.data[0].card_images;
+          var url  = imgs && imgs[0] && imgs[0].image_url;
+          if (url) { _cardImgCache[c.name] = url; el.src = url; }
+          else { el.style.display = 'none'; }
+        })
+        .catch(function() { el.style.display = 'none'; });
+    } else {
+      this.style.display = 'none';
+    }
+  };
 }
 
 function renderZones(containerId, zones, zoneType, owner) {
@@ -4456,11 +4482,25 @@ function renderZones(containerId, zones, zoneType, owner) {
         div.innerHTML = '<div class="d-zone-face-down"></div>';
       } else {
         const defPos = slot.position === 'DEF';
-        const dispATK = defPos ? slot.card.def : (slot.card.atk ?? '?') + (slot.equipATK ? `+${slot.equipATK}` : '');
+        const dispATK = defPos ? slot.card.def : (slot.card.atk ?? '?') + (slot.equipATK ? '+' + slot.equipATK : '');
         div.classList.toggle('def-pos', defPos);
-        div.innerHTML = `<img src="https://images.ygoprodeck.com/images/cards/${slot.card.id}.jpg" alt="${slot.card.name}" onerror="this.style.opacity='.3'">
-          ${zoneType === 'monster' ? `<div class="d-zone-atk">${defPos ? 'DEF ' : ''}${dispATK}</div>` : ''}
-          ${slot.hasAttacked ? '<div class="d-zone-attacked">✓</div>' : ''}`;
+        const zImg = document.createElement('img');
+        zImg.alt = slot.card.name;
+        zImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+        loadCardImg(zImg, slot.card);
+        div.appendChild(zImg);
+        if (zoneType === 'monster') {
+          const atkEl = document.createElement('div');
+          atkEl.className = 'd-zone-atk';
+          atkEl.textContent = (defPos ? 'DEF ' : '') + dispATK;
+          div.appendChild(atkEl);
+        }
+        if (slot.hasAttacked) {
+          const attEl = document.createElement('div');
+          attEl.className = 'd-zone-attacked';
+          attEl.textContent = '✓';
+          div.appendChild(attEl);
+        }
       }
       div.onclick = () => {
         // Don't reveal opponent's face-down cards in the preview
@@ -4484,14 +4524,22 @@ function renderZones(containerId, zones, zoneType, owner) {
 function previewCard(card) {
   const el = document.getElementById('d-preview');
   const isMon = card.type && card.type.toLowerCase().includes('monster');
-  el.innerHTML = `
-    <img class="d-preview-img" src="https://images.ygoprodeck.com/images/cards/${card.id}.jpg" alt="${card.name}" onerror="this.style.display='none'">
-    <div class="d-preview-info">
-      <div class="d-preview-name">${card.name}</div>
-      <div class="d-preview-type">${card.type || ''}${card.attribute ? ' · ' + card.attribute : ''}${card.level ? ' LV' + card.level : ''}</div>
-      ${isMon ? `<div class="d-preview-stats">ATK ${card.atk ?? '?'} / DEF ${card.def ?? '?'}</div>` : ''}
-    </div>
-    <div class="d-preview-desc">${(card.desc || '').slice(0, 250)}</div>`;
+  el.innerHTML = '';
+  const pImg = document.createElement('img');
+  pImg.className = 'd-preview-img';
+  pImg.alt = card.name;
+  loadCardImg(pImg, card);
+  el.appendChild(pImg);
+  const info = document.createElement('div');
+  info.className = 'd-preview-info';
+  info.innerHTML = '<div class="d-preview-name">' + card.name + '</div>' +
+    '<div class="d-preview-type">' + (card.type||'') + (card.attribute ? ' · '+card.attribute : '') + (card.level ? ' LV'+card.level : '') + '</div>' +
+    (isMon ? '<div class="d-preview-stats">ATK ' + (card.atk ?? '?') + ' / DEF ' + (card.def ?? '?') + '</div>' : '');
+  el.appendChild(info);
+  const desc = document.createElement('div');
+  desc.className = 'd-preview-desc';
+  desc.textContent = (card.desc || '').slice(0, 250);
+  el.appendChild(desc);
 }
 
 function previewCardBack() {
