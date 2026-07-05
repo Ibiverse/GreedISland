@@ -1702,6 +1702,39 @@
     .deb.secondary { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
 
     /* ===== HAND TRAP WINDOW ===== */
+    /* ── RPS Overlay ── */
+    .rps-overlay {
+      position: fixed; inset: 0; z-index: 9100;
+      background: rgba(0,0,0,.83);
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+    .rps-modal {
+      background: linear-gradient(135deg, #1a1a4e, #0e0e2c);
+      border: 1px solid rgba(100,120,255,.45);
+      border-radius: 14px;
+      padding: 32px 36px; text-align: center;
+      max-width: 380px; width: 90%;
+      box-shadow: 0 0 60px rgba(80,100,255,.3);
+    }
+    .rps-title { font-size: 18px; font-weight: 900; color: var(--gold); font-family: 'Exo 2',sans-serif; letter-spacing: 2px; margin-bottom: 6px; }
+    .rps-subtitle { font-size: 11px; color: var(--text-dim); margin-bottom: 20px; }
+    .rps-choices { display: flex; gap: 14px; justify-content: center; margin-bottom: 18px; }
+    .rps-choice-btn {
+      font-size: 38px; background: rgba(255,255,255,.07);
+      border: 2px solid rgba(255,255,255,.18);
+      border-radius: 12px; padding: 10px 16px;
+      cursor: pointer; transition: all .15s; line-height: 1;
+    }
+    .rps-choice-btn:hover:not(:disabled) { background: rgba(255,255,255,.15); border-color: var(--gold); transform: scale(1.12); }
+    .rps-choice-btn:disabled { opacity: .5; cursor: default; transform: none; }
+    .rps-result { font-size: 13px; color: var(--text); min-height: 22px; line-height: 1.5; }
+    .rps-order-btns { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+    .rps-order-btn { padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 13px; transition: all .15s; }
+    .rps-order-btn.first  { background: rgba(212,170,80,.25); border: 1px solid var(--gold); color: var(--gold); }
+    .rps-order-btn.second { background: rgba(100,160,255,.15); border: 1px solid #60a5fa; color: #60a5fa; }
+    .rps-order-btn:hover  { filter: brightness(1.3); }
+
     .ht-overlay {
       position: fixed; inset: 0; z-index: 900;
       background: rgba(0,0,0,.65);
@@ -4044,11 +4077,186 @@ function _pickDeckAndStart(profile, deckKey, overlay) {
       toast('Deck not found, using starter', 'inf');
     }
   }
-  doStartDuel(profile, pCards, extraCards);
+  showRPS(function(playerGoesFirst) {
+    doStartDuel(profile, pCards, extraCards, playerGoesFirst);
+  });
+}
+
+/* ---- Rock-Paper-Scissors: determine who goes first ---- */
+function showRPS(onDecided) {
+  const overlay = document.createElement('div');
+  overlay.className = 'rps-overlay';
+  overlay.innerHTML = `
+    <div class="rps-modal">
+      <div class="rps-title">WHO GOES FIRST?</div>
+      <div class="rps-subtitle">Play Rock – Paper – Scissors against your opponent</div>
+      <div class="rps-choices">
+        <button class="rps-choice-btn" onclick="rpsPlay(0)">&#x270A;</button>
+        <button class="rps-choice-btn" onclick="rpsPlay(1)">&#x270B;</button>
+        <button class="rps-choice-btn" onclick="rpsPlay(2)">&#x270C;&#xFE0F;</button>
+      </div>
+      <div class="rps-result" id="rps-result">Choose your move</div>
+      <div class="rps-order-btns" id="rps-order" style="display:none">
+        <button class="rps-order-btn first"  onclick="rpsDecide(true)">Go First</button>
+        <button class="rps-order-btn second" onclick="rpsDecide(false)">Go Second</button>
+      </div>
+    </div>`;
+  window._rpsOverlay  = overlay;
+  window._rpsCallback = onDecided;
+  document.body.appendChild(overlay);
+}
+
+function rpsPlay(pChoice) {
+  const RPS    = ['✊','✋','✌️'];
+  const LABELS = ['Rock','Paper','Scissors'];
+  document.querySelectorAll('.rps-choice-btn').forEach(b => { b.disabled = true; });
+  const resultEl = document.getElementById('rps-result');
+  resultEl.textContent = 'Opponent is choosing…';
+  setTimeout(function() {
+    var aChoice = Math.floor(Math.random() * 3);
+    var diff = (pChoice - aChoice + 3) % 3;
+    var base = 'You: ' + RPS[pChoice] + ' ' + LABELS[pChoice] + '  vs  Opp: ' + RPS[aChoice] + ' ' + LABELS[aChoice];
+    if (diff === 0) {
+      resultEl.textContent = base + ' — Tie! Try again.';
+      document.querySelectorAll('.rps-choice-btn').forEach(b => { b.disabled = false; });
+      return;
+    }
+    var playerWon = diff === 1;
+    resultEl.textContent = base + (playerWon ? ' — YOU WIN!' : ' — Opponent wins!');
+    if (playerWon) {
+      setTimeout(function() {
+        document.getElementById('rps-result').textContent = base + ' — You won! Choose order:';
+        document.getElementById('rps-order').style.display = 'flex';
+      }, 700);
+    } else {
+      setTimeout(function() {
+        if (window._rpsOverlay) window._rpsOverlay.remove();
+        if (window._rpsCallback) window._rpsCallback(false);
+      }, 1600);
+    }
+  }, 900);
+}
+
+function rpsDecide(goFirst) {
+  if (window._rpsOverlay) window._rpsOverlay.remove();
+  if (window._rpsCallback) window._rpsCallback(goFirst);
+}
+
+/* ---- Player turn sequence: Draw → Standby → Main 1 (auto) ---- */
+async function startPlayerTurn() {
+  var wait = function(ms) { return new Promise(function(r) { setTimeout(r, ms); }); };
+  var endBtn = document.getElementById('d-end-btn');
+  if (endBtn) endBtn.disabled = true;
+
+  // DRAW PHASE
+  GS.phase = 'DRAW';
+  document.getElementById('d-turn-who').textContent = 'YOUR TURN';
+  document.getElementById('d-turn-num').textContent = GS.turn;
+  updatePhaseBar(); renderAll();
+
+  if (GS.turn === 1) {
+    dlog('─── Your Turn 1 ─── No draw on first turn.');
+    toast('Draw Phase — no draw on Turn 1', 'inf');
+    await wait(900);
+  } else {
+    if (!GS.player.deck.length) {
+      dlog('<b>You have no cards to draw — Opponent wins by deck-out!</b>');
+      showEndScreen('ai'); return;
+    }
+    drawCards('player', 1);
+    var drawn = GS.player.hand[GS.player.hand.length - 1];
+    dlog('─── Your Turn ' + GS.turn + ' ─── Drew <b>' + (drawn ? drawn.name : '1 card') + '</b>.');
+    renderAll();
+    toast('Drew: ' + (drawn ? drawn.name : '1 card'), 'ok');
+    await wait(1000);
+  }
+
+  // STANDBY PHASE
+  GS.phase = 'STBY';
+  updatePhaseBar(); renderAll();
+  dlog('Standby Phase.');
+  toast('Standby Phase', 'inf');
+  await wait(700);
+
+  // MAIN PHASE 1
+  GS.phase = 'MAIN1';
+  updatePhaseBar(); renderAll();
+  dlog(PHASE_DESCS.MAIN1);
+  if (endBtn) endBtn.disabled = false;
+  toast('Main Phase 1 — your move!', 'inf');
+}
+
+/* ---- Quick-play / hand trap window during opponent turn ---- */
+function quickPlayWindow(description) {
+  return new Promise(function(resolve) {
+    var quickSpells = [];
+    GS.player.hand.forEach(function(card, handIdx) {
+      if ((card.type || '').toLowerCase().includes('quick')) {
+        quickSpells.push({ card: card, handIdx: handIdx, effect: 'Quick-Play Spell', isQS: true });
+      }
+    });
+    var traps = getUsableHandTraps('main');
+    var all = quickSpells.concat(traps.map(function(t) { return Object.assign({}, t, { isQS: false }); }));
+
+    if (!all.length) { setTimeout(function() { resolve({ interrupted: false }); }, 350); return; }
+
+    GS.htWindows = (GS.htWindows || 0) + 1;
+    var overlay = document.createElement('div');
+    overlay.className = 'ht-overlay';
+    var resolved = false;
+    var timerInterval = null;
+
+    var doResolve = function(result) {
+      if (resolved) return;
+      resolved = true;
+      clearInterval(timerInterval);
+      overlay.remove();
+      resolve(result);
+    };
+
+    overlay.innerHTML = '<div class="ht-modal">' +
+      '<div class="ht-header"><span class="ht-title">⚡ RESPONSE?</span><button class="ht-skip">PASS</button></div>' +
+      '<div class="ht-trigger">OPP: ' + description + '</div>' +
+      '<div class="ht-cards">' +
+        all.map(function(item, i) {
+          return '<button class="ht-card-btn" data-ti="' + i + '">' +
+            '<span class="ht-card-name">' + item.card.name + '</span>' +
+            '<span class="ht-card-eff">' + (item.isQS ? 'Quick-Play Spell — activate from hand' : item.effect) + '</span>' +
+            '</button>';
+        }).join('') +
+      '</div>' +
+      '<div class="ht-timer-bar"><div class="ht-timer-fill" id="ht-fill" style="width:100%"></div></div>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('.ht-skip').onclick = function() { doResolve({ interrupted: false }); };
+
+    overlay.querySelectorAll('.ht-card-btn').forEach(function(btn, i) {
+      btn.onclick = function() {
+        var item = all[i];
+        if (item.isQS) {
+          doActivateSpell(item.card, item.handIdx);
+        } else {
+          resolveHandTrap(item.card, item.handIdx, item.effect);
+        }
+        GS.comboLog.push({ turn: GS.turn, event: 'Used ' + item.card.name + ' during opponent turn', optimal: true });
+        doResolve({ interrupted: true, card: item.card });
+      };
+    });
+
+    var timeLeft = 8;
+    timerInterval = setInterval(function() {
+      timeLeft--;
+      var fill = document.getElementById('ht-fill');
+      if (fill) fill.style.width = (timeLeft / 8 * 100) + '%';
+      if (timeLeft <= 0) doResolve({ interrupted: false });
+    }, 1000);
+  });
 }
 
 /* ---- Start Duel ---- */
-function doStartDuel(profile, pCards, extraCards) {
+function doStartDuel(profile, pCards, extraCards, playerGoesFirst) {
   closeDeckPanel();
   const prof = PROFILES[profile] || PROFILES.aggro;
   const startLP = parseInt(Cfg.get('lp')) || 8000;
@@ -4058,8 +4266,10 @@ function doStartDuel(profile, pCards, extraCards) {
   const aiTemplate = prof.deckFn();
   const aDeck = shuffle(aiTemplate.map(c => ({ ...c })));
 
+  var goFirst = playerGoesFirst !== false; // default: player goes first
+
   GS = {
-    phase: 'MAIN1', turn: 1, active: 'player',
+    phase: 'DRAW', turn: 1, active: goFirst ? 'player' : 'ai',
     profile,
     normalSummonUsed: false, spSummonCount: 0,
     attackingSlot: null, aiThinking: false,
@@ -4086,16 +4296,22 @@ function doStartDuel(profile, pCards, extraCards) {
   document.getElementById('d-log').innerHTML = '';
   document.getElementById('combo-analysis-btn').style.display = 'none';
 
-  dlog(`─── DUEL START vs <b>${prof.name}</b> ───`);
-  dlog(`You drew ${handSz} cards. <span style="color:var(--gold)">Tap any card in YOUR HAND below to summon or activate it.</span>`);
+  dlog('─── DUEL START vs <b>' + prof.name + '</b> ───');
+  dlog('You drew ' + handSz + ' cards. <span style="color:var(--gold)">Tap any card in YOUR HAND to play it.</span>');
+  if (!goFirst) dlog('<span style="color:#f87171">Opponent goes first this duel!</span>');
   if (profile !== 'aggro') {
     const tips = prof.tips || [];
-    if (tips.length) dlog(`<span style="color:#facc15">💡 TIP: ${tips[0].text}</span>`);
+    if (tips.length) dlog('<span style="color:#facc15">💡 TIP: ' + tips[0].text + '</span>');
   }
-  dlog(PHASE_DESCS.MAIN1);
   renderAll();
-  // Brief toast guide
-  setTimeout(() => toast('Tap a card in YOUR HAND to summon it to the field!', 'inf'), 600);
+
+  if (goFirst) {
+    startPlayerTurn();
+  } else {
+    GS.aiThinking = false;
+    document.getElementById('d-end-btn').disabled = true;
+    setTimeout(aiTakeTurn, 900);
+  }
 }
 
 /* ---- Rendering ---- */
@@ -4200,7 +4416,12 @@ function renderPlayerHand() {
     img.src = `https://images.ygoprodeck.com/images/cards/${card.id}.jpg`;
     img.alt = card.name;
     img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0';
-    img.onerror = () => { img.style.display = 'none'; };
+    img.onerror = function() {
+      if (!this._triedCropped) {
+        this._triedCropped = true;
+        this.src = 'https://images.ygoprodeck.com/images/cards_cropped/' + card.id + '.jpg';
+      } else { this.style.display = 'none'; }
+    };
     div.style.position = 'relative';
     div.appendChild(img);
     const nameEl = document.createElement('div');
@@ -4717,9 +4938,11 @@ async function aiTakeTurn() {
   if (!GS.ai.deck.length) { dlog('<b>OPP has no cards to draw — you win by deck-out!</b>'); showEndScreen('player'); return; }
   drawCards('ai', 1); dlog('OPP drew 1 card.'); renderOppHand(); await wait(500);
 
-  // STANDBY
+  // STANDBY — offer player a quick-play / hand-trap response window
   GS.phase = 'STBY'; updatePhaseBar(); dlog('OPP: Standby Phase');
-  renderAll(); await wait(450);
+  renderAll(); await wait(300);
+  await quickPlayWindow('Opponent Standby Phase — any Quick-Play or Hand Trap?');
+  await wait(250);
 
   // MAIN 1
   GS.phase = 'MAIN1'; updatePhaseBar(); dlog('OPP: Main Phase 1');
@@ -4850,21 +5073,12 @@ async function aiTakeTurn() {
   GS.ai.field.monsters.forEach(z => { if (z) z.hasAttacked = false; });
   renderAll(); await wait(500);
 
-  // Switch to player
+  // Switch to player — auto Draw → Standby → Main 1
   GS.aiThinking = false;
   GS.active = 'player';
-  GS.phase  = 'MAIN1';
   GS.normalSummonUsed = false;
   GS.turn++;
-  document.getElementById('d-turn-who').textContent = 'YOUR TURN';
-  document.getElementById('d-turn-num').textContent = GS.turn;
-
-  // Player draw
-  if (!GS.player.deck.length) { dlog('<b>You have no cards to draw — OPP wins by deck-out!</b>'); showEndScreen('ai'); return; }
-  drawCards('player', 1);
-  dlog(`─── Your Turn ${GS.turn} ─── Drew 1 card.`);
-  dlog(PHASE_DESCS.MAIN1);
-  renderAll();
+  startPlayerTurn();
 }
 
 /* ---- GY viewer modal ---- */
