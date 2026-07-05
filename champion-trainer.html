@@ -5714,15 +5714,11 @@ async function aiTakeTurn_dragonlink(wait) {
   GS.ai.field.monsters.forEach(z => { if (z) z.hasAttacked = false; });
   renderAll(); await wait(500);
 
-  GS.aiThinking = false; GS.active = 'player'; GS.phase = 'MAIN1';
-  GS.normalSummonUsed = false; GS.turn++;
-  document.getElementById('d-turn-who').textContent = 'YOUR TURN';
-  document.getElementById('d-turn-num').textContent = GS.turn;
-  if (!GS.player.deck.length) { showEndScreen('ai'); return; }
-  drawCards('player', 1);
-  dlog(`─── Your Turn ${GS.turn} ─── Drew 1 card.`);
-  dlog(PHASE_DESCS.MAIN1);
-  renderAll();
+  GS.aiThinking = false;
+  GS.active = 'player';
+  GS.normalSummonUsed = false;
+  GS.turn++;
+  startPlayerTurn();
 }
 
 /* ---- Tearlaments ---- */
@@ -5815,14 +5811,8 @@ async function aiTakeTurn_tearalaments(wait) {
   while(GS.ai.hand.length>6){GS.ai.gy.push(GS.ai.hand.pop());}
   GS.ai.field.monsters.forEach(z=>{if(z)z.hasAttacked=false;});
   renderAll(); await wait(500);
-  GS.aiThinking=false; GS.active='player'; GS.phase='MAIN1';
-  GS.normalSummonUsed=false; GS.turn++;
-  document.getElementById('d-turn-who').textContent='YOUR TURN';
-  document.getElementById('d-turn-num').textContent=GS.turn;
-  if(!GS.player.deck.length){showEndScreen('ai');return;}
-  drawCards('player',1);
-  dlog(`─── Your Turn ${GS.turn} ─── Drew 1 card. ${PHASE_DESCS.MAIN1}`);
-  renderAll();
+  GS.aiThinking=false; GS.active='player'; GS.normalSummonUsed=false; GS.turn++;
+  startPlayerTurn();
 }
 
 /* ---- Snake-Eye ---- */
@@ -5921,13 +5911,8 @@ async function aiTakeTurn_snakeeye(wait) {
   while(GS.ai.hand.length>6){GS.ai.gy.push(GS.ai.hand.pop());}
   GS.ai.field.monsters.forEach(z=>{if(z)z.hasAttacked=false;});
   renderAll(); await wait(500);
-  GS.aiThinking=false; GS.active='player'; GS.phase='MAIN1'; GS.normalSummonUsed=false; GS.turn++;
-  document.getElementById('d-turn-who').textContent='YOUR TURN';
-  document.getElementById('d-turn-num').textContent=GS.turn;
-  if(!GS.player.deck.length){showEndScreen('ai');return;}
-  drawCards('player',1);
-  dlog(`─── Your Turn ${GS.turn} ─── Drew 1 card. ${PHASE_DESCS.MAIN1}`);
-  renderAll();
+  GS.aiThinking=false; GS.active='player'; GS.normalSummonUsed=false; GS.turn++;
+  startPlayerTurn();
 }
 
 /* ---- Branded Despia ---- */
@@ -6022,13 +6007,8 @@ async function aiTakeTurn_branded(wait) {
   while(GS.ai.hand.length>6){GS.ai.gy.push(GS.ai.hand.pop());}
   GS.ai.field.monsters.forEach(z=>{if(z)z.hasAttacked=false;});
   renderAll(); await wait(500);
-  GS.aiThinking=false; GS.active='player'; GS.phase='MAIN1'; GS.normalSummonUsed=false; GS.turn++;
-  document.getElementById('d-turn-who').textContent='YOUR TURN';
-  document.getElementById('d-turn-num').textContent=GS.turn;
-  if(!GS.player.deck.length){showEndScreen('ai');return;}
-  drawCards('player',1);
-  dlog(`─── Your Turn ${GS.turn} ─── Drew 1 card. ${PHASE_DESCS.MAIN1}`);
-  renderAll();
+  GS.aiThinking=false; GS.active='player'; GS.normalSummonUsed=false; GS.turn++;
+  startPlayerTurn();
 }
 
 /* ============================================================
