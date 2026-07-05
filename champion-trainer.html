@@ -1485,17 +1485,32 @@
     .d-zone-set {
       width: 100%; height: 100%;
       background: url('https://images.ygoprodeck.com/images/cards/back.jpg') center/cover no-repeat,
-                  linear-gradient(135deg, #1a2a6c, #2244aa);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; border-radius: 3px;
+                  linear-gradient(135deg, #0d2b6e, #1a3d8c);
+      display: flex; align-items: flex-end; justify-content: center;
+      border-radius: 3px;
+      border: 2px solid #5599ff;
+      box-shadow: 0 0 10px rgba(68,136,255,.5), inset 0 0 12px rgba(10,30,100,.7);
     }
     .d-zone-face-down {
       width: 100%; height: 100%;
       background: url('https://images.ygoprodeck.com/images/cards/back.jpg') center/cover no-repeat,
-                  linear-gradient(135deg, #1a2a6c, #2244aa);
-      border: 1px solid #3355bb;
+                  linear-gradient(135deg, #0d2b6e, #1a3d8c);
+      border: 2px solid #5599ff;
       border-radius: 3px;
+      box-shadow: 0 0 10px rgba(68,136,255,.5), inset 0 0 12px rgba(10,30,100,.7);
+      display: flex; align-items: flex-end; justify-content: center;
     }
+    .d-zone-face-down::after, .d-zone-set::after {
+      content: '↓';
+      font-size: 10px; font-weight: 900; color: rgba(150,200,255,.9);
+      background: rgba(0,0,20,.55); padding: 1px 4px; border-radius: 3px 3px 0 0;
+      pointer-events: none;
+    }
+    @keyframes zone-placed {
+      0%   { box-shadow: 0 0 0 3px rgba(212,170,80,.9); }
+      100% { box-shadow: 0 0 12px rgba(68,136,255,.5); }
+    }
+    .d-zone.just-placed { animation: zone-placed .5s ease; }
 
     /* Center bar */
     .d-link-zone {
@@ -1559,9 +1574,14 @@
       position: absolute; bottom: 0; left: 0; right: 0;
       font-size: 7px; font-weight: 700; line-height: 1.2;
       color: #fff; text-align: center;
-      background: rgba(0,0,0,.65); padding: 2px 2px 1px;
+      background: rgba(0,0,0,.72); padding: 2px 2px 2px;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       pointer-events: none;
+    }
+    .d-hand-card-fallback {
+      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; color: rgba(255,255,255,.8);
+      text-align: center; padding: 4px; line-height: 1.3;
     }
 
     /* Phase bar */
@@ -4117,13 +4137,38 @@ function renderOppHand() {
   if (lbl) lbl.textContent = `(${GS.ai.hand.length})`;
 }
 
+function cardTypeBg(card) {
+  const t = (card.type || '').toLowerCase();
+  if (t.includes('fusion'))  return '#3d1060';
+  if (t.includes('synchro')) return '#606060';
+  if (t.includes('xyz'))     return '#1a1a2e';
+  if (t.includes('link'))    return '#0a2255';
+  if (t.includes('ritual'))  return '#1a2860';
+  if (t.includes('spell'))   return '#0e4a2a';
+  if (t.includes('trap'))    return '#4a1060';
+  if (t.includes('effect'))  return '#7a3400';
+  return '#5a4000'; // normal
+}
+
 function renderPlayerHand() {
   const el = document.getElementById('d-my-hand');
   el.innerHTML = '';
   GS.player.hand.forEach((card, i) => {
     const div = document.createElement('div');
     div.className = 'd-hand-card' + (GS.turn === 1 ? ' new-card' : '');
-    div.innerHTML = `<img src="https://images.ygoprodeck.com/images/cards/${card.id}.jpg" alt="${card.name}" onerror="this.src='https://images.ygoprodeck.com/images/cards/back.jpg'"><div class="d-hand-name">${card.name}</div>`;
+    const bg = cardTypeBg(card);
+    div.style.background = bg;
+    const img = document.createElement('img');
+    img.src = `https://images.ygoprodeck.com/images/cards/${card.id}.jpg`;
+    img.alt = card.name;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0';
+    img.onerror = () => { img.style.display = 'none'; };
+    div.style.position = 'relative';
+    div.appendChild(img);
+    const nameEl = document.createElement('div');
+    nameEl.className = 'd-hand-name';
+    nameEl.textContent = card.name;
+    div.appendChild(nameEl);
     div.onclick = () => { if (GS.active === 'player' && !GS.aiThinking) showHandActions(card, i); };
     div.title = card.name;
     el.appendChild(div);
@@ -4154,12 +4199,17 @@ function renderZones(containerId, zones, zoneType, owner) {
         const defPos = slot.position === 'DEF';
         const dispATK = defPos ? slot.card.def : (slot.card.atk ?? '?') + (slot.equipATK ? `+${slot.equipATK}` : '');
         div.classList.toggle('def-pos', defPos);
-        div.innerHTML = `<img src="https://images.ygoprodeck.com/images/cards/${slot.card.id}.jpg" alt="${slot.card.name}" loading="lazy" onerror="this.style.opacity='.3'">
+        div.innerHTML = `<img src="https://images.ygoprodeck.com/images/cards/${slot.card.id}.jpg" alt="${slot.card.name}" onerror="this.style.opacity='.3'">
           ${zoneType === 'monster' ? `<div class="d-zone-atk">${defPos ? 'DEF ' : ''}${dispATK}</div>` : ''}
           ${slot.hasAttacked ? '<div class="d-zone-attacked">✓</div>' : ''}`;
       }
       div.onclick = () => {
-        previewCard(slot.card);
+        // Don't reveal opponent's face-down cards in the preview
+        if (slot.faceDown && owner === 'ai') {
+          previewCardBack();
+        } else {
+          previewCard(slot.card);
+        }
         if (owner === 'player') onPlayerZone(i, zoneType, slot, div);
         else                    onOppZone(i, zoneType, slot);
       };
@@ -4183,6 +4233,24 @@ function previewCard(card) {
       ${isMon ? `<div class="d-preview-stats">ATK ${card.atk ?? '?'} / DEF ${card.def ?? '?'}</div>` : ''}
     </div>
     <div class="d-preview-desc">${(card.desc || '').slice(0, 250)}</div>`;
+}
+
+function previewCardBack() {
+  const el = document.getElementById('d-preview');
+  el.innerHTML = `
+    <img class="d-preview-img" src="https://images.ygoprodeck.com/images/cards/back.jpg" alt="Face-Down">
+    <div class="d-preview-info">
+      <div class="d-preview-name">???</div>
+      <div class="d-preview-type">Face-Down Card</div>
+    </div>
+    <div class="d-preview-desc">This card is set face-down. Its identity is hidden until flipped.</div>`;
+}
+
+function flashZone(containerId, slotIdx) {
+  const wrap = document.getElementById(containerId);
+  if (!wrap) return;
+  const zone = wrap.children[slotIdx];
+  if (zone) { zone.classList.add('just-placed'); setTimeout(() => zone.classList.remove('just-placed'), 600); }
 }
 
 /* ---- Action popup ---- */
@@ -4333,8 +4401,10 @@ function doSetMonster(card, handIdx) {
   GS.player.field.monsters[slot] = mkZone(card, 'DEF', true);
   GS.player.hand.splice(handIdx, 1);
   GS.normalSummonUsed = true;
-  dlog(`You Set a monster face-down.`);
+  dlog(`You Set <b>${card.name}</b> face-down in Defense Position.`);
   renderAll();
+  flashZone('my-m-zones', slot);
+  toast(`${card.name} set face-down`, 'ok');
 }
 
 function doSetST(card, handIdx) {
@@ -4343,8 +4413,11 @@ function doSetST(card, handIdx) {
   GS.player.field.spells[slot] = mkZone(card, 'SET', true);
   GS.player.hand.splice(handIdx, 1);
   const t = (card.type||'').toLowerCase();
-  dlog(`You Set a ${t.includes('trap') ? 'Trap' : 'Spell'} card face-down.`);
+  const label = t.includes('trap') ? 'Trap' : 'Spell';
+  dlog(`You Set <b>${card.name}</b> face-down (${label} zone ${slot + 1}).`);
   renderAll();
+  flashZone('my-st-zones', slot);
+  toast(`${card.name} set face-down`, 'ok');
 }
 
 function doActivateSpell(card, handIdx) {
